@@ -2,6 +2,8 @@ package com.zrmiller.gui;
 
 import com.zrmiller.core.parser.PlaceParser;
 import com.zrmiller.core.utility.ZUtil;
+import com.zrmiller.modules.styles.ColorManager;
+import com.zrmiller.modules.styles.IThemeListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +13,7 @@ import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class CanvasPanel extends JPanel {
+public class CanvasPanel extends JPanel implements IThemeListener {
 
     // TODO : Move
     public static int CANVAS_SIZE_X = 1001;
@@ -61,12 +63,12 @@ public class CanvasPanel extends JPanel {
             new Color(104, 16, 171),
     };
 
-    private static final Color backgroundColor = new Color(28, 27, 27);
     private final PlaceParser placeParser = new PlaceParser();
 
     BufferedImage bufferedImage = new BufferedImage(viewportWidth, viewportHeight, BufferedImage.TYPE_INT_RGB);
 
     int[] colorBuffer = new int[viewportWidth * viewportHeight * 3];
+    private Color backgroundColor = Color.RED;
 
     private static final Executor executor = Executors.newSingleThreadExecutor();
     int lastPaintedFrame = 0;
@@ -151,6 +153,7 @@ public class CanvasPanel extends JPanel {
     }
 
     private void addListeners() {
+        ColorManager.addListener(this);
         addMouseWheelListener(new MouseWheelListener() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
@@ -202,6 +205,11 @@ public class CanvasPanel extends JPanel {
         super.paintComponent(g);
         bufferedImage.getRaster().setPixels(0, 0, viewportWidth, viewportHeight, colorBuffer);
         g.drawImage(bufferedImage, 0, 0, Color.white, null);
+    }
+
+    @Override
+    public void onThemeChange() {
+        backgroundColor = UIManager.getColor("ComboBox.background");
     }
 
 }
