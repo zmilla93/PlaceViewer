@@ -25,7 +25,7 @@ public class CanvasPanel extends JPanel {
     private int viewportPanX = 0;
     private int viewportPanY = 0;
     private final int MAX_ZOOM = 20;
-    private int zoom = 2;
+    private int zoom = 1;
     private static int COLOR_CHANNEL_COUNT;
 
     // Movement
@@ -64,7 +64,6 @@ public class CanvasPanel extends JPanel {
 
     private PlaceParser placeParser = new PlaceParser();
 
-    //    BufferedImage bufferedImage = new BufferedImage(CANVAS_SIZE_X, CANVAS_SIZE_Y, BufferedImage.TYPE_INT_RGB);
     BufferedImage bufferedImage = new BufferedImage(viewportWidth, viewportHeight, BufferedImage.TYPE_INT_RGB);
 
     int[] colorBuffer = new int[viewportWidth * viewportHeight * 3];
@@ -118,8 +117,13 @@ public class CanvasPanel extends JPanel {
     private void resolvePixel(int pixelX, int pixelY) {
         int x = pixelX - viewportPanX;
         int y = pixelY - viewportPanY;
-//        int canvasIndex = x + y * CANVAS_SIZE_X;
-        int canvasIndex = x / zoom + y / zoom * CANVAS_SIZE_X;
+        int z = zoom <= 0 ? 2 - zoom : zoom;
+        int canvasIndex;
+        if (zoom >= 1) {
+            canvasIndex = x / z + y / z * CANVAS_SIZE_X;
+        } else {
+            canvasIndex = x * z + y * z * CANVAS_SIZE_X;
+        }
         int colorBufferIndex = pixelX * 3 + pixelY * viewportWidth * 3;   // index of top left colorBuffer element being drawn
         if (canvasIndex < 0 || canvasIndex >= placeParser.getColorBuffer().length) {
             colorBuffer[colorBufferIndex] = backgroundColor.getRed();
@@ -129,7 +133,9 @@ public class CanvasPanel extends JPanel {
         }
         int colorIndex = placeParser.getColorBuffer()[canvasIndex];
         Color color = colors[colorIndex];
-        if (x < 0 || x > CANVAS_SIZE_X * zoom || y < 0 || y > CANVAS_SIZE_Y * zoom) {
+        int checkX = zoom < 1 ? CANVAS_SIZE_X / z : CANVAS_SIZE_X * z;
+        int checkY = zoom < 1 ? CANVAS_SIZE_Y / z : CANVAS_SIZE_Y * z;
+        if (x < 0 || x > checkX || y < 0 || y > checkY * z) {
             // Paint Out of Bounds Pixel
             colorBuffer[colorBufferIndex] = backgroundColor.getRed();
             colorBuffer[colorBufferIndex + 1] = backgroundColor.getGreen();
@@ -166,7 +172,7 @@ public class CanvasPanel extends JPanel {
             public void mouseWheelMoved(MouseWheelEvent e) {
                 int mod = e.getPreciseWheelRotation() < 0 ? 1 : -1;
                 zoom += mod;
-                zoom = ZUtil.clamp(zoom, 1, MAX_ZOOM);
+                zoom = ZUtil.clamp(zoom, -2, MAX_ZOOM);
                 markForRepaint = true;
             }
         });
@@ -191,6 +197,10 @@ public class CanvasPanel extends JPanel {
                 markForRepaint = true;
             }
         });
+    }
+
+    private int getFixedZoom() {
+        return zoom <= 0 ? 2 - zoom : zoom;
     }
 
     @Override
