@@ -10,6 +10,7 @@ public class WindowContainer extends JPanel implements ICanvasListener {
     private CanvasPanel canvasPanel = new CanvasPanel();
     private JPanel sidebarPanel = new JPanel(new GridBagLayout());
     private JPanel southPanel = new JPanel(new BorderLayout());
+    private JLabel positionLabel = new JLabel("Pos -");
     private JLabel frameLabel = new JLabel("Unloaded");
     private JLabel zoomLabel = new JLabel("100%");
 
@@ -19,6 +20,7 @@ public class WindowContainer extends JPanel implements ICanvasListener {
         buildPanels();
         addPanels();
 
+        onPan(new Point(0, 0));
         canvasPanel.addListener(this);
     }
 
@@ -30,11 +32,9 @@ public class WindowContainer extends JPanel implements ICanvasListener {
         // South Panel
         JPanel southRightPanel = new JPanel();
         southRightPanel.add(zoomLabel);
+        southPanel.add(positionLabel, BorderLayout.CENTER);
         southPanel.add(frameLabel, BorderLayout.WEST);
         southPanel.add(southRightPanel, BorderLayout.EAST);
-
-
-//        southPanel.add(frameLabel, gc);
     }
 
     private void addPanels() {
@@ -49,7 +49,7 @@ public class WindowContainer extends JPanel implements ICanvasListener {
     }
 
     @Override
-    public void onPan() {
-
+    public void onPan(Point point) {
+        positionLabel.setText("Pos " + point.x + ", " + point.y);
     }
 }

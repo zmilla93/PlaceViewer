@@ -1,6 +1,7 @@
 package com.zrmiller.gui;
 
 import com.zrmiller.core.parser.PlaceParser;
+import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.modules.styles.ColorManager;
 import com.zrmiller.modules.styles.IThemeListener;
@@ -47,25 +48,6 @@ public class CanvasPanel extends JPanel implements IThemeListener {
 
         }
     });
-
-    private static Color[] colors = new Color[]{
-            new Color(255, 255, 255),
-            new Color(201, 201, 201),
-            new Color(79, 79, 79),
-            new Color(0, 0, 0),
-            new Color(222, 156, 227),
-            new Color(243, 8, 8),
-            new Color(245, 107, 36),
-            new Color(122, 62, 18),
-            new Color(232, 196, 5),
-            new Color(164, 220, 128),
-            new Color(17, 47, 7),
-            new Color(40, 181, 194),
-            new Color(72, 132, 217),
-            new Color(13, 56, 227),
-            new Color(181, 60, 222),
-            new Color(104, 16, 171),
-    };
 
     private final PlaceParser parser = new PlaceParser();
 
@@ -114,7 +96,14 @@ public class CanvasPanel extends JPanel implements IThemeListener {
         addListeners();
     }
 
-    private void resizeCanvas(){
+    private Point getCenterPixel() {
+        Point point = new Point();
+        point.x = (viewportWidth / 2 - viewportPanX) / zoom;
+        point.y = (viewportHeight / 2 - viewportPanY) / zoom;
+        return point;
+    }
+
+    private void resizeCanvas() {
         Dimension size = getSize();
         viewportWidth = size.width;
         viewportHeight = size.height;
@@ -149,7 +138,7 @@ public class CanvasPanel extends JPanel implements IThemeListener {
             return;
         }
         int colorIndex = parser.getColorBuffer()[canvasIndex];
-        Color color = colors[colorIndex];
+        Color color = PlaceInfo.canvasColors[colorIndex];
         int checkX = zoom < 1 ? CANVAS_SIZE_X / z : CANVAS_SIZE_X * z;
         int checkY = zoom < 1 ? CANVAS_SIZE_Y / z : CANVAS_SIZE_Y * z;
         if (x < 0 || x > checkX || y < 0 || y > checkY * z) {
@@ -173,10 +162,8 @@ public class CanvasPanel extends JPanel implements IThemeListener {
                 int mod = e.getPreciseWheelRotation() < 0 ? 1 : -1;
                 zoom += mod;
                 zoom = ZUtil.clamp(zoom, -1, MAX_ZOOM);
-                fixZoomPan();
                 markForRepaint = true;
-                for (ICanvasListener listener : canvasListeners)
-                    listener.onZoom(zoom);
+                alertListeners();
             }
         });
         addMouseListener(new MouseAdapter() {
@@ -198,6 +185,7 @@ public class CanvasPanel extends JPanel implements IThemeListener {
                 viewportPanX = initialPanX + dragX;
                 viewportPanY = initialPanY + dragY;
                 markForRepaint = true;
+                alertListeners();
             }
         });
         addComponentListener(new ComponentAdapter() {
@@ -208,13 +196,11 @@ public class CanvasPanel extends JPanel implements IThemeListener {
         });
     }
 
-    private void fixZoomPan() {
-        // FIXME:
-        int diff = zoom - cachedZoom;
-//        System.out.println("DIFF:" + diff);
-//        viewportPanX += CANVAS_SIZE_X / 2 * -diff;
-//        viewportPanY += CANVAS_SIZE_Y / 2 * -diff;
-        cachedZoom = zoom;
+    private void alertListeners() {
+        for (ICanvasListener listener : canvasListeners)
+            listener.onZoom(zoom);
+        for (ICanvasListener listener : canvasListeners)
+            listener.onPan(getCenterPixel());
     }
 
     private int getFixedZoom() {
