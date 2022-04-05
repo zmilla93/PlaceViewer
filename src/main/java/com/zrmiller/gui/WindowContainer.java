@@ -8,7 +8,7 @@ import java.awt.*;
 public class WindowContainer extends JPanel implements ICanvasListener {
 
     private CanvasPanel canvasPanel = new CanvasPanel();
-    private JPanel sidebarPanel = new JPanel(new GridBagLayout());
+    private JPanel sidebarPanel = new JPanel(new BorderLayout());
     private JPanel southPanel = new JPanel(new BorderLayout());
     private JLabel positionLabel = new JLabel("Pos -");
     private JLabel frameLabel = new JLabel("Unloaded");
@@ -26,7 +26,9 @@ public class WindowContainer extends JPanel implements ICanvasListener {
 
     private void buildPanels() {
 
-        sidebarPanel.add(new JButton("ASJFKLSDJAF"));
+        sidebarPanel.add(new JButton("ASJFKLSDJAF"), BorderLayout.CENTER);
+//        sidebarPanel.add(new JSeparator(JSeparator.VERTICAL), BorderLayout.EAST);
+        sidebarPanel.add(new SeparatorPanel(), BorderLayout.EAST);
         GridBagConstraints gc = ZUtil.getGC();
 
         // South Panel
@@ -35,6 +37,7 @@ public class WindowContainer extends JPanel implements ICanvasListener {
         southPanel.add(positionLabel, BorderLayout.CENTER);
         southPanel.add(frameLabel, BorderLayout.WEST);
         southPanel.add(southRightPanel, BorderLayout.EAST);
+        southPanel.add(new SeparatorPanel(), BorderLayout.NORTH);
     }
 
     private void addPanels() {
