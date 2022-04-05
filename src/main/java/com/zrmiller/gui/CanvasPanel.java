@@ -23,7 +23,7 @@ public class CanvasPanel extends JPanel implements IThemeListener {
     // Panel Settings
     public int viewportWidth = 1400;
     public int viewportHeight = 1400;
-    private int targetFPS = 30;
+    private int targetFPS = -1;
     private int viewportPanX = 0;
     private int viewportPanY = 0;
     private final int MAX_ZOOM = 20;
@@ -114,6 +114,15 @@ public class CanvasPanel extends JPanel implements IThemeListener {
         addListeners();
     }
 
+    private void resizeCanvas(){
+        Dimension size = getSize();
+        viewportWidth = size.width;
+        viewportHeight = size.height;
+        bufferedImage = new BufferedImage(viewportWidth, viewportHeight, BufferedImage.TYPE_INT_RGB);
+        updateColorBuffer();
+        repaint();
+    }
+
     private void updateColorBuffer() {
         for (int y = 0; y < viewportHeight; y++) {
             for (int x = 0; x < viewportWidth; x++) {
@@ -191,12 +200,18 @@ public class CanvasPanel extends JPanel implements IThemeListener {
                 markForRepaint = true;
             }
         });
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                resizeCanvas();
+            }
+        });
     }
 
     private void fixZoomPan() {
         // FIXME:
         int diff = zoom - cachedZoom;
-        System.out.println("DIFF:" + diff);
+//        System.out.println("DIFF:" + diff);
 //        viewportPanX += CANVAS_SIZE_X / 2 * -diff;
 //        viewportPanY += CANVAS_SIZE_Y / 2 * -diff;
         cachedZoom = zoom;
