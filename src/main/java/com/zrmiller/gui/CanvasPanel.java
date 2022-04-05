@@ -1,6 +1,7 @@
 package com.zrmiller.gui;
 
 import com.zrmiller.core.parser.PlaceParser;
+import com.zrmiller.core.utility.ZUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +24,7 @@ public class CanvasPanel extends JPanel {
     private int VIEWPORT_PAN_BUFFER = 100;
     private int viewportPanX = 0;
     private int viewportPanY = 0;
-    private final int MAX_ZOOM = 10;
+    private final int MAX_ZOOM = 20;
     private int zoom = 2;
     private static int COLOR_CHANNEL_COUNT;
 
@@ -117,8 +118,8 @@ public class CanvasPanel extends JPanel {
     private void resolvePixel(int pixelX, int pixelY) {
         int x = pixelX - viewportPanX;
         int y = pixelY - viewportPanY;
-        int canvasIndex =  x+ y * CANVAS_SIZE_X;
-//        int canvasIndex =  x / zoom + y * CANVAS_SIZE_X / zoom;
+//        int canvasIndex = x + y * CANVAS_SIZE_X;
+        int canvasIndex = x / zoom + y / zoom * CANVAS_SIZE_X;
         int colorBufferIndex = pixelX * 3 + pixelY * viewportWidth * 3;   // index of top left colorBuffer element being drawn
         if (canvasIndex < 0 || canvasIndex >= placeParser.getColorBuffer().length) {
             colorBuffer[colorBufferIndex] = backgroundColor.getRed();
@@ -128,7 +129,7 @@ public class CanvasPanel extends JPanel {
         }
         int colorIndex = placeParser.getColorBuffer()[canvasIndex];
         Color color = colors[colorIndex];
-        if (x < 0 || x > CANVAS_SIZE_X || y < 0 || y > CANVAS_SIZE_Y) {
+        if (x < 0 || x > CANVAS_SIZE_X * zoom || y < 0 || y > CANVAS_SIZE_Y * zoom) {
             // Paint Out of Bounds Pixel
             colorBuffer[colorBufferIndex] = backgroundColor.getRed();
             colorBuffer[colorBufferIndex + 1] = backgroundColor.getGreen();
@@ -160,6 +161,15 @@ public class CanvasPanel extends JPanel {
     private boolean markForRepaint = false;
 
     private void addListeners() {
+        addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                int mod = e.getPreciseWheelRotation() < 0 ? 1 : -1;
+                zoom += mod;
+                zoom = ZUtil.clamp(zoom, 1, MAX_ZOOM);
+                markForRepaint = true;
+            }
+        });
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
