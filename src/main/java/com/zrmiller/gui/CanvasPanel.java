@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -22,7 +23,7 @@ public class CanvasPanel extends JPanel implements IThemeListener {
     // Panel Settings
     public int viewportWidth = 1400;
     public int viewportHeight = 1400;
-    private int targetFPS = -1;
+    private int targetFPS = 30;
     private int viewportPanX = 0;
     private int viewportPanY = 0;
     private final int MAX_ZOOM = 20;
@@ -36,6 +37,9 @@ public class CanvasPanel extends JPanel implements IThemeListener {
     private int initialY;
     private int initialPanX;
     private int initialPanY;
+
+    // Listeners
+    private ArrayList<ICanvasListener> canvasListeners = new ArrayList<>();
 
     private Timer timer = new Timer(1, new ActionListener() {
         @Override
@@ -90,17 +94,17 @@ public class CanvasPanel extends JPanel implements IThemeListener {
                 parser.close();
             }
         });
-
         timer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                updateColorBuffer(placeParser.getColorBuffer());
-                updateColorBuffer();
-                repaint();
-
-                if (markForRepaint || lastPaintedFrame != parser.getLineCount()) {
-                    repaint();
+                if (lastPaintedFrame != parser.getLineCount()) {
+                    markForRepaint = true;
                     lastPaintedFrame = parser.getLineCount();
+                }
+                if (markForRepaint) {
+                    updateColorBuffer();
+                    repaint();
+                    markForRepaint = false;
                 }
             }
         });
@@ -162,6 +166,8 @@ public class CanvasPanel extends JPanel implements IThemeListener {
                 zoom = ZUtil.clamp(zoom, -1, MAX_ZOOM);
                 fixZoomPan();
                 markForRepaint = true;
+                for (ICanvasListener listener : canvasListeners)
+                    listener.onZoom(zoom);
             }
         });
         addMouseListener(new MouseAdapter() {
@@ -200,9 +206,21 @@ public class CanvasPanel extends JPanel implements IThemeListener {
         return zoom <= 0 ? 2 - zoom : zoom;
     }
 
+    // Listeners
+    public void addListener(ICanvasListener listener) {
+        canvasListeners.add(listener);
+    }
+
+    public void removeListener(ICanvasListener listener) {
+        canvasListeners.remove(listener);
+    }
+
+    public void removeAllListeners() {
+        canvasListeners.clear();
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
         bufferedImage.getRaster().setPixels(0, 0, viewportWidth, viewportHeight, colorBuffer);
         g.drawImage(bufferedImage, 0, 0, Color.white, null);
     }
