@@ -1,28 +1,25 @@
 package com.zrmiller.gui;
 
 import com.zrmiller.core.parser.PlaceParser;
-import com.zrmiller.core.utility.ZUtil;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class CanvasPanel extends JPanel {
 
+    // TODO : Move
     public static int CANVAS_SIZE_X = 1001;
     public static int CANVAS_SIZE_Y = 1001;
 
+    // Panel Settings
+    public int viewportWidth = 1400;
+    public int viewportHeight = 1400;
     private int targetFPS = 60;
-
-
-    public int viewportWidth = 1001;
-    public int viewportHeight = 1001;
-
     private int VIEWPORT_PAN_BUFFER = 100;
     private int viewportPanX = 0;
     private int viewportPanY = 0;
@@ -62,12 +59,14 @@ public class CanvasPanel extends JPanel {
             new Color(104, 16, 171),
     };
 
+    private static Color backgroundColor = new Color(54, 54, 54);
+
     private PlaceParser placeParser = new PlaceParser();
 
     //    BufferedImage bufferedImage = new BufferedImage(CANVAS_SIZE_X, CANVAS_SIZE_Y, BufferedImage.TYPE_INT_RGB);
     BufferedImage bufferedImage = new BufferedImage(viewportWidth, viewportHeight, BufferedImage.TYPE_INT_RGB);
 
-    int[] colorBuffer = new int[CANVAS_SIZE_X * CANVAS_SIZE_Y * 3];
+    int[] colorBuffer = new int[viewportWidth * viewportHeight * 3];
 
     private static Executor executor = Executors.newSingleThreadExecutor();
     int lastPaintedFrame = 0;
@@ -88,7 +87,6 @@ public class CanvasPanel extends JPanel {
             }
         });
 
-
         timer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -108,10 +106,8 @@ public class CanvasPanel extends JPanel {
     }
 
     private void updateColorBuffer() {
-        Arrays.fill(colorBuffer, 0);
-        for (int y = 0; y < CANVAS_SIZE_Y; y++) {
-            for (int x = 0; x < CANVAS_SIZE_X; x++) {
-//                pixelToScreen(x, y);
+        for (int y = 0; y < viewportHeight; y++) {
+            for (int x = 0; x < viewportWidth; x++) {
                 resolvePixel(x, y);
             }
         }
@@ -120,65 +116,26 @@ public class CanvasPanel extends JPanel {
     private void resolvePixel(int pixelX, int pixelY) {
         int x = pixelX - viewportPanX;
         int y = pixelY - viewportPanY;
-        int index = x + y * CANVAS_SIZE_X;
-
-
+        int canvasX = x + y * CANVAS_SIZE_X;
         int colorBufferIndex = pixelX * 3 + pixelY * viewportWidth * 3;   // index of top left colorBuffer element being drawn
-        if (index < 0 || index >= placeParser.getColorBuffer().length) {
-//            System.out.println("ERR:" + x + ", " + y);
+        if (canvasX < 0 || canvasX >= placeParser.getColorBuffer().length) {
+            colorBuffer[colorBufferIndex] = backgroundColor.getRed();
+            colorBuffer[colorBufferIndex + 1] = backgroundColor.getGreen();
+            colorBuffer[colorBufferIndex + 2] = backgroundColor.getBlue();
             return;
         }
-        int colorIndex = placeParser.getColorBuffer()[index];
-
+        int colorIndex = placeParser.getColorBuffer()[canvasX];
         Color color = colors[colorIndex];
         if (x < 0 || x > CANVAS_SIZE_X || y < 0 || y > CANVAS_SIZE_Y) {
-            // TODO : Draw black
-            colorBuffer[colorBufferIndex] = 0;
-            colorBuffer[colorBufferIndex + 1] = 0;
-            colorBuffer[colorBufferIndex + 2] = 0;
+            // Paint Out of Bounds Pixel
+            colorBuffer[colorBufferIndex] = backgroundColor.getRed();
+            colorBuffer[colorBufferIndex + 1] = backgroundColor.getGreen();
+            colorBuffer[colorBufferIndex + 2] = backgroundColor.getBlue();
         } else {
+            // Paint Color Pixel
             colorBuffer[colorBufferIndex] = color.getRed();
             colorBuffer[colorBufferIndex + 1] = color.getGreen();
             colorBuffer[colorBufferIndex + 2] = color.getBlue();
-        }
-    }
-
-    private void pixelToScreen(int inX, int inY) {
-        int x = inX + viewportPanX;
-        int y = inY + viewportPanY;
-        if (x < 0 || x + 2 > viewportWidth) return;
-        if (y < 0 || y + 2 > viewportHeight) return;
-
-        int index = x + y * viewportWidth;  // index of pixel on canvas
-        int colorIndex = placeParser.getColorBuffer()[index];
-        Color color = colors[colorIndex];
-        int colorBufferIndex = x * 3 + y * viewportWidth * 3;   // index of top left colorBuffer element being drawn
-
-//        for (int pixelY = 0; pixelY < zoom; pixelY++) {
-//            for (int pixelX = 0; pixelX < zoom; pixelX++) {
-//                int bufIndex = colorBufferIndex + pixelX  * 3 + pixelY * CANVAS_SIZE_X * 3;
-//                colorBuffer[bufIndex] = color.getRed();
-//                colorBuffer[bufIndex + 1] = color.getGreen();
-//                colorBuffer[bufIndex + 2] = color.getBlue();
-//            }
-//        }
-
-        colorBuffer[colorBufferIndex] = color.getRed();
-        colorBuffer[colorBufferIndex + 1] = color.getGreen();
-        colorBuffer[colorBufferIndex + 2] = color.getBlue();
-    }
-
-    boolean isPointWithinViewport(int x, int y) {
-        return false;
-    }
-
-    private void updateColorBuffer(int[] newColorBuffer) {
-        for (int i = 0; i < newColorBuffer.length; i++) {
-            int index = i * 3;
-            Color color = colors[newColorBuffer[i]];
-            colorBuffer[index] = color.getRed();
-            colorBuffer[index + 1] = color.getGreen();
-            colorBuffer[index + 2] = color.getBlue();
         }
     }
 
