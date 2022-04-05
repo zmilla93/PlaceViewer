@@ -1,6 +1,6 @@
 package com.zrmiller.core.parser;
 
-import com.zrmiller.CanvasPanel;
+import com.zrmiller.gui.CanvasPanel;
 
 import java.io.*;
 import java.sql.Timestamp;

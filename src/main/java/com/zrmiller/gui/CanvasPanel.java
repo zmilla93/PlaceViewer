@@ -1,4 +1,4 @@
-package com.zrmiller;
+package com.zrmiller.gui;
 
 import com.zrmiller.core.parser.PlaceParser;
 

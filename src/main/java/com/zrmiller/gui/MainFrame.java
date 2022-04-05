@@ -1,7 +1,5 @@
 package com.zrmiller.gui;
 
-import com.zrmiller.CanvasPanel;
-
 import javax.swing.*;
 import java.awt.*;
 
