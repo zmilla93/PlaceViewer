@@ -63,7 +63,7 @@ public class CanvasPanel extends JPanel implements IThemeListener {
             new Color(104, 16, 171),
     };
 
-    private final PlaceParser placeParser = new PlaceParser();
+    private final PlaceParser parser = new PlaceParser();
 
     BufferedImage bufferedImage = new BufferedImage(viewportWidth, viewportHeight, BufferedImage.TYPE_INT_RGB);
 
@@ -76,18 +76,18 @@ public class CanvasPanel extends JPanel implements IThemeListener {
     public CanvasPanel() {
         setFocusable(true);
         setRequestFocusEnabled(true);
-        placeParser.openInputStream("D:/Place/place_tiles_final");
+        parser.openInputStream("D:/Place/place_tiles_final");
         executor.execute(new Runnable() {
             @Override
             public void run() {
                 try {
-                    while (placeParser.ready()) {
-                        placeParser.getNextTokens();
+                    while (parser.ready()) {
+                        parser.getNextTokens();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                placeParser.close();
+                parser.close();
             }
         });
 
@@ -98,9 +98,9 @@ public class CanvasPanel extends JPanel implements IThemeListener {
                 updateColorBuffer();
                 repaint();
 
-                if (markForRepaint || lastPaintedFrame != placeParser.getLineCount()) {
+                if (markForRepaint || lastPaintedFrame != parser.getLineCount()) {
                     repaint();
-                    lastPaintedFrame = placeParser.getLineCount();
+                    lastPaintedFrame = parser.getLineCount();
                 }
             }
         });
@@ -129,13 +129,13 @@ public class CanvasPanel extends JPanel implements IThemeListener {
             canvasIndex = x * z + y * z * CANVAS_SIZE_X;
         }
         int colorBufferIndex = pixelX * 3 + pixelY * viewportWidth * 3;   // index of top left colorBuffer element being drawn
-        if (canvasIndex < 0 || canvasIndex >= placeParser.getColorBuffer().length) {
+        if (canvasIndex < 0 || canvasIndex >= parser.getColorBuffer().length) {
             colorBuffer[colorBufferIndex] = backgroundColor.getRed();
             colorBuffer[colorBufferIndex + 1] = backgroundColor.getGreen();
             colorBuffer[colorBufferIndex + 2] = backgroundColor.getBlue();
             return;
         }
-        int colorIndex = placeParser.getColorBuffer()[canvasIndex];
+        int colorIndex = parser.getColorBuffer()[canvasIndex];
         Color color = colors[colorIndex];
         int checkX = zoom < 1 ? CANVAS_SIZE_X / z : CANVAS_SIZE_X * z;
         int checkY = zoom < 1 ? CANVAS_SIZE_Y / z : CANVAS_SIZE_Y * z;
