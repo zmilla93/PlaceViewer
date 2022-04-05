@@ -22,8 +22,8 @@ public class CanvasPanel extends JPanel {
     public int VIEWPORT_WIDTH;
     public int VIEWPORT_HEIGHT;
 
-    private int viewportPanX = 500;
-    private int viewportPanY = 0;
+    private int viewportPanX = -500;
+    private int viewportPanY = -250;
     private final int MAX_ZOOM = 10;
     private int zoom = 1;
 
@@ -88,22 +88,45 @@ public class CanvasPanel extends JPanel {
         timer.start();
     }
 
-    private void updateColorBuffer(){
+    private void updateColorBuffer() {
         int[] simpleBuffer = placeParser.getColorBuffer();
         Arrays.fill(colorBuffer, 0);
-        int x;
-        int y;
 
-        for(int i = 0;i<simpleBuffer.length;i++){
-            int index = i * 3;
-            Color color = colors[simpleBuffer[i]];
-            colorBuffer[index] = color.getRed();
-            colorBuffer[index + 1] = color.getGreen();
-            colorBuffer[index + 2] = color.getBlue();
+        for (int y = 0; y < CANVAS_SIZE_Y; y++) {
+            for (int x = 0; x < CANVAS_SIZE_X; x++) {
+                pixelToScreen(x, y);
+            }
         }
+
+//        for (int i = 0; i < simpleBuffer.length; i++) {
+//            int index = i * 3;
+//            Color color = colors[simpleBuffer[i]];
+//            colorBuffer[index] = color.getRed();
+//            colorBuffer[index + 1] = color.getGreen();
+//            colorBuffer[index + 2] = color.getBlue();
+//        }
     }
 
-    boolean isPointWithinViewport(int x, int y){
+    private void pixelToScreen(int inX, int inY) {
+        int x = inX + viewportPanX;
+        int y = inY + viewportPanY;
+        if (x < 0 || x + 2 > CANVAS_SIZE_X) return;
+        if (y < 0 || y + 2 > CANVAS_SIZE_Y) return;
+        int colorBufferIndex = x * 3 + y * CANVAS_SIZE_X * 3;
+        int index = x + y * CANVAS_SIZE_X;
+        int colorIndex = placeParser.getColorBuffer()[index];
+        Color color = colors[colorIndex];
+//        for(int i = 0;i<3;i++){
+//
+//            colorBuffer[index] = color.getRed();
+//        }
+
+        colorBuffer[colorBufferIndex] = color.getRed();
+        colorBuffer[colorBufferIndex + 1] = color.getGreen();
+        colorBuffer[colorBufferIndex + 2] = color.getBlue();
+    }
+
+    boolean isPointWithinViewport(int x, int y) {
         return false;
     }
 
