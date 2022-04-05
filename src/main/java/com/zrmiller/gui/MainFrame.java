@@ -5,6 +5,9 @@ import com.zrmiller.core.utility.ZUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class MainFrame extends JFrame {
 
@@ -30,6 +33,13 @@ public class MainFrame extends JFrame {
         gc.fill = GridBagConstraints.HORIZONTAL;
         sidebar.add(runButton, gc);
         gc.gridy++;
+        container.setFocusable(true);
+        container.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                // TODO
+            }
+        });
 
         sidebarContainer.add(sidebar, BorderLayout.NORTH);
         container.add(sidebarContainer, BorderLayout.WEST);

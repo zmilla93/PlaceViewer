@@ -21,12 +21,13 @@ public class CanvasPanel extends JPanel {
     public int viewportWidth = 1400;
     public int viewportHeight = 1400;
     private int targetFPS = -1;
-    private int VIEWPORT_PAN_BUFFER = 100;
     private int viewportPanX = 0;
     private int viewportPanY = 0;
     private final int MAX_ZOOM = 20;
     private int zoom = 1;
-    private static int COLOR_CHANNEL_COUNT;
+    private int cachedZoom = zoom;
+
+    private boolean markForRepaint;
 
     // Movement
     private int initialX;
@@ -60,18 +61,19 @@ public class CanvasPanel extends JPanel {
             new Color(104, 16, 171),
     };
 
-    private static Color backgroundColor = new Color(28, 27, 27);
-
-    private PlaceParser placeParser = new PlaceParser();
+    private static final Color backgroundColor = new Color(28, 27, 27);
+    private final PlaceParser placeParser = new PlaceParser();
 
     BufferedImage bufferedImage = new BufferedImage(viewportWidth, viewportHeight, BufferedImage.TYPE_INT_RGB);
 
     int[] colorBuffer = new int[viewportWidth * viewportHeight * 3];
 
-    private static Executor executor = Executors.newSingleThreadExecutor();
+    private static final Executor executor = Executors.newSingleThreadExecutor();
     int lastPaintedFrame = 0;
 
     public CanvasPanel() {
+        setFocusable(true);
+        setRequestFocusEnabled(true);
         placeParser.openInputStream("D:/Place/place_tiles_final");
         executor.execute(new Runnable() {
             @Override
@@ -148,31 +150,14 @@ public class CanvasPanel extends JPanel {
         }
     }
 
-    public void updateTile(int x, int y, int colorIndex) {
-        int index = x * 3 + y * CANVAS_SIZE_X * 3;
-        Color color = colors[colorIndex];
-        if (index + 2 > colorBuffer.length) {
-            System.out.println("BAD::" + x + ", " + y);
-            return;
-        }
-        if (index < 0) {
-            System.out.println("BAD::" + x + ", " + y);
-            return;
-        }
-        colorBuffer[index] = color.getRed();
-        colorBuffer[index + 1] = color.getGreen();
-        colorBuffer[index + 2] = color.getBlue();
-    }
-
-    private boolean markForRepaint = false;
-
     private void addListeners() {
         addMouseWheelListener(new MouseWheelListener() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
                 int mod = e.getPreciseWheelRotation() < 0 ? 1 : -1;
                 zoom += mod;
-                zoom = ZUtil.clamp(zoom, -2, MAX_ZOOM);
+                zoom = ZUtil.clamp(zoom, -1, MAX_ZOOM);
+                fixZoomPan();
                 markForRepaint = true;
             }
         });
@@ -197,6 +182,15 @@ public class CanvasPanel extends JPanel {
                 markForRepaint = true;
             }
         });
+    }
+
+    private void fixZoomPan() {
+        // FIXME:
+        int diff = zoom - cachedZoom;
+        System.out.println("DIFF:" + diff);
+//        viewportPanX += CANVAS_SIZE_X / 2 * -diff;
+//        viewportPanY += CANVAS_SIZE_Y / 2 * -diff;
+        cachedZoom = zoom;
     }
 
     private int getFixedZoom() {
