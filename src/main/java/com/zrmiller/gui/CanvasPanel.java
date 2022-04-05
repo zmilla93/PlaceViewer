@@ -19,12 +19,12 @@ public class CanvasPanel extends JPanel {
     // Panel Settings
     public int viewportWidth = 1400;
     public int viewportHeight = 1400;
-    private int targetFPS = 60;
+    private int targetFPS = -1;
     private int VIEWPORT_PAN_BUFFER = 100;
     private int viewportPanX = 0;
     private int viewportPanY = 0;
     private final int MAX_ZOOM = 10;
-    private int zoom = 1;
+    private int zoom = 2;
     private static int COLOR_CHANNEL_COUNT;
 
     // Movement
@@ -59,7 +59,7 @@ public class CanvasPanel extends JPanel {
             new Color(104, 16, 171),
     };
 
-    private static Color backgroundColor = new Color(54, 54, 54);
+    private static Color backgroundColor = new Color(28, 27, 27);
 
     private PlaceParser placeParser = new PlaceParser();
 
@@ -100,7 +100,8 @@ public class CanvasPanel extends JPanel {
                 }
             }
         });
-        timer.setDelay(1000 / targetFPS);
+        int delay = targetFPS == -1 ? 0 : 1000 / targetFPS;
+        timer.setDelay(delay);
         timer.start();
         addListeners();
     }
@@ -116,15 +117,16 @@ public class CanvasPanel extends JPanel {
     private void resolvePixel(int pixelX, int pixelY) {
         int x = pixelX - viewportPanX;
         int y = pixelY - viewportPanY;
-        int canvasX = x + y * CANVAS_SIZE_X;
+        int canvasIndex =  x+ y * CANVAS_SIZE_X;
+//        int canvasIndex =  x / zoom + y * CANVAS_SIZE_X / zoom;
         int colorBufferIndex = pixelX * 3 + pixelY * viewportWidth * 3;   // index of top left colorBuffer element being drawn
-        if (canvasX < 0 || canvasX >= placeParser.getColorBuffer().length) {
+        if (canvasIndex < 0 || canvasIndex >= placeParser.getColorBuffer().length) {
             colorBuffer[colorBufferIndex] = backgroundColor.getRed();
             colorBuffer[colorBufferIndex + 1] = backgroundColor.getGreen();
             colorBuffer[colorBufferIndex + 2] = backgroundColor.getBlue();
             return;
         }
-        int colorIndex = placeParser.getColorBuffer()[canvasX];
+        int colorIndex = placeParser.getColorBuffer()[canvasIndex];
         Color color = colors[colorIndex];
         if (x < 0 || x > CANVAS_SIZE_X || y < 0 || y > CANVAS_SIZE_Y) {
             // Paint Out of Bounds Pixel

@@ -85,11 +85,11 @@ public class PlaceParser {
         return ints;
     }
 
-    public int getLineCount(){
+    public int getLineCount() {
         return lineCount;
     }
 
-    public int[] getColorBuffer(){
+    public int[] getColorBuffer() {
         return colorBuffer;
     }
 
