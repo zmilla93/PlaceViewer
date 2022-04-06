@@ -3,27 +3,16 @@ package com.zrmiller.core.parser;
 import com.zrmiller.gui.CanvasPanel;
 
 import java.io.*;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class PlaceParser {
 
     private BufferedReader reader;
     private BufferedWriter writer;
     private boolean running;
-    private IParserCallback callback;
 
     private int lineCount;
 
     private int[] colorBuffer = new int[CanvasPanel.CANVAS_SIZE_X * CanvasPanel.CANVAS_SIZE_Y];
-
-    private Timer timer = new Timer();
-    private TimerTask timerTask = new TimerTask() {
-        @Override
-        public void run() {
-            callback.statusUpdate("");
-        }
-    };
 
     public void openInputStream(String inputPath) {
         try {
@@ -38,7 +27,13 @@ public class PlaceParser {
         return reader.ready();
     }
 
-    public int[] getNextTokens() throws IOException {
+    /**
+     * Reads the next line from the file and returns the result.
+     *
+     * @return An array of 3 integers. [0] = x, [1] = y, [2] = color
+     * @throws IOException
+     */
+    public int[] getNextLine() throws IOException {
         String[] line = reader.readLine().split(",");
         int[] ints = new int[]{Integer.parseInt(line[0]), Integer.parseInt(line[1]), Integer.parseInt(line[2])};
         int index = ints[0] + ints[1] * CanvasPanel.CANVAS_SIZE_X;

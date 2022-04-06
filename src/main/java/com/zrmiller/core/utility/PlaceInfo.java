@@ -7,6 +7,9 @@ public class PlaceInfo {
     public static final int ORIGINAL_LINE_COUNT = 16567568;
     public static final int CLEAN_LINE_COUNT = 16567564;
 
+    public static int CANVAS_SIZE_X = 1001;
+    public static int CANVAS_SIZE_Y = 1001;
+
     public static final Color[] canvasColors = new Color[]{
             new Color(255, 255, 255),
             new Color(201, 201, 201),

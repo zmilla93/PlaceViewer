@@ -27,7 +27,6 @@ public class WindowContainer extends JPanel implements ICanvasListener {
     private void buildPanels() {
 
         sidebarPanel.add(new JButton("ASJFKLSDJAF"), BorderLayout.CENTER);
-//        sidebarPanel.add(new JSeparator(JSeparator.VERTICAL), BorderLayout.EAST);
         sidebarPanel.add(new SeparatorPanel(), BorderLayout.EAST);
         GridBagConstraints gc = ZUtil.getGC();
 
@@ -41,7 +40,7 @@ public class WindowContainer extends JPanel implements ICanvasListener {
     }
 
     private void addPanels() {
-        add(sidebarPanel, BorderLayout.WEST);
+//        add(sidebarPanel, BorderLayout.WEST);
         add(canvasPanel, BorderLayout.CENTER);
         add(southPanel, BorderLayout.SOUTH);
     }

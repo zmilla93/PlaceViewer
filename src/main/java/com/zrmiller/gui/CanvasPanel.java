@@ -1,6 +1,7 @@
 package com.zrmiller.gui;
 
-import com.zrmiller.core.parser.PlaceParser;
+import com.zrmiller.core.parser.BufferedPlacePlayer;
+import com.zrmiller.core.parser.PlacePlayer;
 import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.modules.styles.ColorManager;
@@ -10,7 +11,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -42,6 +42,8 @@ public class CanvasPanel extends JPanel implements IThemeListener {
     // Listeners
     private ArrayList<ICanvasListener> canvasListeners = new ArrayList<>();
 
+    private Thread thread;
+
     private Timer timer = new Timer(1, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -49,7 +51,8 @@ public class CanvasPanel extends JPanel implements IThemeListener {
         }
     });
 
-    private final PlaceParser parser = new PlaceParser();
+//    private final PlaceParser parser = new PlaceParser();
+    private final PlacePlayer parser = new PlacePlayer("D:/Place/place_tiles_final");
 
     BufferedImage bufferedImage = new BufferedImage(viewportWidth, viewportHeight, BufferedImage.TYPE_INT_RGB);
 
@@ -62,27 +65,30 @@ public class CanvasPanel extends JPanel implements IThemeListener {
     public CanvasPanel() {
         setFocusable(true);
         setRequestFocusEnabled(true);
-        parser.openInputStream("D:/Place/place_tiles_final");
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (parser.ready()) {
-                        parser.getNextTokens();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                parser.close();
-            }
-        });
+        parser.play();
+//        parser.openInputStream("D:/Place/place_tiles_final");
+//        executor.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    while (parser.ready()) {
+//                        parser.getNextLine();
+//                    }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                parser.close();
+//            }
+//        });
         timer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (lastPaintedFrame != parser.getLineCount()) {
-                    markForRepaint = true;
-                    lastPaintedFrame = parser.getLineCount();
-                }
+//                if (lastPaintedFrame != parser.getLineCount()) {
+//                    markForRepaint = true;
+//                    lastPaintedFrame = parser.getLineCount();
+//                }
+                // FIXME :
+                markForRepaint = true;
                 if (markForRepaint) {
                     updateColorBuffer();
                     repaint();
