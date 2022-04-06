@@ -1,9 +1,11 @@
 package com.zrmiller.gui;
 
+import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.core.utility.ZUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.NumberFormat;
 
 public class WindowContainer extends JPanel implements ICanvasListener {
 
@@ -11,7 +13,7 @@ public class WindowContainer extends JPanel implements ICanvasListener {
     private JPanel sidebarPanel = new JPanel(new BorderLayout());
     private JPanel southPanel = new JPanel(new BorderLayout());
     private JLabel positionLabel = new JLabel("Pos -");
-    private JLabel frameLabel = new JLabel("Unloaded");
+    private JLabel frameCountLabel = new JLabel("-");
     private JLabel zoomLabel = new JLabel("100%");
 
     public WindowContainer() {
@@ -34,13 +36,13 @@ public class WindowContainer extends JPanel implements ICanvasListener {
         JPanel southRightPanel = new JPanel();
         southRightPanel.add(zoomLabel);
         southPanel.add(positionLabel, BorderLayout.CENTER);
-        southPanel.add(frameLabel, BorderLayout.WEST);
+        southPanel.add(frameCountLabel, BorderLayout.WEST);
         southPanel.add(southRightPanel, BorderLayout.EAST);
         southPanel.add(new SeparatorPanel(), BorderLayout.NORTH);
     }
 
     private void addPanels() {
-//        add(sidebarPanel, BorderLayout.WEST);
+        add(new PlayerControlPanel(canvasPanel.getPlayer()), BorderLayout.WEST);
         add(canvasPanel, BorderLayout.CENTER);
         add(southPanel, BorderLayout.SOUTH);
     }
@@ -54,4 +56,10 @@ public class WindowContainer extends JPanel implements ICanvasListener {
     public void onPan(Point point) {
         positionLabel.setText("Pos " + point.x + ", " + point.y);
     }
+
+    @Override
+    public void onDraw(int frameCount) {
+        frameCountLabel.setText("Frame " + NumberFormat.getInstance().format(frameCount) + " / " + PlaceInfo.CLEAN_LINE_COUNT_FORMATTED);
+    }
+
 }

@@ -1,6 +1,5 @@
 package com.zrmiller.gui;
 
-import com.zrmiller.core.parser.BufferedPlacePlayer;
 import com.zrmiller.core.parser.PlacePlayer;
 import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.core.utility.ZUtil;
@@ -51,8 +50,8 @@ public class CanvasPanel extends JPanel implements IThemeListener {
         }
     });
 
-//    private final PlaceParser parser = new PlaceParser();
-    private final PlacePlayer parser = new PlacePlayer("D:/Place/place_tiles_final");
+    //    private final PlaceParser parser = new PlaceParser();
+    private final PlacePlayer player = new PlacePlayer("D:/Place/place_tiles_final");
 
     BufferedImage bufferedImage = new BufferedImage(viewportWidth, viewportHeight, BufferedImage.TYPE_INT_RGB);
 
@@ -65,7 +64,7 @@ public class CanvasPanel extends JPanel implements IThemeListener {
     public CanvasPanel() {
         setFocusable(true);
         setRequestFocusEnabled(true);
-        parser.play();
+        player.play();
 //        parser.openInputStream("D:/Place/place_tiles_final");
 //        executor.execute(new Runnable() {
 //            @Override
@@ -83,16 +82,16 @@ public class CanvasPanel extends JPanel implements IThemeListener {
         timer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                if (lastPaintedFrame != parser.getLineCount()) {
-//                    markForRepaint = true;
-//                    lastPaintedFrame = parser.getLineCount();
-//                }
-                // FIXME :
-                markForRepaint = true;
+                if (lastPaintedFrame != player.getFrameCount()) {
+                    markForRepaint = true;
+                    lastPaintedFrame = player.getFrameCount();
+                }
                 if (markForRepaint) {
                     updateColorBuffer();
                     repaint();
                     markForRepaint = false;
+                    for (ICanvasListener listener : canvasListeners)
+                        listener.onDraw(lastPaintedFrame);
                 }
             }
         });
@@ -137,13 +136,13 @@ public class CanvasPanel extends JPanel implements IThemeListener {
             canvasIndex = x * z + y * z * CANVAS_SIZE_X;
         }
         int colorBufferIndex = pixelX * 3 + pixelY * viewportWidth * 3;   // index of top left colorBuffer element being drawn
-        if (canvasIndex < 0 || canvasIndex >= parser.getColorBuffer().length) {
+        if (canvasIndex < 0 || canvasIndex >= player.getColorBuffer().length) {
             colorBuffer[colorBufferIndex] = backgroundColor.getRed();
             colorBuffer[colorBufferIndex + 1] = backgroundColor.getGreen();
             colorBuffer[colorBufferIndex + 2] = backgroundColor.getBlue();
             return;
         }
-        int colorIndex = parser.getColorBuffer()[canvasIndex];
+        int colorIndex = player.getColorBuffer()[canvasIndex];
         Color color = PlaceInfo.canvasColors[colorIndex];
         int checkX = zoom < 1 ? CANVAS_SIZE_X / z : CANVAS_SIZE_X * z;
         int checkY = zoom < 1 ? CANVAS_SIZE_Y / z : CANVAS_SIZE_Y * z;
@@ -224,6 +223,10 @@ public class CanvasPanel extends JPanel implements IThemeListener {
 
     public void removeAllListeners() {
         canvasListeners.clear();
+    }
+
+    public PlacePlayer getPlayer() {
+        return player;
     }
 
     @Override

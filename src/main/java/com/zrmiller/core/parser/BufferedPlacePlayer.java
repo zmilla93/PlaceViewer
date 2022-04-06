@@ -64,7 +64,7 @@ public class BufferedPlacePlayer {
 
     private void applyNextFrame() {
         if (frameIndex >= currentBuffer.length) {
-            if(!ready){
+            if (!ready) {
                 pause();
                 return;
             }

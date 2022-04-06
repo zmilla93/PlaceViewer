@@ -3,6 +3,7 @@ package com.zrmiller.core.parser;
 import com.zrmiller.core.utility.PlaceInfo;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -12,12 +13,14 @@ public class PlacePlayer {
     private int updatesPerSecond = 1000000;
     private int TEMP_FPS = 60;
     private Timer timer = new Timer();
-    int frameIndex = 0;
+    int frameCount = 0;
 
     private final int[] colorBuffer = new int[PlaceInfo.CANVAS_SIZE_X * PlaceInfo.CANVAS_SIZE_Y];
+    private final String inputPath;
 
-    public PlacePlayer(String inputFile) {
-        parser.openInputStream(inputFile);
+    public PlacePlayer(String inputPath) {
+        this.inputPath = inputPath;
+        parser.openInputStream(inputPath);
     }
 
     public void play() {
@@ -41,6 +44,14 @@ public class PlacePlayer {
         timer.purge();
     }
 
+    public void reset() {
+        pause();
+        parser.close();
+        frameCount = 0;
+        Arrays.fill(colorBuffer, 0);
+        parser.openInputStream(inputPath);
+    }
+
     public void jumpToFrame(int frame) {
 
     }
@@ -49,8 +60,12 @@ public class PlacePlayer {
         if (parser.ready()) {
             int[] tokens = parser.getNextLine();
             colorBuffer[tokens[0] + tokens[1] * PlaceInfo.CANVAS_SIZE_X] = tokens[2];
-            frameIndex++;
+            frameCount++;
         }
+    }
+
+    public int getFrameCount() {
+        return frameCount;
     }
 
     public int[] getColorBuffer() {

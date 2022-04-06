@@ -1,11 +1,13 @@
 package com.zrmiller.core.utility;
 
 import java.awt.*;
+import java.text.NumberFormat;
 
 public class PlaceInfo {
 
     public static final int ORIGINAL_LINE_COUNT = 16567568;
     public static final int CLEAN_LINE_COUNT = 16567564;
+    public static final String CLEAN_LINE_COUNT_FORMATTED = NumberFormat.getInstance().format(CLEAN_LINE_COUNT);
 
     public static int CANVAS_SIZE_X = 1001;
     public static int CANVAS_SIZE_Y = 1001;

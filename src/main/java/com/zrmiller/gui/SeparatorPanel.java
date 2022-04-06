@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- *  Can be used with a BorderLayout panel to create a separator.
+ * Can be used with a BorderLayout panel to create a separator.
  */
 public class SeparatorPanel extends JPanel {
 

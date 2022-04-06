@@ -34,6 +34,7 @@ public class PlaceParser {
      * @throws IOException
      */
     public int[] getNextLine() throws IOException {
+        // FIXME : Replace split with faster method
         String[] line = reader.readLine().split(",");
         int[] ints = new int[]{Integer.parseInt(line[0]), Integer.parseInt(line[1]), Integer.parseInt(line[2])};
         int index = ints[0] + ints[1] * CanvasPanel.CANVAS_SIZE_X;

@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 
 public class FileConverter {
 
-    public FileConverter(){
+    public FileConverter() {
 
     }
 
