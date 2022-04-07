@@ -216,8 +216,8 @@ public class CanvasPanel extends JPanel implements IThemeListener {
     private void alertListeners() {
         for (ICanvasListener listener : canvasListeners)
             listener.onZoom(zoom);
-        for (ICanvasListener listener : canvasListeners)
-            listener.onPan(getCenterPixel());
+//        for (ICanvasListener listener : canvasListeners)
+//            listener.onPan(getCenterPixel());
     }
 
     private int getFixedZoom() {

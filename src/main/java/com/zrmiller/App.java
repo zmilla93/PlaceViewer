@@ -3,6 +3,7 @@ package com.zrmiller;
 import com.zrmiller.core.datawrangler.DataWrangler2022;
 import com.zrmiller.core.PlaceParser2022;
 import com.zrmiller.core.utility.PlaceInfo;
+import com.zrmiller.gui.FrameManager;
 import com.zrmiller.modules.stopwatch.Stopwatch;
 
 import javax.swing.*;
@@ -17,17 +18,18 @@ public class App {
     public static void main(String[] args) {
         try {
             SwingUtilities.invokeAndWait(() -> {
-//                FrameManager.init();
+                FrameManager.init();
             });
         } catch (InterruptedException | InvocationTargetException e) {
             e.printStackTrace();
         }
 
-        tempDownloadDataset();
 
-//        tempConvertDataset();
-//        testNewDownload();
-//        oldDownload();
+    }
+
+    private static void downloadFullDataset(){
+        DataWrangler2022 d = new DataWrangler2022();
+        d.downloadAndProcessFullDataset();
     }
 
     private static void testNewDownload() {
@@ -46,7 +48,7 @@ public class App {
 
         // Binary Convert
         Stopwatch.start();
-        dataDownloader.minifyFileBinary("Place_Tiles__2022_Original_0.txt", "Place_1_Micro.placetiles");
+        dataDownloader.minifyFile("Place_Tiles__2022_Original_0.txt", "Place_1_Micro.placetiles");
         System.out.println("Converted to binary in " + Stopwatch.getElapsedSeconds() + " seconds");
 
 //        // Normal Convert

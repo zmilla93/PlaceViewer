@@ -17,7 +17,7 @@ public class DataWrangler2022 extends DataWrangler {
 
     private static final String downloadURLTemplate = "https://placedata.reddit.com/data/canvas-history/2022_place_canvas_history-INDEX.csv.gzip";
 
-    private String directory = "D:/Place/";
+    private String directory = "D:/Place/2022-Binary/";
 
     private String prefix = "Place_2022_INDEX";
     private String binaryExtension = ".placetiles";
@@ -33,25 +33,32 @@ public class DataWrangler2022 extends DataWrangler {
 
     }
 
-    public void downloadAndUnzipFullDataset() {
+//    public void downloadAndUnzipFullDataset() {
+//        for (int i = 0; i < 78; i++) {
+//            System.out.println("Downloading file #" + i + "...");
+//            downloadFile(getIndexedName(zipFileName, i), getUrlString(i));
+//            System.out.println("Unzipping file #" + i + "...");
+//            unzip(getIndexedName(zipFileName, i), getIndexedName(originalFileName, i));
+//        }
+//    }
+
+    public void downloadAndProcessFullDataset() {
         for (int i = 0; i < 78; i++) {
-            System.out.println("Downloading file #" + i + "...");
-            downloadFile(getIndexedName(zipFileName, i), getUrlString(i));
-            System.out.println("Unzipping file #" + i + "...");
-            unzip(getIndexedName(zipFileName, i), getIndexedName(originalFileName, i));
+            downloadUnzipAndMinify(i);
         }
     }
 
     public void downloadUnzipAndMinify(int index) {
+        int fileCount = index + 1;
+        System.out.println("Downloading file #" + fileCount + "...");
         downloadFile(getIndexedName(zipFileName, index), getUrlString(index));
+        System.out.println("Unzipping file #" + fileCount + "...");
         unzip(getIndexedName(zipFileName, index), getIndexedName(originalFileName, index));
-        minifyFileBinary(getIndexedName(originalFileName, index), getIndexedName(binaryFileName, index));
+        System.out.println("Minifying file #" + fileCount + "...");
+        minifyFile(getIndexedName(originalFileName, index), getIndexedName(binaryFileName, index));
     }
 
     private String getIndexedName(String input, int index) {
-        System.out.println("...");
-        System.out.println("in:"+input);
-        System.out.println("out:" + input.replaceFirst("INDEX", Integer.toString(index)));
         return input.replaceFirst("INDEX", Integer.toString(index));
     }
 
@@ -80,7 +87,7 @@ public class DataWrangler2022 extends DataWrangler {
                 bytesDownloaded += numBytesRead;
                 float currentProgress = (bytesDownloaded / (float) fileSize);
                 outputStream.write(data, 0, numBytesRead);
-                System.out.println("CURP:" + currentProgress);
+//                System.out.println("CURP:" + currentProgress);
             }
             inputStream.close();
             outputStream.close();
@@ -119,11 +126,11 @@ public class DataWrangler2022 extends DataWrangler {
         return false;
     }
 
-    public boolean minifyFileBinary(String source, String dest) {
-        return minifyFileBinary(source, dest, true);
+    public boolean minifyFile(String source, String dest) {
+        return minifyFile(source, dest, true);
     }
 
-    public boolean minifyFileBinary(String source, String dest, boolean deleteSource) {
+    public boolean minifyFile(String source, String dest, boolean deleteSource) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(directory + source));
             BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(directory + dest));
@@ -133,17 +140,12 @@ public class DataWrangler2022 extends DataWrangler {
                 String[] tokens = tokenizeLine(line, 5);
                 if (tokens == null) continue; // Skip Empty Lines
                 if (!lineStartsWithNumber(tokens[0])) continue; // Skip lines that don't start with a timestamp
-                try {
-                    TileEdit edit = new TileEdit(getTimestamp(tokens[0]), colorConverter.colorToInt(tokens[2]), Short.parseShort(tokens[3].substring(1)), Short.parseShort(tokens[4].substring(0, tokens[4].length() - 1)));
-                    outputStream.write(edit.toByteArray());
-                } catch (IllegalArgumentException e) {
-                    System.out.println("BADNUM:" + line);
-                    e.printStackTrace();
-                }
+                TileEdit edit = new TileEdit(getTimestamp(tokens[0]), colorConverter.colorToInt(tokens[2]), Short.parseShort(tokens[3].substring(1)), Short.parseShort(tokens[4].substring(0, tokens[4].length() - 1)));
+                outputStream.write(edit.toByteArray());
             }
             reader.close();
             outputStream.close();
-            if(deleteSource){
+            if (deleteSource) {
                 File file = new File(directory + source);
                 return file.delete();
             }
@@ -165,24 +167,4 @@ public class DataWrangler2022 extends DataWrangler {
         return (int) (timestamp.getTime() - (long) PlaceInfo.TIME_CORRECTION_2022);
     }
 
-//    private String[] tokenizeLine(String input, int tokenCount) {
-//        String[] tokens = new String[tokenCount];
-//        StringBuilder builder = new StringBuilder();
-//        int tokenIndex = 0;
-//        for (int i = 0; i < input.length(); i++) {
-//            if (tokenIndex >= tokenCount) {
-//                System.out.println("BADNESS:" + input);
-//                return null;
-//            }
-//            if (input.charAt(i) == ',') {
-//                tokens[tokenIndex] = builder.toString();
-//                builder.setLength(0);
-//                tokenIndex++;
-//            } else {
-//                builder.append(input.charAt(i));
-//            }
-//        }
-//        tokens[tokenIndex] = builder.toString();
-//        return tokens;
-//    }
 }
