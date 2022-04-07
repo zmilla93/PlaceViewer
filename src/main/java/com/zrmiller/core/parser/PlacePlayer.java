@@ -9,7 +9,7 @@ import java.util.TimerTask;
 
 public class PlacePlayer {
 
-    PlaceParser parser = new PlaceParser();
+    PlaceParser2017 parser = new PlaceParser2017();
     private int updatesPerSecond = 1000000;
     private int TEMP_FPS = 60;
     private Timer timer = new Timer();

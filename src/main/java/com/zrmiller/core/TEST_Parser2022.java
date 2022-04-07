@@ -3,13 +3,13 @@ package com.zrmiller.core;
 import java.io.*;
 import java.nio.ByteBuffer;
 
-public class PlaceParser2022 {
+public class TEST_Parser2022 {
 
     private String directory = "D:/Place/";
     private String fileNameBinary = "Place_1_Micro.placetiles";
     private String fileName = "Place_1_Mini.txt";
 
-    public PlaceParser2022() {
+    public TEST_Parser2022() {
 
     }
 

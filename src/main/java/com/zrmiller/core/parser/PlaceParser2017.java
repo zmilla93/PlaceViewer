@@ -4,7 +4,7 @@ import com.zrmiller.gui.CanvasPanel;
 
 import java.io.*;
 
-public class PlaceParser {
+public class PlaceParser2017 {
 
     private BufferedReader reader;
     private BufferedWriter writer;

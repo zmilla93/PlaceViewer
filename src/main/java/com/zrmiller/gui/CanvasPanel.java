@@ -151,7 +151,7 @@ public class CanvasPanel extends JPanel implements IThemeListener {
             return;
         }
         int heat = player.getHeatmapBuffer()[canvasIndex];
-        float f = heat / (float)PlacePlayer.heatmapMax;
+        float f = heat / (float) PlacePlayer.heatmapMax;
         Color c = new Color(f, f, f);
         int colorIndex = player.getColorBuffer()[canvasIndex];
         Color color = PlaceInfo.canvasColors[colorIndex];

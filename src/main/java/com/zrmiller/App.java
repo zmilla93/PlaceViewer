@@ -1,12 +1,13 @@
 package com.zrmiller;
 
+import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.datawrangler.DataWrangler2022;
-import com.zrmiller.core.PlaceParser2022;
+import com.zrmiller.core.TEST_Parser2022;
+import com.zrmiller.core.parser.PlaceParser2022;
 import com.zrmiller.core.utility.PlaceInfo;
-import com.zrmiller.gui.FrameManager;
-import com.zrmiller.modules.stopwatch.Stopwatch;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
@@ -18,16 +19,33 @@ public class App {
     public static void main(String[] args) {
         try {
             SwingUtilities.invokeAndWait(() -> {
-                FrameManager.init();
+//                FrameManager.init();
             });
         } catch (InterruptedException | InvocationTargetException e) {
             e.printStackTrace();
         }
+        System.out.println(PlaceInfo.TIME_CORRECTION_2022);
 
+        testParse();
+    }
+
+
+    private static void testParse() {
+        PlaceParser2022 p = new PlaceParser2022("D:/Place/2022-Binary/", "Place_2022_INDEX.placetiles");
+        p.openStream();
+        while (true) {
+            try {
+                TileEdit edit = p.readNextLine();
+                if (edit == null)
+                    break;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
-    private static void downloadFullDataset(){
+    private static void downloadFullDataset() {
         DataWrangler2022 d = new DataWrangler2022();
         d.downloadAndProcessFullDataset();
     }
@@ -43,30 +61,5 @@ public class App {
         dataDownloader.downloadUnzipAndMinify(23);
     }
 
-    private static void tempConvertDataset() {
-        DataWrangler2022 dataDownloader = new DataWrangler2022();
-
-        // Binary Convert
-        Stopwatch.start();
-        dataDownloader.minifyFile("Place_Tiles__2022_Original_0.txt", "Place_1_Micro.placetiles");
-        System.out.println("Converted to binary in " + Stopwatch.getElapsedSeconds() + " seconds");
-
-//        // Normal Convert
-//        Stopwatch.start();
-//        dataDownloader.minifyFile("Place_Tiles__2022_Original_0.txt", "Place_1_Mini.txt");
-//        System.out.println("Converted to normal in " + Stopwatch.getElapsedSeconds() + " seconds");
-
-        PlaceParser2022 parser2022 = new PlaceParser2022();
-
-        Stopwatch.start();
-        parser2022.readAllBinary();
-        System.out.println("Read binary in " + Stopwatch.getElapsedSeconds() + " seconds");
-
-        Stopwatch.start();
-        parser2022.readAll();
-        System.out.println("Read all in " + Stopwatch.getElapsedSeconds() + " seconds");
-
-        System.out.println(PlaceInfo.TIME_CORRECTION_2022);
-    }
 
 }

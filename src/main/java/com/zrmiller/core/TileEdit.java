@@ -9,6 +9,8 @@ public class TileEdit {
     public final short x;
     public final short y;
 
+    public static final int BYTE_COUNT = 10;
+
     public TileEdit(int timestamp, short color, short x, short y) {
         this.timestamp = timestamp;
         this.color = color;
