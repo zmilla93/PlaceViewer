@@ -22,7 +22,7 @@ public class IconButton extends JButton {
 
     public IconButton(String path) {
         this.path = path.startsWith("/") ? path : "/" + path;
-        if(!getImageFromFile()){
+        if (!getImageFromFile()) {
             System.err.println("[IconButton] File not found: /resources" + path);
             System.err.println("[IconButton] If this file exists, try cleaning and rebuilding the project.");
             return;

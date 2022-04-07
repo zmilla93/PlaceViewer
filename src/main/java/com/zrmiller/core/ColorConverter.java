@@ -1,10 +1,46 @@
 package com.zrmiller.core;
 
+import java.awt.*;
 import java.util.HashMap;
 
 public class ColorConverter {
 
-    private HashMap<String, Short> colorToIntMap;
+    private final HashMap<String, Short> colorToIntMap;
+
+    public static final Color[] intToColor = new Color[]{
+            new Color(109, 0, 26),
+            new Color(190, 0, 57),
+            new Color(255, 69, 0),
+            new Color(255, 168, 0),
+            new Color(255, 214, 53),
+            new Color(255, 248, 184),
+            new Color(0, 163, 104),
+            new Color(0, 204, 120),
+            new Color(126, 237, 86),
+            new Color(0, 117, 111),
+            new Color(0, 158, 170),
+            new Color(0, 204, 192),
+            new Color(36, 80, 164),
+            new Color(54, 144, 234),
+            new Color(81, 233, 244),
+            new Color(73, 58, 193),
+            new Color(106, 92, 255),
+            new Color(148, 179, 255),
+            new Color(129, 30, 159),
+            new Color(180, 74, 192),
+            new Color(228, 171, 255),
+            new Color(222, 16, 127),
+            new Color(255, 56, 129),
+            new Color(255, 153, 170),
+            new Color(109, 72, 47),
+            new Color(156, 105, 38),
+            new Color(255, 180, 112),
+            new Color(0, 0, 0),
+            new Color(81, 82, 82),
+            new Color(137, 141, 144),
+            new Color(212, 215, 217),
+            new Color(255, 255, 255),
+    };
 
     public ColorConverter() {
         colorToIntMap = new HashMap<>();

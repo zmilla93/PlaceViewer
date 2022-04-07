@@ -17,7 +17,7 @@ public class DownloaderPanel extends JPanel {
         addListeners();
     }
 
-    private void addListeners(){
+    private void addListeners() {
         JPanel self = this;
         browseButton.addActionListener(e -> fileChooser.showOpenDialog(self));
     }

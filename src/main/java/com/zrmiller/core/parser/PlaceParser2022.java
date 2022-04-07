@@ -8,7 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class PlaceParser2022 implements IPlaceParser{
+public class PlaceParser2022 implements IPlaceParser {
 
     private String directory;
     private String fileNameTemplate;
@@ -27,9 +27,7 @@ public class PlaceParser2022 implements IPlaceParser{
 
     @Override
     public boolean openStream() {
-//        goToFile(99);
         try {
-            System.out.println("F:" + directory + getIndexedName(fileNameTemplate, PlaceInfo.fileOrder[0]));
             currentStream = new BufferedInputStream(new FileInputStream(directory + getIndexedName(fileNameTemplate, PlaceInfo.fileOrder[0])));
             nextStream = new BufferedInputStream(new FileInputStream(directory + getIndexedName(fileNameTemplate, PlaceInfo.fileOrder[1])));
             fileIndex = 2;
@@ -77,13 +75,10 @@ public class PlaceParser2022 implements IPlaceParser{
                 fileLineCount = 0;
             }
         }
-        if (numBytesRead == -1){
+        if (numBytesRead == -1) {
             currentLine = null;
             return false;
         }
-//        TileEdit edit = new TileEdit(line);
-//        if(fileLineCount == 0)
-//            System.out.println("T" + edit.timestamp);
         currentLine = new TileEdit(line);
         fileLineCount++;
         return true;
@@ -94,7 +89,6 @@ public class PlaceParser2022 implements IPlaceParser{
         currentStream = nextStream;
         if (fileIndex < PlaceInfo.fileOrder.length) {
             try {
-                System.out.println("Next:" + PlaceInfo.fileOrder[fileIndex]);
                 nextStream = new BufferedInputStream(new FileInputStream(directory + getIndexedName(fileNameTemplate, PlaceInfo.fileOrder[fileIndex])));
                 fileIndex++;
             } catch (FileNotFoundException e) {

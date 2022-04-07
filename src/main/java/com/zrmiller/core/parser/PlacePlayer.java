@@ -31,8 +31,7 @@ public class PlacePlayer {
     public PlacePlayer(String inputPath) {
         this.inputPath = inputPath;
         parser = new PlaceParser2022("D:/Place/2022-Binary/", "Place_2022_INDEX.placetiles");
-
-        System.out.println("OPEN STREAM: " + parser.openStream());
+        parser.openStream();
     }
 
     public void play() {
