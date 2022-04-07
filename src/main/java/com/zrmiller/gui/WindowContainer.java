@@ -10,39 +10,61 @@ import java.text.NumberFormat;
 public class WindowContainer extends JPanel implements ICanvasListener {
 
     private CanvasPanel canvasPanel = new CanvasPanel();
+
     private JPanel sidebarPanel = new JPanel(new BorderLayout());
     private JPanel southPanel = new JPanel(new BorderLayout());
     private JLabel positionLabel = new JLabel("Pos -");
     private JLabel frameCountLabel = new JLabel("-");
     private JLabel zoomLabel = new JLabel("100%");
 
+    private JMenuBar menubar = new MainMenuBar();
+    private JMenu settingsMenu = new JMenu("Settings");
+    private JMenuItem settingsMenuItem = new JMenu("Settings");
+    private JMenuItem asdf = new JMenuItem("Settings");
+    private JMenuItem aaaa = new JMenuItem("Settings");
+
+    private JPanel northPanel = new JPanel(new BorderLayout());
+
     public WindowContainer() {
         setLayout(new BorderLayout());
-        // Panels
         buildPanels();
-        addPanels();
 
         onPan(new Point(0, 0));
         canvasPanel.addListener(this);
     }
 
     private void buildPanels() {
+        // Menubar
+//        menubar.add(settingsMenu);
+//        settingsMenu.add(settingsMenuItem);
+//        settingsMenu.add(new JMenuItem("Whoaaa"));
+//        settingsMenu.add(new JButton("HMMM"));
+//        settingsMenu.add(new JLabel("wowzers"));
 
+        // Sidebar???
         sidebarPanel.add(new JButton("ASJFKLSDJAF"), BorderLayout.CENTER);
         sidebarPanel.add(new SeparatorPanel(), BorderLayout.EAST);
         GridBagConstraints gc = ZUtil.getGC();
 
+        // North Panel
+        northPanel.add(menubar, BorderLayout.NORTH);
+        northPanel.add(new PlayerControlPanel(canvasPanel.getPlayer()), BorderLayout.CENTER);
+        JPanel northContainer = new JPanel(new BorderLayout());
+        northContainer.add(northPanel, BorderLayout.CENTER);
+//        northContainer.add(new SeparatorPanel(), BorderLayout.SOUTH);
+        northContainer.add(new SeparatorPanel(), BorderLayout.SOUTH);
+
+
         // South Panel
         JPanel southRightPanel = new JPanel();
         southRightPanel.add(zoomLabel);
-        southPanel.add(positionLabel, BorderLayout.CENTER);
+//        southPanel.add(positionLabel, BorderLayout.CENTER);
         southPanel.add(frameCountLabel, BorderLayout.WEST);
         southPanel.add(southRightPanel, BorderLayout.EAST);
         southPanel.add(new SeparatorPanel(), BorderLayout.NORTH);
-    }
 
-    private void addPanels() {
-        add(new PlayerControlPanel(canvasPanel.getPlayer()), BorderLayout.WEST);
+        // Main Panel
+        add(northContainer, BorderLayout.NORTH);
         add(canvasPanel, BorderLayout.CENTER);
         add(southPanel, BorderLayout.SOUTH);
     }

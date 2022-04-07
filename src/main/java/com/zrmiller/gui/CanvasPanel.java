@@ -23,7 +23,7 @@ public class CanvasPanel extends JPanel implements IThemeListener {
     // Panel Settings
     public int viewportWidth = 1400;
     public int viewportHeight = 1400;
-    private int targetFPS = -1;
+    private int targetFPS = 60;
     private int viewportPanX = 0;
     private int viewportPanY = 0;
     private final int MAX_ZOOM = 20;
@@ -55,7 +55,7 @@ public class CanvasPanel extends JPanel implements IThemeListener {
 
     BufferedImage bufferedImage = new BufferedImage(viewportWidth, viewportHeight, BufferedImage.TYPE_INT_RGB);
 
-    int[] colorBuffer = new int[viewportWidth * viewportHeight * 3];
+    int[] rgbColorBuffer = new int[viewportWidth * viewportHeight * 3]; // 3 entries per pixel
     private Color backgroundColor = Color.RED;
 
     private static final Executor executor = Executors.newSingleThreadExecutor();
@@ -64,7 +64,7 @@ public class CanvasPanel extends JPanel implements IThemeListener {
     public CanvasPanel() {
         setFocusable(true);
         setRequestFocusEnabled(true);
-        player.play();
+//        player.play();
 //        parser.openInputStream("D:/Place/place_tiles_final");
 //        executor.execute(new Runnable() {
 //            @Override
@@ -86,19 +86,27 @@ public class CanvasPanel extends JPanel implements IThemeListener {
                     markForRepaint = true;
                     lastPaintedFrame = player.getFrameCount();
                 }
-                if (markForRepaint) {
-                    updateColorBuffer();
-                    repaint();
-                    markForRepaint = false;
-                    for (ICanvasListener listener : canvasListeners)
-                        listener.onDraw(lastPaintedFrame);
-                }
+                tryRepaint();
             }
         });
         int delay = targetFPS == -1 ? 0 : 1000 / targetFPS;
         timer.setDelay(delay);
         timer.start();
         addListeners();
+    }
+
+    private void tryRepaint() {
+//        if (lastPaintedFrame != player.getFrameCount()) {
+//            markForRepaint = true;
+//            lastPaintedFrame = player.getFrameCount();
+//        }
+        if (markForRepaint) {
+            updateColorBuffer();
+            repaint();
+            markForRepaint = false;
+            for (ICanvasListener listener : canvasListeners)
+                listener.onDraw(lastPaintedFrame);
+        }
     }
 
     private Point getCenterPixel() {
@@ -137,9 +145,9 @@ public class CanvasPanel extends JPanel implements IThemeListener {
         }
         int colorBufferIndex = pixelX * 3 + pixelY * viewportWidth * 3;   // index of top left colorBuffer element being drawn
         if (canvasIndex < 0 || canvasIndex >= player.getColorBuffer().length) {
-            colorBuffer[colorBufferIndex] = backgroundColor.getRed();
-            colorBuffer[colorBufferIndex + 1] = backgroundColor.getGreen();
-            colorBuffer[colorBufferIndex + 2] = backgroundColor.getBlue();
+            rgbColorBuffer[colorBufferIndex] = backgroundColor.getRed();
+            rgbColorBuffer[colorBufferIndex + 1] = backgroundColor.getGreen();
+            rgbColorBuffer[colorBufferIndex + 2] = backgroundColor.getBlue();
             return;
         }
         int colorIndex = player.getColorBuffer()[canvasIndex];
@@ -148,14 +156,14 @@ public class CanvasPanel extends JPanel implements IThemeListener {
         int checkY = zoom < 1 ? CANVAS_SIZE_Y / z : CANVAS_SIZE_Y * z;
         if (x < 0 || x > checkX || y < 0 || y > checkY * z) {
             // Paint Out of Bounds Pixel
-            colorBuffer[colorBufferIndex] = backgroundColor.getRed();
-            colorBuffer[colorBufferIndex + 1] = backgroundColor.getGreen();
-            colorBuffer[colorBufferIndex + 2] = backgroundColor.getBlue();
+            rgbColorBuffer[colorBufferIndex] = backgroundColor.getRed();
+            rgbColorBuffer[colorBufferIndex + 1] = backgroundColor.getGreen();
+            rgbColorBuffer[colorBufferIndex + 2] = backgroundColor.getBlue();
         } else {
             // Paint Color Pixel
-            colorBuffer[colorBufferIndex] = color.getRed();
-            colorBuffer[colorBufferIndex + 1] = color.getGreen();
-            colorBuffer[colorBufferIndex + 2] = color.getBlue();
+            rgbColorBuffer[colorBufferIndex] = color.getRed();
+            rgbColorBuffer[colorBufferIndex + 1] = color.getGreen();
+            rgbColorBuffer[colorBufferIndex + 2] = color.getBlue();
         }
     }
 
@@ -231,13 +239,15 @@ public class CanvasPanel extends JPanel implements IThemeListener {
 
     @Override
     protected void paintComponent(Graphics g) {
-        bufferedImage.getRaster().setPixels(0, 0, viewportWidth, viewportHeight, colorBuffer);
+        bufferedImage.getRaster().setPixels(0, 0, viewportWidth, viewportHeight, rgbColorBuffer);
         g.drawImage(bufferedImage, 0, 0, Color.white, null);
     }
 
     @Override
     public void onThemeChange() {
         backgroundColor = UIManager.getColor("ComboBox.background");
+        markForRepaint = true;
+        tryRepaint();
     }
 
 }

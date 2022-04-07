@@ -18,12 +18,15 @@ public class PlacePlayer {
     private final int[] colorBuffer = new int[PlaceInfo.CANVAS_SIZE_X * PlaceInfo.CANVAS_SIZE_Y];
     private final String inputPath;
 
+    private boolean playing;
+
     public PlacePlayer(String inputPath) {
         this.inputPath = inputPath;
         parser.openInputStream(inputPath);
     }
 
     public void play() {
+        if(playing) return;
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -37,11 +40,17 @@ public class PlacePlayer {
                 }
             }
         }, 0, 1000 / TEMP_FPS);
+        playing = true;
     }
 
     public void pause() {
         timer.cancel();
         timer.purge();
+        playing = false;
+    }
+
+    public void setSpeed(int speed) {
+        updatesPerSecond = speed;
     }
 
     public void reset() {
@@ -61,6 +70,8 @@ public class PlacePlayer {
             int[] tokens = parser.getNextLine();
             colorBuffer[tokens[0] + tokens[1] * PlaceInfo.CANVAS_SIZE_X] = tokens[2];
             frameCount++;
+        } else {
+            pause();
         }
     }
 
