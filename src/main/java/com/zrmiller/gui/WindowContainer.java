@@ -49,9 +49,10 @@ public class WindowContainer extends JPanel implements ICanvasListener {
         // North Panel
 //        northPanel.add(menubar, BorderLayout.NORTH);
 
-        SpeedLabelPanel speedLabelPanel = new SpeedLabelPanel();
         PlayerControlPanel playerControlPanel = new PlayerControlPanel(canvasPanel.getPlayer());
+
         northPanel.add(playerControlPanel, BorderLayout.WEST);
+        northPanel.add(new jumpToFramePanel(), BorderLayout.EAST);
 //        northPanel.add(speedLabelPanel, BorderLayout.EAST);
 
         JPanel northContainer = new JPanel(new BorderLayout());

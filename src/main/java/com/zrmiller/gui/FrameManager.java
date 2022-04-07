@@ -1,5 +1,6 @@
 package com.zrmiller.gui;
 
+import com.zrmiller.gui.windows.MainFrame;
 import com.zrmiller.modules.styles.ColorManager;
 import com.zrmiller.modules.styles.ColorTheme;
 
