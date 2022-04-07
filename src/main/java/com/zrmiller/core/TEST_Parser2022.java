@@ -35,10 +35,10 @@ public class TEST_Parser2022 {
         }
     }
 
-    public void readAll(){
+    public void readAll() {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(directory + fileName));
-            while (reader.ready()){
+            while (reader.ready()) {
                 String line = reader.readLine();
                 String[] tokens = TEMP_tokenizeLine(line, 5);
             }
@@ -67,7 +67,6 @@ public class TEST_Parser2022 {
         tokens[tokenIndex] = builder.toString();
         return tokens;
     }
-
 
 
 }

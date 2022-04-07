@@ -17,7 +17,7 @@ public class WindowContainer extends JPanel implements ICanvasListener {
     private JLabel frameCountLabel = new JLabel("-");
     private JLabel zoomLabel = new JLabel("100%");
 
-//    private JMenuBar menubar = new MainMenuBar();
+    //    private JMenuBar menubar = new MainMenuBar();
     private JMenu settingsMenu = new JMenu("Settings");
     private JMenuItem settingsMenuItem = new JMenu("Settings");
     private JMenuItem asdf = new JMenuItem("Settings");
