@@ -20,8 +20,8 @@ public class DataDownloader2022 implements IDownloadTracker {
     private String prefix = "Place_2022_INDEX";
     private String binaryExtension = ".placetiles";
 
-    private String zipFileName = prefix + "_Archive_INDEX.gzip";
-    private String originalFileName = prefix + "_Original_INDEX.txt";
+    private String zipFileName = prefix + "_Archive.gzip";
+    private String originalFileName = prefix + "_Original.txt";
     private String binaryFileName = prefix + binaryExtension;
 
     private final HashSet<Integer> filesToIgnore = new HashSet<>();
@@ -34,19 +34,22 @@ public class DataDownloader2022 implements IDownloadTracker {
     public void downloadAndUnzipFullDataset() {
         for (int i = 0; i < 78; i++) {
             System.out.println("Downloading file #" + i + "...");
-            downloadFile(indexedName(zipFileName, i), getUrlString(i));
+            downloadFile(getIndexedName(zipFileName, i), getUrlString(i));
             System.out.println("Unzipping file #" + i + "...");
-            unzip(indexedName(zipFileName, i), indexedName(originalFileName, i));
+            unzip(getIndexedName(zipFileName, i), getIndexedName(originalFileName, i));
         }
     }
 
     public void downloadUnzipAndMinify(int index) {
-        downloadFile(indexedName(zipFileName, index), getUrlString(index));
-        unzip(indexedName(zipFileName, index), indexedName(originalFileName, index), false);
-        minifyFileBinary(indexedName(originalFileName, index), indexedName(binaryFileName, index));
+        downloadFile(getIndexedName(zipFileName, index), getUrlString(index));
+        unzip(getIndexedName(zipFileName, index), getIndexedName(originalFileName, index));
+        minifyFileBinary(getIndexedName(originalFileName, index), getIndexedName(binaryFileName, index));
     }
 
-    private String indexedName(String input, int index) {
+    private String getIndexedName(String input, int index) {
+        System.out.println("...");
+        System.out.println("in:"+input);
+        System.out.println("out:" + input.replaceFirst("INDEX", Integer.toString(index)));
         return input.replaceFirst("INDEX", Integer.toString(index));
     }
 
@@ -90,7 +93,7 @@ public class DataDownloader2022 implements IDownloadTracker {
         return unzip(source, dest, true);
     }
 
-    public boolean unzip(String source, String dest, boolean deleteZip) {
+    public boolean unzip(String source, String dest, boolean deleteSource) {
         try {
             GZIPInputStream inputStream = new GZIPInputStream(new FileInputStream(directory + source));
             OutputStream outputStream = new FileOutputStream(directory + dest);
@@ -101,7 +104,7 @@ public class DataDownloader2022 implements IDownloadTracker {
             }
             inputStream.close();
             outputStream.close();
-            if (deleteZip) {
+            if (deleteSource) {
                 File file = new File(directory + source);
                 boolean success = file.delete();  // Fixme : check delete status
                 if (!success) {
@@ -116,27 +119,31 @@ public class DataDownloader2022 implements IDownloadTracker {
 
     int miniLineCount = 0;
 
-    public boolean minifyFile(String source, String dest) {
-        miniLineCount = 0;
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(directory + source));
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(directory + dest)));
-            while (reader.ready()) {
-                String formattedLine = getFormattedLine(reader.readLine());
-                if (formattedLine == null) continue;
-                writer.write(formattedLine);
-            }
-            reader.close();
-            writer.close();
-            System.out.println("LINE COUT : " + miniLineCount);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+//    public boolean minifyFile(String source, String dest) {
+//        miniLineCount = 0;
+//        try {
+//            BufferedReader reader = new BufferedReader(new FileReader(directory + source));
+//            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(directory + dest)));
+//            while (reader.ready()) {
+//                String formattedLine = getFormattedLine(reader.readLine());
+//                if (formattedLine == null) continue;
+//                writer.write(formattedLine);
+//            }
+//            reader.close();
+//            writer.close();
+//            System.out.println("LINE COUT : " + miniLineCount);
+//            return true;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
 
     public boolean minifyFileBinary(String source, String dest) {
+        return minifyFileBinary(source, dest, true);
+    }
+
+    public boolean minifyFileBinary(String source, String dest, boolean deleteSource) {
         miniLineCount = 0;
         try {
             BufferedReader reader = new BufferedReader(new FileReader(directory + source));
@@ -155,7 +162,12 @@ public class DataDownloader2022 implements IDownloadTracker {
                     e.printStackTrace();
                 }
             }
+            reader.close();
             outputStream.close();
+            if(deleteSource){
+                File file = new File(directory + source);
+                return file.delete();
+            }
             return true;
         } catch (IOException e) {
             e.printStackTrace();

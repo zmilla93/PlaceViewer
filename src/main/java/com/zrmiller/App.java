@@ -18,13 +18,13 @@ public class App {
     public static void main(String[] args) {
         try {
             SwingUtilities.invokeAndWait(() -> {
-                FrameManager.init();
+//                FrameManager.init();
             });
         } catch (InterruptedException | InvocationTargetException e) {
             e.printStackTrace();
         }
 
-//        tempDownloadDataset();
+        tempDownloadDataset();
 
 //        tempConvertDataset();
 //        testNewDownload();
@@ -39,7 +39,7 @@ public class App {
 
     private static void tempDownloadDataset() {
         DataDownloader2022 dataDownloader = new DataDownloader2022();
-        dataDownloader.downloadUnzipAndMinify(0);
+        dataDownloader.downloadUnzipAndMinify(23);
     }
 
     private static void tempConvertDataset() {
@@ -50,10 +50,10 @@ public class App {
         dataDownloader.minifyFileBinary("Place_Tiles__2022_Original_0.txt", "Place_1_Micro.placetiles");
         System.out.println("Converted to binary in " + Stopwatch.getElapsedSeconds() + " seconds");
 
-        // Normal Convert
-        Stopwatch.start();
-        dataDownloader.minifyFile("Place_Tiles__2022_Original_0.txt", "Place_1_Mini.txt");
-        System.out.println("Converted to normal in " + Stopwatch.getElapsedSeconds() + " seconds");
+//        // Normal Convert
+//        Stopwatch.start();
+//        dataDownloader.minifyFile("Place_Tiles__2022_Original_0.txt", "Place_1_Mini.txt");
+//        System.out.println("Converted to normal in " + Stopwatch.getElapsedSeconds() + " seconds");
 
         PlaceParser2022 parser2022 = new PlaceParser2022();
 
