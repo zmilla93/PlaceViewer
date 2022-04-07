@@ -1,5 +1,7 @@
-package com.zrmiller.core;
+package com.zrmiller.core.datawrangler;
 
+import com.zrmiller.core.ColorConverter;
+import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.utility.PlaceInfo;
 
 import java.io.*;
@@ -11,7 +13,7 @@ import java.util.zip.GZIPInputStream;
 
 // Dataset Details - https://www.reddit.com/r/place/comments/txvk2d/rplace_datasets_april_fools_2022/
 
-public class DataDownloader2022 implements IDownloadTracker {
+public class DataWrangler2022 extends DataWrangler {
 
     private static final String downloadURLTemplate = "https://placedata.reddit.com/data/canvas-history/2022_place_canvas_history-INDEX.csv.gzip";
 
@@ -27,7 +29,7 @@ public class DataDownloader2022 implements IDownloadTracker {
     private final HashSet<Integer> filesToIgnore = new HashSet<>();
     private static final int BYTE_BUFFER_SIZE = 1024 * 4;
 
-    public DataDownloader2022() {
+    public DataWrangler2022() {
 
     }
 
@@ -117,34 +119,11 @@ public class DataDownloader2022 implements IDownloadTracker {
         return false;
     }
 
-    int miniLineCount = 0;
-
-//    public boolean minifyFile(String source, String dest) {
-//        miniLineCount = 0;
-//        try {
-//            BufferedReader reader = new BufferedReader(new FileReader(directory + source));
-//            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(directory + dest)));
-//            while (reader.ready()) {
-//                String formattedLine = getFormattedLine(reader.readLine());
-//                if (formattedLine == null) continue;
-//                writer.write(formattedLine);
-//            }
-//            reader.close();
-//            writer.close();
-//            System.out.println("LINE COUT : " + miniLineCount);
-//            return true;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
-
     public boolean minifyFileBinary(String source, String dest) {
         return minifyFileBinary(source, dest, true);
     }
 
     public boolean minifyFileBinary(String source, String dest, boolean deleteSource) {
-        miniLineCount = 0;
         try {
             BufferedReader reader = new BufferedReader(new FileReader(directory + source));
             BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(directory + dest));
@@ -175,19 +154,6 @@ public class DataDownloader2022 implements IDownloadTracker {
         }
     }
 
-    private String getFormattedLine(String input) {
-        // TODO
-        if (!lineStartsWithNumber(input))
-            return null;
-        String[] tokens = tokenizeLine(input, 5);
-        if (tokens == null) return null; // TODO : TEMP
-        long timeT = getTimestamp(tokens[0]);
-        miniLineCount++;
-        return timeT + "," + tokens[2] + "," + tokens[3] + "," + tokens[4] + "\n";
-
-
-    }
-
     private boolean lineStartsWithNumber(String line) {
         int c = line.charAt(0);
         return c >= 48 && c <= 57;
@@ -199,37 +165,24 @@ public class DataDownloader2022 implements IDownloadTracker {
         return (int) (timestamp.getTime() - (long) PlaceInfo.TIME_CORRECTION_2022);
     }
 
-    private String[] tokenizeLine(String input, int tokenCount) {
-        String[] tokens = new String[tokenCount];
-        StringBuilder builder = new StringBuilder();
-        int tokenIndex = 0;
-        for (int i = 0; i < input.length(); i++) {
-            if (tokenIndex >= tokenCount) {
-                System.out.println("BADNESS:" + input);
-                return null;
-            }
-            if (input.charAt(i) == ',') {
-                tokens[tokenIndex] = builder.toString();
-                builder.setLength(0);
-                tokenIndex++;
-            } else {
-                builder.append(input.charAt(i));
-            }
-        }
-        tokens[tokenIndex] = builder.toString();
-        return tokens;
-    }
-
-
-
-
-    @Override
-    public void downloadPercentCallback(int progress) {
-//        System.out.println("PROGRESS : " + progress);
-    }
-
-    @Override
-    public void textCallback(String message) {
-
-    }
+//    private String[] tokenizeLine(String input, int tokenCount) {
+//        String[] tokens = new String[tokenCount];
+//        StringBuilder builder = new StringBuilder();
+//        int tokenIndex = 0;
+//        for (int i = 0; i < input.length(); i++) {
+//            if (tokenIndex >= tokenCount) {
+//                System.out.println("BADNESS:" + input);
+//                return null;
+//            }
+//            if (input.charAt(i) == ',') {
+//                tokens[tokenIndex] = builder.toString();
+//                builder.setLength(0);
+//                tokenIndex++;
+//            } else {
+//                builder.append(input.charAt(i));
+//            }
+//        }
+//        tokens[tokenIndex] = builder.toString();
+//        return tokens;
+//    }
 }

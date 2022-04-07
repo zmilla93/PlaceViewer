@@ -1,9 +1,8 @@
 package com.zrmiller;
 
-import com.zrmiller.core.DataDownloader2022;
+import com.zrmiller.core.datawrangler.DataWrangler2022;
 import com.zrmiller.core.PlaceParser2022;
 import com.zrmiller.core.utility.PlaceInfo;
-import com.zrmiller.gui.FrameManager;
 import com.zrmiller.modules.stopwatch.Stopwatch;
 
 import javax.swing.*;
@@ -32,18 +31,18 @@ public class App {
     }
 
     private static void testNewDownload() {
-        DataDownloader2022 d = new DataDownloader2022();
+        DataWrangler2022 d = new DataWrangler2022();
 //        d.downloadFile("CoolTest.gzip", "https://placedata.reddit.com/data/canvas-history/2022_place_canvas_history-000000000000.csv.gzip");
         d.downloadUnzipAndMinify(23);
     }
 
     private static void tempDownloadDataset() {
-        DataDownloader2022 dataDownloader = new DataDownloader2022();
+        DataWrangler2022 dataDownloader = new DataWrangler2022();
         dataDownloader.downloadUnzipAndMinify(23);
     }
 
     private static void tempConvertDataset() {
-        DataDownloader2022 dataDownloader = new DataDownloader2022();
+        DataWrangler2022 dataDownloader = new DataWrangler2022();
 
         // Binary Convert
         Stopwatch.start();
