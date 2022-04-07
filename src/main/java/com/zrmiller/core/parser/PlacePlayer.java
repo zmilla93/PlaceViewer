@@ -1,5 +1,6 @@
 package com.zrmiller.core.parser;
 
+import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.utility.PlaceInfo;
 
 import java.io.IOException;
@@ -9,17 +10,18 @@ import java.util.TimerTask;
 
 public class PlacePlayer {
 
-    PlaceParser2017 parser = new PlaceParser2017();
+    //    PlaceParser2017 parser = new PlaceParser2017();
+    IPlaceParser parser = new PlaceParser2022("D:/Place/2022-Binary/", "Place_2022_INDEX.placetiles");
     private int updatesPerSecond = 1000000;
     private int TEMP_FPS = 60;
     private Timer timer = new Timer();
     int frameCount = 0;
 
-    private final int[] colorBuffer = new int[PlaceInfo.CANVAS_SIZE_X * PlaceInfo.CANVAS_SIZE_Y];
+    private int[] colorBuffer = new int[PlaceInfo.CANVAS_SIZE_X * PlaceInfo.CANVAS_SIZE_Y];
     private final String inputPath;
 
     // Heatmap
-    private final int[] heatmapBuffer = new int[PlaceInfo.CANVAS_SIZE_X * PlaceInfo.CANVAS_SIZE_Y];
+    private int[] heatmapBuffer = new int[PlaceInfo.CANVAS_SIZE_X * PlaceInfo.CANVAS_SIZE_Y];
     public static int heatmapWeight = 10000;
     public static int heatmapMax = 100000;
     public static int heatmapDecay = 10;
@@ -28,7 +30,9 @@ public class PlacePlayer {
 
     public PlacePlayer(String inputPath) {
         this.inputPath = inputPath;
-        parser.openInputStream(inputPath);
+        parser = new PlaceParser2022("D:/Place/2022-Binary/", "Place_2022_INDEX.placetiles");
+
+        System.out.println("OPEN STREAM: " + parser.openStream());
     }
 
     public void play() {
@@ -63,11 +67,12 @@ public class PlacePlayer {
 
     public void reset() {
         pause();
-        parser.close();
+        parser.closeStream();
         frameCount = 0;
         Arrays.fill(colorBuffer, 0);
         Arrays.fill(heatmapBuffer, 0);
-        parser.openInputStream(inputPath);
+//        parser.openInputStream(inputPath);
+        parser.openStream();
     }
 
     public void jumpToFrame(int frame) {
@@ -76,9 +81,12 @@ public class PlacePlayer {
 
     private void applyNextFrame() throws IOException {
         if (parser.ready()) {
-            int[] tokens = parser.getNextLine();
-            int index = tokens[0] + tokens[1] * PlaceInfo.CANVAS_SIZE_X;
-            colorBuffer[index] = tokens[2];
+//            int[] tokens = parser.getNextLine();
+            TileEdit tile = parser.readNextLine();
+
+//            int index = tokens[0] + tokens[1] * PlaceInfo.CANVAS_SIZE_X;
+            int index = tile.x + tile.y * PlaceInfo.CANVAS_SIZE_X;
+            colorBuffer[index] = tile.color;
             heatmapBuffer[index] += heatmapWeight;
             if (heatmapBuffer[index] > heatmapMax) heatmapBuffer[index] = heatmapMax;
             frameCount++;
@@ -105,6 +113,12 @@ public class PlacePlayer {
 
     public int[] getHeatmapBuffer() {
         return heatmapBuffer;
+    }
+
+    public void resizeCanvas(int width, int height) {
+        pause();
+        colorBuffer = new int[PlaceInfo.CANVAS_SIZE_X * PlaceInfo.CANVAS_SIZE_Y];
+        heatmapBuffer = new int[PlaceInfo.CANVAS_SIZE_X * PlaceInfo.CANVAS_SIZE_Y];
     }
 
 }

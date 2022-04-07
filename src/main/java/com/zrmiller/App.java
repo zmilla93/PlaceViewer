@@ -5,6 +5,7 @@ import com.zrmiller.core.datawrangler.DataWrangler2022;
 import com.zrmiller.core.TEST_Parser2022;
 import com.zrmiller.core.parser.PlaceParser2022;
 import com.zrmiller.core.utility.PlaceInfo;
+import com.zrmiller.gui.FrameManager;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -19,14 +20,14 @@ public class App {
     public static void main(String[] args) {
         try {
             SwingUtilities.invokeAndWait(() -> {
-//                FrameManager.init();
+                FrameManager.init();
             });
         } catch (InterruptedException | InvocationTargetException e) {
             e.printStackTrace();
         }
         System.out.println(PlaceInfo.TIME_CORRECTION_2022);
-
-        testParse();
+        System.out.println("file count : " + PlaceInfo.fileOrder.length);
+//        testParse();
     }
 
 

@@ -1,6 +1,6 @@
 package com.zrmiller.core.parser;
 
-import com.zrmiller.gui.CanvasPanel;
+import com.zrmiller.core.utility.PlaceInfo;
 
 import java.io.*;
 
@@ -12,7 +12,7 @@ public class PlaceParser2017 {
 
     private int lineCount;
 
-    private int[] colorBuffer = new int[CanvasPanel.CANVAS_SIZE_X * CanvasPanel.CANVAS_SIZE_Y];
+    private int[] colorBuffer = new int[PlaceInfo.CANVAS_SIZE_X * PlaceInfo.CANVAS_SIZE_Y];
 
     public void openInputStream(String inputPath) {
         try {
@@ -37,7 +37,7 @@ public class PlaceParser2017 {
         // FIXME : Replace split with faster method
         String[] line = reader.readLine().split(",");
         int[] ints = new int[]{Integer.parseInt(line[0]), Integer.parseInt(line[1]), Integer.parseInt(line[2])};
-        int index = ints[0] + ints[1] * CanvasPanel.CANVAS_SIZE_X;
+        int index = ints[0] + ints[1] * PlaceInfo.CANVAS_SIZE_X;
         colorBuffer[index] = ints[2];
         lineCount++;
         return ints;

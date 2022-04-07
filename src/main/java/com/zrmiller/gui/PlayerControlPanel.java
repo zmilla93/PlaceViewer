@@ -39,7 +39,7 @@ public class PlayerControlPanel extends JPanel {
 
         speedSlider.setValue(60);
         speedSlider.setMinimum(60);
-        speedSlider.setMaximum(1000000);
+        speedSlider.setMaximum(10000000);
     }
 
     private void addListeners() {

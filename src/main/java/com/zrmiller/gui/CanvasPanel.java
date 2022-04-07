@@ -16,9 +16,9 @@ import java.util.concurrent.Executors;
 
 public class CanvasPanel extends JPanel implements IThemeListener {
 
-    // TODO : Move
-    public static int CANVAS_SIZE_X = 1001;
-    public static int CANVAS_SIZE_Y = 1001;
+    // TODO : Merge
+    private static final int LOCAL_CANVAS_SIZE_X = PlaceInfo.CANVAS_SIZE_X;
+    private static final int LOCAL_CANVAS_SIZE_Y = PlaceInfo.CANVAS_SIZE_Y;
 
     // Panel Settings
     public int viewportWidth = 1400;
@@ -139,9 +139,48 @@ public class CanvasPanel extends JPanel implements IThemeListener {
         int z = zoom <= 0 ? 2 - zoom : zoom;
         int canvasIndex;
         if (zoom >= 1) {
-            canvasIndex = x / z + y / z * CANVAS_SIZE_X;
+            canvasIndex = x / z + y / z * LOCAL_CANVAS_SIZE_X;
         } else {
-            canvasIndex = x * z + y * z * CANVAS_SIZE_X;
+            canvasIndex = x * z + y * z * LOCAL_CANVAS_SIZE_X;
+        }
+        int colorBufferIndex = pixelX * 3 + pixelY * viewportWidth * 3;   // index of top left colorBuffer element being drawn
+        if (canvasIndex < 0 || canvasIndex >= player.getColorBuffer().length) {
+            rgbColorBuffer[colorBufferIndex] = backgroundColor.getRed();
+            rgbColorBuffer[colorBufferIndex + 1] = backgroundColor.getGreen();
+            rgbColorBuffer[colorBufferIndex + 2] = backgroundColor.getBlue();
+            return;
+        }
+        // FIXME : Heatmap : IllegalArgumentException: Color parameter outside of expected range: Red Green Blue
+        int heat = player.getHeatmapBuffer()[canvasIndex];
+//        float f = heat / (float) PlacePlayer.heatmapMax;
+//        Color c = new Color(f, f, f);
+        int colorIndex = player.getColorBuffer()[canvasIndex];
+        Color color = PlaceInfo.canvasColors[colorIndex];
+//        Color color = c;
+        int checkX = zoom < 1 ? LOCAL_CANVAS_SIZE_X / z : LOCAL_CANVAS_SIZE_X * z;
+        int checkY = zoom < 1 ? LOCAL_CANVAS_SIZE_Y / z : LOCAL_CANVAS_SIZE_Y * z;
+        if (x < 0 || x > checkX || y < 0 || y > checkY * z) {
+            // Paint Out of Bounds Pixel
+            rgbColorBuffer[colorBufferIndex] = backgroundColor.getRed();
+            rgbColorBuffer[colorBufferIndex + 1] = backgroundColor.getGreen();
+            rgbColorBuffer[colorBufferIndex + 2] = backgroundColor.getBlue();
+        } else {
+            // Paint Color Pixel
+            rgbColorBuffer[colorBufferIndex] = color.getRed();
+            rgbColorBuffer[colorBufferIndex + 1] = color.getGreen();
+            rgbColorBuffer[colorBufferIndex + 2] = color.getBlue();
+        }
+    }
+
+    private void OLD_resolvePixel(int pixelX, int pixelY) {
+        int x = pixelX - viewportPanX;
+        int y = pixelY - viewportPanY;
+        int z = zoom <= 0 ? 2 - zoom : zoom;
+        int canvasIndex;
+        if (zoom >= 1) {
+            canvasIndex = x / z + y / z * LOCAL_CANVAS_SIZE_X;
+        } else {
+            canvasIndex = x * z + y * z * LOCAL_CANVAS_SIZE_X;
         }
         int colorBufferIndex = pixelX * 3 + pixelY * viewportWidth * 3;   // index of top left colorBuffer element being drawn
         if (canvasIndex < 0 || canvasIndex >= player.getColorBuffer().length) {
@@ -156,8 +195,8 @@ public class CanvasPanel extends JPanel implements IThemeListener {
         int colorIndex = player.getColorBuffer()[canvasIndex];
         Color color = PlaceInfo.canvasColors[colorIndex];
 //        Color color = c;
-        int checkX = zoom < 1 ? CANVAS_SIZE_X / z : CANVAS_SIZE_X * z;
-        int checkY = zoom < 1 ? CANVAS_SIZE_Y / z : CANVAS_SIZE_Y * z;
+        int checkX = zoom < 1 ? LOCAL_CANVAS_SIZE_X / z : LOCAL_CANVAS_SIZE_X * z;
+        int checkY = zoom < 1 ? LOCAL_CANVAS_SIZE_Y / z : LOCAL_CANVAS_SIZE_Y * z;
         if (x < 0 || x > checkX || y < 0 || y > checkY * z) {
             // Paint Out of Bounds Pixel
             rgbColorBuffer[colorBufferIndex] = backgroundColor.getRed();
