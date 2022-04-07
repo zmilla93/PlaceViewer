@@ -18,6 +18,12 @@ public class PlacePlayer {
     private final int[] colorBuffer = new int[PlaceInfo.CANVAS_SIZE_X * PlaceInfo.CANVAS_SIZE_Y];
     private final String inputPath;
 
+    // Heatmap
+    private final int[] heatmapBuffer = new int[PlaceInfo.CANVAS_SIZE_X * PlaceInfo.CANVAS_SIZE_Y];
+    public static int heatmapWeight = 10000;
+    public static int heatmapMax = 100000;
+    public static int heatmapDecay = 10;
+
     private boolean playing;
 
     public PlacePlayer(String inputPath) {
@@ -26,18 +32,20 @@ public class PlacePlayer {
     }
 
     public void play() {
-        if(playing) return;
+        if (playing) return;
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                int iterations = updatesPerSecond / TEMP_FPS;
                 try {
-                    for (int i = 0; i < updatesPerSecond / TEMP_FPS; i++) {
+                    for (int i = 0; i < iterations; i++) {
                         applyNextFrame();
                     }
                 } catch (IOException e) {
                     pause();
                 }
+                decayHeatmap(iterations);
             }
         }, 0, 1000 / TEMP_FPS);
         playing = true;
@@ -58,6 +66,7 @@ public class PlacePlayer {
         parser.close();
         frameCount = 0;
         Arrays.fill(colorBuffer, 0);
+        Arrays.fill(heatmapBuffer, 0);
         parser.openInputStream(inputPath);
     }
 
@@ -68,10 +77,21 @@ public class PlacePlayer {
     private void applyNextFrame() throws IOException {
         if (parser.ready()) {
             int[] tokens = parser.getNextLine();
-            colorBuffer[tokens[0] + tokens[1] * PlaceInfo.CANVAS_SIZE_X] = tokens[2];
+            int index = tokens[0] + tokens[1] * PlaceInfo.CANVAS_SIZE_X;
+            colorBuffer[index] = tokens[2];
+            heatmapBuffer[index] += heatmapWeight;
+            if (heatmapBuffer[index] > heatmapMax) heatmapBuffer[index] = heatmapMax;
             frameCount++;
         } else {
             pause();
+        }
+    }
+
+    private void decayHeatmap(int iterations) {
+        for (int i = 0; i < heatmapBuffer.length; i++) {
+            int heat = heatmapBuffer[i] - iterations / 10;
+            if (heat < 0) heat = 0;
+            heatmapBuffer[i] = heat;
         }
     }
 
@@ -81,6 +101,10 @@ public class PlacePlayer {
 
     public int[] getColorBuffer() {
         return colorBuffer;
+    }
+
+    public int[] getHeatmapBuffer() {
+        return heatmapBuffer;
     }
 
 }

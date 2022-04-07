@@ -22,20 +22,19 @@ public class PlayerControlPanel extends JPanel {
     public PlayerControlPanel(PlacePlayer player) {
         this.player = player;
         setLayout(new GridBagLayout());
-
-
-
         GridBagConstraints gc = ZUtil.getGC();
+
+        add(resetButton);
+        gc.gridx++;
         add(pauseButton, gc);
         gc.gridx++;
         add(playButton);
-        gc.gridx++;
-        add(resetButton);
         gc.gridx++;
         add(speedSlider);
         gc.gridx++;
         add(speedLabel);
         gc.gridx++;
+
         addListeners();
 
         speedSlider.setValue(60);
@@ -44,9 +43,9 @@ public class PlayerControlPanel extends JPanel {
     }
 
     private void addListeners() {
+        resetButton.addActionListener(e -> player.reset());
         playButton.addActionListener(e -> player.play());
         pauseButton.addActionListener(e -> player.pause());
-        resetButton.addActionListener(e -> player.reset());
         speedSlider.addChangeListener(e -> {
             speedLabel.setText(NumberFormat.getInstance().format(speedSlider.getValue()) + " Tiles Per Second");
             player.setSpeed(speedSlider.getValue());

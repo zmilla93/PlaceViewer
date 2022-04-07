@@ -150,8 +150,12 @@ public class CanvasPanel extends JPanel implements IThemeListener {
             rgbColorBuffer[colorBufferIndex + 2] = backgroundColor.getBlue();
             return;
         }
+        int heat = player.getHeatmapBuffer()[canvasIndex];
+        float f = heat / (float)PlacePlayer.heatmapMax;
+        Color c = new Color(f, f, f);
         int colorIndex = player.getColorBuffer()[canvasIndex];
         Color color = PlaceInfo.canvasColors[colorIndex];
+//        Color color = c;
         int checkX = zoom < 1 ? CANVAS_SIZE_X / z : CANVAS_SIZE_X * z;
         int checkY = zoom < 1 ? CANVAS_SIZE_Y / z : CANVAS_SIZE_Y * z;
         if (x < 0 || x > checkX || y < 0 || y > checkY * z) {
