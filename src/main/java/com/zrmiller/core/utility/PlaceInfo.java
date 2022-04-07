@@ -7,11 +7,18 @@ public class PlaceInfo {
 
     public static final int ORIGINAL_LINE_COUNT = 16567568;
     public static final int CLEAN_LINE_COUNT = 16567564;
+
     public static final String CLEAN_LINE_COUNT_FORMATTED = NumberFormat.getInstance().format(CLEAN_LINE_COUNT);
 
     public static int CANVAS_SIZE_X = 1001;
     public static int CANVAS_SIZE_Y = 1001;
 
+    // 2022 Stats
+    public static final long INITIAL_TIME_2022 = 1648835050315L;
+    public static final long FINAL_TIME_2022 = 1649135640207L;
+    public static final int TIME_CORRECTION_2022 = (int) (FINAL_TIME_2022 - INITIAL_TIME_2022);
+
+    // Colors
     public static final Color[] canvasColors = new Color[]{
             new Color(255, 255, 255),
             new Color(201, 201, 201),

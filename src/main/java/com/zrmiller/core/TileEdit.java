@@ -1,15 +1,36 @@
 package com.zrmiller.core;
 
+import java.nio.ByteBuffer;
+
 public class TileEdit {
 
-    public int x;
-    public int y;
-    public int color;
+    public final int timestamp;
+    public final short color;
+    public final short x;
+    public final short y;
 
-    public TileEdit(int x, int y, int color) {
+    public TileEdit(int timestamp, short color, short x, short y) {
+        this.timestamp = timestamp;
+        this.color = color;
         this.x = x;
         this.y = y;
-        this.color = color;
+    }
+
+    public TileEdit(byte[] bytes) {
+        ByteBuffer buffer = ByteBuffer.wrap(bytes);
+        timestamp = buffer.getInt();
+        color = buffer.getShort();
+        x = buffer.getShort();
+        y = buffer.getShort();
+    }
+
+    public byte[] toByteArray() {
+        ByteBuffer buffer = ByteBuffer.allocate(10);
+        buffer.putInt(timestamp);
+        buffer.putShort(color);
+        buffer.putShort(x);
+        buffer.putShort(y);
+        return buffer.array();
     }
 
 }

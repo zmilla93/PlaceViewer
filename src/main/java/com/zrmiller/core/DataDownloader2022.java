@@ -1,5 +1,7 @@
 package com.zrmiller.core;
 
+import com.zrmiller.core.utility.PlaceInfo;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -37,6 +39,12 @@ public class DataDownloader2022 implements IDownloadTracker {
         }
     }
 
+    public void runOrder(int index) {
+        downloadFile(indexedName(zipFileName, index), getUrlString(index), this);
+        unzip(indexedName(zipFileName, index), indexedName(originalFileName, index));
+        minifyFile(indexedName(originalFileName, index), indexedName(miniFileName, index));
+    }
+
     public void runDownload() {
 //        downloadFile(0);
         System.out.println("URL:" + getUrlString(0));
@@ -59,6 +67,10 @@ public class DataDownloader2022 implements IDownloadTracker {
     public void addFileToIgnore(int index) {
         if (!filesToIgnore.contains(index))
             filesToIgnore.add(index);
+    }
+
+    public void binTest() {
+        minifyFileBinary("Place_Tiles__2022_Original_0.txt", "Place_1_Micro.txt");
     }
 
     private String getUrlString(int index) {
@@ -149,7 +161,6 @@ public class DataDownloader2022 implements IDownloadTracker {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(directory + source));
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(directory + dest)));
-//            byte[] line = new byte[4];
             while (reader.ready()) {
                 String formattedLine = getFormattedLine(reader.readLine());
                 if (formattedLine == null) continue;
@@ -165,28 +176,68 @@ public class DataDownloader2022 implements IDownloadTracker {
         }
     }
 
+    public boolean minifyFileBinary(String source, String dest) {
+        miniLineCount = 0;
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(directory + source));
+            FileOutputStream outputStream = new FileOutputStream(directory + dest);
+            ColorConverter colorConverter = new ColorConverter();
+            while (reader.ready()) {
+                String line = reader.readLine();
+                String[] tokens = tokenizeLine(line, 5);
+                if (tokens == null) continue; // Skip Empty Lines
+                if (!lineStartsWithNumber(tokens[0])) continue; // Skip lines that don't start with a timestamp
+                try {
+
+                    TileEdit edit = new TileEdit(getTimestamp(tokens[0]), colorConverter.colorToInt(tokens[2]), Short.parseShort(tokens[3].substring(1)), Short.parseShort(tokens[4].substring(0, tokens[4].length() - 1)));
+                    outputStream.write(edit.toByteArray());
+                } catch (IllegalArgumentException e) {
+                    System.out.println("BADNUM:" + line);
+                    e.printStackTrace();
+                }
+
+
+            }
+            outputStream.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     private String getFormattedLine(String input) {
         // TODO
+        if (!lineStartsWithNumber(input))
+            return null;
         String[] tokens = tokenizeLine(input, 5);
         if (tokens == null) return null; // TODO : TEMP
-        int c = tokens[0].charAt(0);
-        if (c < 48 || c > 57) return null;  // Ignore lines that don't start with a number
-        String time = tokens[0].substring(0, tokens[0].length() - 4);
-        Timestamp timestamp = Timestamp.valueOf(time);
-        long timeT = timestamp.getTime();
-
+//        int c = tokens[0].charAt(0);
+//        if (c < 48 || c > 57) return null;  // Ignore lines that don't start with a number
+//        String time = tokens[0].substring(0, tokens[0].length() - 4);
+//        Timestamp timestamp = Timestamp.valueOf(time);
+        long timeT = getTimestamp(tokens[0]);
         miniLineCount++;
-        if (tokens[2].equals("#9C6926") && tokens[3].equals("\"1019") && tokens[4].equals("441\"")) {
-            System.out.println("P1:" + miniLineCount);
-        }
-        if (tokens[2].equals("#000000") && tokens[3].equals("\"662") && tokens[4].equals("222\"")) {
-            System.out.println("P2:" + miniLineCount);
-        }
-
-
         return timeT + "," + tokens[2] + "," + tokens[3] + "," + tokens[4] + "\n";
 
 
+    }
+
+    private boolean lineStartsWithNumber(String line) {
+        int c = line.charAt(0);
+        return c >= 48 && c <= 57;
+    }
+
+//    private long getTime(String timeToken) {
+//        String time = timeToken.substring(0, timeToken.length() - 4);
+//        Timestamp timestamp = Timestamp.valueOf(time);
+//        return timestamp.getTime();
+//    }
+
+    private int getTimestamp(String timeToken) throws IllegalArgumentException {
+        String timeString = timeToken.substring(0, timeToken.length() - 4);
+        Timestamp timestamp = Timestamp.valueOf(timeString);
+        return (int) (timestamp.getTime() - (long) PlaceInfo.TIME_CORRECTION_2022);
     }
 
     private String[] tokenizeLine(String input, int tokenCount) {
@@ -243,6 +294,25 @@ public class DataDownloader2022 implements IDownloadTracker {
             writer.close();
         } catch (IOException e) {
 
+        }
+    }
+
+    public void scanForColors(String source) {
+        try {
+            HashSet<String> colors = new HashSet<>();
+            BufferedReader reader = new BufferedReader(new FileReader(directory + source));
+            while (reader.ready()) {
+                String[] tokens = tokenizeLine(reader.readLine(), 5);
+                if (tokens == null) continue;
+                colors.add(tokens[2]);
+            }
+            for (String s : colors) {
+                System.out.println("COLOR :: " + s);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
