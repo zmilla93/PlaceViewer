@@ -17,7 +17,7 @@ public class WindowContainer extends JPanel implements ICanvasListener {
     private JLabel frameCountLabel = new JLabel("-");
     private JLabel zoomLabel = new JLabel("100%");
 
-    private JMenuBar menubar = new MainMenuBar();
+//    private JMenuBar menubar = new MainMenuBar();
     private JMenu settingsMenu = new JMenu("Settings");
     private JMenuItem settingsMenuItem = new JMenu("Settings");
     private JMenuItem asdf = new JMenuItem("Settings");
@@ -47,7 +47,7 @@ public class WindowContainer extends JPanel implements ICanvasListener {
         GridBagConstraints gc = ZUtil.getGC();
 
         // North Panel
-        northPanel.add(menubar, BorderLayout.NORTH);
+//        northPanel.add(menubar, BorderLayout.NORTH);
         northPanel.add(new PlayerControlPanel(canvasPanel.getPlayer()), BorderLayout.CENTER);
         JPanel northContainer = new JPanel(new BorderLayout());
         northContainer.add(northPanel, BorderLayout.CENTER);

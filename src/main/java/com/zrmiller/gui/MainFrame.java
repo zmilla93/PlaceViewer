@@ -18,8 +18,10 @@ public class MainFrame extends JFrame {
         setSize(1200, 1000);
         container.setLayout(new BorderLayout());
 
+        MainMenuBar mainMenuBar = new MainMenuBar();
         WindowContainer windowContainer = new WindowContainer();
-        container.add(windowContainer, BorderLayout.CENTER);
+        container.add(mainMenuBar, BorderLayout.NORTH);
+        container.add(new DownloaderPanel(), BorderLayout.CENTER);
 
         container.addKeyListener(new KeyAdapter() {
             @Override
