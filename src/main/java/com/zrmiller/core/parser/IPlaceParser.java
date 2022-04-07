@@ -14,4 +14,6 @@ public interface IPlaceParser {
 
     TileEdit readNextLine() throws IOException;
 
+    boolean jumpToFrame(int frame);
+
 }

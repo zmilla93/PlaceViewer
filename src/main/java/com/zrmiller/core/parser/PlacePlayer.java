@@ -11,7 +11,7 @@ import java.util.TimerTask;
 public class PlacePlayer {
 
     //    PlaceParser2017 parser = new PlaceParser2017();
-    IPlaceParser parser = new PlaceParser2022("D:/Place/2022-Binary/", "Place_2022_INDEX.placetiles");
+    IPlaceParser parser;
     private int updatesPerSecond = 1000000;
     private int TEMP_FPS = 60;
     private Timer timer = new Timer();
@@ -75,7 +75,7 @@ public class PlacePlayer {
     }
 
     public void jumpToFrame(int frame) {
-
+        parser.jumpToFrame(frame);
     }
 
     private void applyNextFrame() throws IOException {

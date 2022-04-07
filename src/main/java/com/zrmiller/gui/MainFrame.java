@@ -15,6 +15,7 @@ public class MainFrame extends JFrame {
         super("PlaceViewer");
         setIconImage(App.APP_ICON.getImage());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new Dimension(600, 400));
         setSize(1200, 1000);
         container.setLayout(new BorderLayout());
 
