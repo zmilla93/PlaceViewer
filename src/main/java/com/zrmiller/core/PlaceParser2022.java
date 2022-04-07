@@ -6,62 +6,70 @@ import java.nio.ByteBuffer;
 public class PlaceParser2022 {
 
     private String directory = "D:/Place/";
-    private String fileName = "Place_1_Micro.placetiles";
+    private String fileNameBinary = "Place_1_Micro.placetiles";
+    private String fileName = "Place_1_Mini.txt";
 
     public PlaceParser2022() {
 
     }
 
-    public void readAll() {
+    public void readAllBinary() {
         try {
-            FileInputStream inputStream = new FileInputStream(directory + fileName);
+            BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(directory + fileNameBinary));
+//            FileInputStream inputStream = new FileInputStream(directory + fileNameBinary);
             byte[] line = new byte[10];
             int size = 1;
             System.out.println("Reading...");
             while (size > -1) {
                 size = inputStream.read(line);
-                ByteBuffer buffer = ByteBuffer.wrap(line);
-                int timestamp = buffer.getInt();
-                short color = buffer.getShort();
-                short x = buffer.getShort();
-                short y = buffer.getShort();
-                System.out.println("X : " + x);
-                System.out.println("y : " + y);
-                break;
+//                ByteBuffer buffer = ByteBuffer.wrap(line);
+//                int timestamp = buffer.getInt();
+//                short color = buffer.getShort();
+//                short x = buffer.getShort();
+//                short y = buffer.getShort();
+//                System.out.println("X : " + x);
+//                System.out.println("y : " + y);
+//                break;
             }
             inputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-//        try {
-//
-//            ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(directory + fileName));
-////            TEMP_TileEdit edit = (TEMP_TileEdit) inputStream.readObject();
-////            System.out.println(edit.x);
-////            System.out.println(edit.y);
-////            byte[] line = new byte[4];
-////            int i = inputStream.read(line);
-////            System.out.println("I:" + i);
-//////            int p1 = line[0];
-////            short x = line[0];
-////            short y = line[2];
-//////            System.out.println("p1:"+ p1);
-////            System.out.println("x:"+ x);
-////            System.out.println("y:"+ y);
-////            inputStream.close();
-//
-////            BufferedReader reader = new BufferedReader(new FileReader(directory + fileName));
-//
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
     }
+
+    public void readAll(){
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(directory + fileName));
+            while (reader.ready()){
+                String line = reader.readLine();
+                String[] tokens = TEMP_tokenizeLine(line, 5);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String[] TEMP_tokenizeLine(String input, int tokenCount) {
+        String[] tokens = new String[tokenCount];
+        StringBuilder builder = new StringBuilder();
+        int tokenIndex = 0;
+        for (int i = 0; i < input.length(); i++) {
+            if (tokenIndex >= tokenCount) {
+                System.out.println("BADNESS:" + input);
+                return null;
+            }
+            if (input.charAt(i) == ',') {
+                tokens[tokenIndex] = builder.toString();
+                builder.setLength(0);
+                tokenIndex++;
+            } else {
+                builder.append(input.charAt(i));
+            }
+        }
+        tokens[tokenIndex] = builder.toString();
+        return tokens;
+    }
+
 
 
 }

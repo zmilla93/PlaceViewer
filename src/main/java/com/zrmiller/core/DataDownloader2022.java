@@ -180,7 +180,7 @@ public class DataDownloader2022 implements IDownloadTracker {
         miniLineCount = 0;
         try {
             BufferedReader reader = new BufferedReader(new FileReader(directory + source));
-            FileOutputStream outputStream = new FileOutputStream(directory + dest);
+            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(directory + dest));
             ColorConverter colorConverter = new ColorConverter();
             while (reader.ready()) {
                 String line = reader.readLine();
@@ -188,15 +188,12 @@ public class DataDownloader2022 implements IDownloadTracker {
                 if (tokens == null) continue; // Skip Empty Lines
                 if (!lineStartsWithNumber(tokens[0])) continue; // Skip lines that don't start with a timestamp
                 try {
-
                     TileEdit edit = new TileEdit(getTimestamp(tokens[0]), colorConverter.colorToInt(tokens[2]), Short.parseShort(tokens[3].substring(1)), Short.parseShort(tokens[4].substring(0, tokens[4].length() - 1)));
                     outputStream.write(edit.toByteArray());
                 } catch (IllegalArgumentException e) {
                     System.out.println("BADNUM:" + line);
                     e.printStackTrace();
                 }
-
-
             }
             outputStream.close();
             return true;
@@ -212,10 +209,6 @@ public class DataDownloader2022 implements IDownloadTracker {
             return null;
         String[] tokens = tokenizeLine(input, 5);
         if (tokens == null) return null; // TODO : TEMP
-//        int c = tokens[0].charAt(0);
-//        if (c < 48 || c > 57) return null;  // Ignore lines that don't start with a number
-//        String time = tokens[0].substring(0, tokens[0].length() - 4);
-//        Timestamp timestamp = Timestamp.valueOf(time);
         long timeT = getTimestamp(tokens[0]);
         miniLineCount++;
         return timeT + "," + tokens[2] + "," + tokens[3] + "," + tokens[4] + "\n";
