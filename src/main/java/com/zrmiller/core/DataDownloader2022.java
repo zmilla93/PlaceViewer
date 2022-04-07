@@ -9,22 +9,23 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.zip.GZIPInputStream;
 
+// Dataset Details - https://www.reddit.com/r/place/comments/txvk2d/rplace_datasets_april_fools_2022/
+
 public class DataDownloader2022 implements IDownloadTracker {
 
-
-    // Dataset Details - https://www.reddit.com/r/place/comments/txvk2d/rplace_datasets_april_fools_2022/
-    private static final String downloadURL = "https://placedata.reddit.com/data/canvas-history/2022_place_canvas_history-INDEX.csv.gzip";
-
+    private static final String downloadURLTemplate = "https://placedata.reddit.com/data/canvas-history/2022_place_canvas_history-INDEX.csv.gzip";
 
     private String directory = "D:/Place/";
-    //    private String outputPath = "D:/Place/Place_Tiles_2022_INDEX.gzip";
-    private String zipFileName = "Place_Tiles__2022_Archive_INDEX.gzip";
-    private String originalFileName = "Place_Tiles__2022_Original_INDEX.txt";
-    private String miniFileName = "Place_Tiles__2022_Mini_INDEX.txt";
-    private String binaryFileName = "Place_Tiles__2022_Binary_INDEX.placetiles";
-    private String sortFileName = "SORT_NAMES.txt";
+
+    private String prefix = "Place_2022_INDEX";
+    private String binaryExtension = ".placetiles";
+
+    private String zipFileName = prefix + "_Archive_INDEX.gzip";
+    private String originalFileName = prefix + "_Original_INDEX.txt";
+    private String binaryFileName = prefix + binaryExtension;
 
     private final HashSet<Integer> filesToIgnore = new HashSet<>();
+    private static final int BYTE_BUFFER_SIZE = 1024 * 4;
 
     public DataDownloader2022() {
 
@@ -33,31 +34,16 @@ public class DataDownloader2022 implements IDownloadTracker {
     public void downloadAndUnzipFullDataset() {
         for (int i = 0; i < 78; i++) {
             System.out.println("Downloading file #" + i + "...");
-            downloadFile(indexedName(zipFileName, i), getUrlString(i), this);
+            downloadFile(indexedName(zipFileName, i), getUrlString(i));
             System.out.println("Unzipping file #" + i + "...");
             unzip(indexedName(zipFileName, i), indexedName(originalFileName, i));
         }
     }
 
-    public void runOrder(int index) {
-        downloadFile(indexedName(zipFileName, index), getUrlString(index), this);
-        unzip(indexedName(zipFileName, index), indexedName(originalFileName, index));
-        minifyFile(indexedName(originalFileName, index), indexedName(miniFileName, index));
-    }
-
-    public void runDownload() {
-//        downloadFile(0);
-        System.out.println("URL:" + getUrlString(0));
-
-//        downloadFile(indexedName(zipFileName, 0), getUrlString(0), this);
-//        downloadFile(indexedName(zipFileName, 77), getUrlString(77), this);
-
-//        unzip(indexedName(zipFileName, 0), indexedName(originalFileName, 0));
-//        unzip(indexedName(zipFileName, 77), indexedName(originalFileName, 77));
-
-
-        minifyFile(indexedName(originalFileName, 0), indexedName(miniFileName, 0));
-        minifyFile(indexedName(originalFileName, 77), indexedName(miniFileName, 77));
+    public void downloadUnzipAndMinify(int index) {
+        downloadFile(indexedName(zipFileName, index), getUrlString(index));
+        unzip(indexedName(zipFileName, index), indexedName(originalFileName, index), false);
+        minifyFileBinary(indexedName(originalFileName, index), indexedName(binaryFileName, index));
     }
 
     private String indexedName(String input, int index) {
@@ -69,61 +55,35 @@ public class DataDownloader2022 implements IDownloadTracker {
             filesToIgnore.add(index);
     }
 
-    public void binTest() {
-        minifyFileBinary("Place_Tiles__2022_Original_0.txt", "Place_1_Micro.txt");
-    }
-
     private String getUrlString(int index) {
         StringBuilder builder = new StringBuilder("0000000000");
         if (index < 10) builder.append("0");
         builder.append(index);
-        return downloadURL.replaceFirst("INDEX", builder.toString());
+        return downloadURLTemplate.replaceFirst("INDEX", builder.toString());
     }
 
-    private int MAX_ATTEMPTS = 5;
-
-    public boolean downloadFile(String fileName, String urlString, IDownloadTracker tracker) {
-        int attempts = 1;
-        while (attempts <= MAX_ATTEMPTS) {
-            try {
-                System.out.println("Downloading '" + fileName + "' from '" + urlString + "'...");
-                URL url = new URL(urlString);
-                HttpURLConnection httpConnection = (HttpURLConnection) (url.openConnection());
-                long fileSize = httpConnection.getContentLength();
-                BufferedInputStream in = new BufferedInputStream(httpConnection.getInputStream());
-//                FileOutputStream fos = new FileOutputStream(App.saveManager.INSTALL_DIRECTORY + File.separator + fileName);
-                FileOutputStream fos = new FileOutputStream(directory + fileName);
-                BufferedOutputStream bout = new BufferedOutputStream(fos, 1024);
-                byte[] data = new byte[1024];
-                long downloadedFileSize = 0;
-                int i;
-                while ((i = in.read(data, 0, 1024)) >= 0) {
-                    downloadedFileSize += i;
-                    final int currentProgress = (int) ((((double) downloadedFileSize) / ((double) fileSize)) * 100000d);
-                    tracker.downloadPercentCallback(currentProgress);
-                    bout.write(data, 0, i);
-                }
-                bout.close();
-                in.close();
-                System.out.println("Download complete.");
-                return true;
-            } catch (IOException e) {
-                if (attempts == MAX_ATTEMPTS) {
-                    System.out.println("Error downloading file from '" + urlString + "'");
-                    return false;
-                } else {
-                    tracker.textCallback("Download failed, retrying...");
-                    System.out.println("Download failed, retrying... (" + attempts + ")");
-                    try {
-                        Thread.sleep(400);
-                    } catch (InterruptedException interruptedException) {
-                        interruptedException.printStackTrace();
-                    }
-                    attempts++;
-                }
+    public boolean downloadFile(String fileName, String urlString) {
+        try {
+            HttpURLConnection httpConnection = (HttpURLConnection) (new URL(urlString).openConnection());
+            long fileSize = httpConnection.getContentLength();
+            BufferedInputStream inputStream = new BufferedInputStream(httpConnection.getInputStream());
+            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(directory + fileName));
+            byte[] data = new byte[BYTE_BUFFER_SIZE];
+            int bytesDownloaded = 0;
+            int numBytesRead;
+            while ((numBytesRead = inputStream.read(data, 0, BYTE_BUFFER_SIZE)) >= 0) {
+                bytesDownloaded += numBytesRead;
+                float currentProgress = (bytesDownloaded / (float) fileSize);
+                outputStream.write(data, 0, numBytesRead);
+                System.out.println("CURP:" + currentProgress);
             }
+            inputStream.close();
+            outputStream.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     public boolean unzip(String source, String dest) {
@@ -221,12 +181,6 @@ public class DataDownloader2022 implements IDownloadTracker {
         return c >= 48 && c <= 57;
     }
 
-//    private long getTime(String timeToken) {
-//        String time = timeToken.substring(0, timeToken.length() - 4);
-//        Timestamp timestamp = Timestamp.valueOf(time);
-//        return timestamp.getTime();
-//    }
-
     private int getTimestamp(String timeToken) throws IllegalArgumentException {
         String timeString = timeToken.substring(0, timeToken.length() - 4);
         Timestamp timestamp = Timestamp.valueOf(timeString);
@@ -254,60 +208,8 @@ public class DataDownloader2022 implements IDownloadTracker {
         return tokens;
     }
 
-    public void dumpTimestamps(String outputDirectory) {
-        try {
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(directory + sortFileName)));
-            for (int i = 0; i < 78; i++) {
-                BufferedReader reader = new BufferedReader(new FileReader(directory + indexedName(originalFileName, i)));
-                if (reader.ready()) {
-                    reader.readLine();
-                    String[] tokens = tokenizeLine(reader.readLine(), 5);
-                    if (tokens == null) continue;
-                    writer.write(tokens[0] + "," + i + "\n");
-                }
-            }
-            writer.close();
-        } catch (IOException e) {
 
-        }
-    }
 
-    public void cleanTimestamps(String inputPath, String outputPath) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(directory + inputPath));
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(directory + outputPath)));
-            while (reader.ready()) {
-                String[] tokens = tokenizeLine(reader.readLine(), 2);
-                if (tokens == null) continue;
-                writer.write(tokens[1]);
-                if (reader.ready())
-                    writer.write(",");
-            }
-            reader.close();
-            writer.close();
-        } catch (IOException e) {
-
-        }
-    }
-
-    public void scanForColors(String source) {
-        try {
-            HashSet<String> colors = new HashSet<>();
-            BufferedReader reader = new BufferedReader(new FileReader(directory + source));
-            while (reader.ready()) {
-                String[] tokens = tokenizeLine(reader.readLine(), 5);
-                if (tokens == null) continue;
-                colors.add(tokens[2]);
-            }
-            for (String s : colors) {
-                System.out.println("COLOR :: " + s);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void downloadPercentCallback(int progress) {

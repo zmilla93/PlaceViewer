@@ -19,17 +19,15 @@ public class PlaceParser2022 {
 //            FileInputStream inputStream = new FileInputStream(directory + fileNameBinary);
             byte[] line = new byte[10];
             int size = 1;
+            int i = 0;
             System.out.println("Reading...");
             while (size > -1) {
                 size = inputStream.read(line);
-//                ByteBuffer buffer = ByteBuffer.wrap(line);
-//                int timestamp = buffer.getInt();
-//                short color = buffer.getShort();
-//                short x = buffer.getShort();
-//                short y = buffer.getShort();
-//                System.out.println("X : " + x);
-//                System.out.println("y : " + y);
-//                break;
+                ByteBuffer buffer = ByteBuffer.wrap(line);
+                int timestamp = buffer.getInt();
+                short color = buffer.getShort();
+                short x = buffer.getShort();
+                short y = buffer.getShort();
             }
             inputStream.close();
         } catch (IOException e) {

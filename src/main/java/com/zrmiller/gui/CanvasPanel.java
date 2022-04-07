@@ -51,7 +51,7 @@ public class CanvasPanel extends JPanel implements IThemeListener {
     });
 
     //    private final PlaceParser parser = new PlaceParser();
-    private final PlacePlayer player = new PlacePlayer("D:/Place/place_tiles_final");
+    private final PlacePlayer player = new PlacePlayer("D:/Place/2017/place_tiles_final");
 
     BufferedImage bufferedImage = new BufferedImage(viewportWidth, viewportHeight, BufferedImage.TYPE_INT_RGB);
 

@@ -21,7 +21,7 @@ public class MainFrame extends JFrame {
         MainMenuBar mainMenuBar = new MainMenuBar();
         WindowContainer windowContainer = new WindowContainer();
         container.add(mainMenuBar, BorderLayout.NORTH);
-        container.add(new DownloaderPanel(), BorderLayout.CENTER);
+        container.add(windowContainer, BorderLayout.CENTER);
 
         container.addKeyListener(new KeyAdapter() {
             @Override
