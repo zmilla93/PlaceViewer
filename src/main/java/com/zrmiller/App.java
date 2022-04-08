@@ -27,15 +27,9 @@ public class App {
         } catch (InterruptedException | InvocationTargetException e) {
             e.printStackTrace();
         }
-        System.out.println(PlaceInfo.TIME_CORRECTION_2022);
-        System.out.println("file count : " + PlaceInfo.fileOrder.length);
-//        testParse();
-
-        DataWrangler2017 dataWrangler2017 = new DataWrangler2017("D:/Place/2017/", "Place_2017_Original.txt");
-
+        // FIXME:
         DatasetManager.changeDataset(Dataset.PLACE_2022);
     }
-
 
     private static void testParse() {
         PlaceParser2022 p = new PlaceParser2022("D:/Place/2022-Binary/");
@@ -49,7 +43,6 @@ public class App {
                 e.printStackTrace();
             }
         }
-
     }
 
     private static void downloadFullDataset() {

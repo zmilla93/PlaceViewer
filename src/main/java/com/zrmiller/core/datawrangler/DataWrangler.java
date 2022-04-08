@@ -1,5 +1,7 @@
 package com.zrmiller.core.datawrangler;
 
+import com.zrmiller.core.managers.SaveManager;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -7,21 +9,27 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public abstract class DataWrangler {
 
     private static final int BYTE_BUFFER_SIZE = 1024 * 4;
-    protected String directory;
+//    protected String directory;
 
     private int fileSize;
     private int bytesDownloaded;
+
+//    protected static Executor executor = Executors.newSingleThreadExecutor();
+    private final ArrayList<IStatusListener> statusListeners = new ArrayList<>();
 
     public boolean downloadFile(String fileName, String urlString) {
         try {
             HttpURLConnection httpConnection = (HttpURLConnection) (new URL(urlString).openConnection());
             fileSize = httpConnection.getContentLength();
             BufferedInputStream inputStream = new BufferedInputStream(httpConnection.getInputStream());
-            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(directory + fileName));
+            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settingsSaveFile.data.dataDirectory + fileName));
             byte[] data = new byte[BYTE_BUFFER_SIZE];
             bytesDownloaded = 0;
             int numBytesRead;
@@ -82,13 +90,23 @@ public abstract class DataWrangler {
         return fileSize;
     }
 
+    public void addListener(IStatusListener listener){
+        statusListeners.add(listener);
+    }
+    public void removeListener(IStatusListener listener){
+        statusListeners.add(listener);
+    }
+    public void removeAllListeners(){
+        statusListeners.clear();
+    }
+
     /**
      * Returns 0-100
      *
      * @return
      */
     public int getProgress() {
-        return (int) Math.ceil(bytesDownloaded / (float) fileSize);
+        return (int) Math.ceil(bytesDownloaded / (float) fileSize * 100);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.zrmiller.gui.downloader;
 
+import com.zrmiller.core.datawrangler.DataWrangler2017;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.windows.DatasetManagerFrame;
 
@@ -34,11 +35,21 @@ public class DownloaderPanel2017 extends DownloaderDatasetPanel {
 
         centerPanel.setLayout(new BorderLayout());
         centerPanel.add(infoBufferPanel, BorderLayout.NORTH);
+        deleteButton.setText("Delete 2017");
+        downloadButton.setText("Download 2017");
         addListeners();
     }
 
     private void addListeners() {
-        downloadButton.addActionListener(e -> datasetManagerFrame.swapToDownloadPanel());
+        downloadButton.addActionListener(e -> {
+            datasetManagerFrame.swapToDownloadPanel();
+            DataWrangler2017 dataWrangler2017 = new DataWrangler2017();
+//            dataWrangler2017.addListener();
+            datasetManagerFrame.getProgressPanel().setWrangler(dataWrangler2017);
+            datasetManagerFrame.getProgressPanel().startTimer();
+            datasetManagerFrame.getProgressPanel().setInfoLower("Downloading 2017 Dataset...");
+            dataWrangler2017.downloadFile();
+        });
     }
 
 }
