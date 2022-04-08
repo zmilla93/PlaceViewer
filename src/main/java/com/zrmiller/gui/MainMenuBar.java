@@ -6,8 +6,6 @@ import com.zrmiller.modules.styles.ColorManager;
 import com.zrmiller.modules.styles.ColorTheme;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class MainMenuBar extends JMenuBar {
 
@@ -59,7 +57,7 @@ public class MainMenuBar extends JMenuBar {
         addListeners();
     }
 
-    private void addListeners(){
+    private void addListeners() {
         // Note: Color theme listeners are added during construction
         // Datasets
         dataset2017Button.addActionListener(e -> DatasetManager.changeDataset(Dataset.PLACE_2017));

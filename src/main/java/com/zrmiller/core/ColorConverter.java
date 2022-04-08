@@ -82,7 +82,7 @@ public class ColorConverter {
         return colorToIntMap.get(colorString);
     }
 
-    public static Color intToColor(int color){
+    public static Color intToColor(int color) {
         return intToColorArr[color];
     }
 

@@ -1,7 +1,6 @@
 package com.zrmiller.core.parser;
 
 import com.zrmiller.core.DatasetManager;
-import com.zrmiller.core.utility.PlaceInfo;
 
 import java.io.*;
 

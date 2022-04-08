@@ -8,7 +8,7 @@ import javax.swing.text.DocumentFilter;
 public class NumberDocumentFilter extends DocumentFilter {
 
     private boolean isValidInput(String text) {
-        if(text.length() > 10) return false;
+        if (text.length() > 10) return false;
         if (text.equals("")) return true;
         if (text.matches("\\d+")) return true;
         return false;

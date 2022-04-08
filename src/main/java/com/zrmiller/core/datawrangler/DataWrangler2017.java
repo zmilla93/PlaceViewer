@@ -5,7 +5,6 @@ import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.utility.PlaceInfo;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class DataWrangler2017 extends DataWrangler {
@@ -49,7 +48,7 @@ public class DataWrangler2017 extends DataWrangler {
             }
             Arrays.sort(tileEdits);
             BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(directory + dest));
-            for(TileEdit tile : tileEdits){
+            for (TileEdit tile : tileEdits) {
 //                outputStream.write((edit.toString() + "\n").getBytes(StandardCharsets.UTF_8));
                 outputStream.write(tile.toByteArray());
             }

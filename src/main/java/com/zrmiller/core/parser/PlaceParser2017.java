@@ -3,7 +3,10 @@ package com.zrmiller.core.parser;
 import com.zrmiller.core.FileNames;
 import com.zrmiller.core.TileEdit;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class PlaceParser2017 implements IPlaceParser {
 

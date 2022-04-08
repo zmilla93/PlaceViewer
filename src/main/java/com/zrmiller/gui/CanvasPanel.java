@@ -1,6 +1,5 @@
 package com.zrmiller.gui;
 
-import com.zrmiller.core.ColorConverter;
 import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.IDatasetListener;
 import com.zrmiller.core.enums.Dataset;
@@ -70,7 +69,7 @@ public class CanvasPanel extends JPanel implements IThemeListener, IDatasetListe
         tryRepaint(false);
     }
 
-    public void clear(){
+    public void clear() {
 
     }
 

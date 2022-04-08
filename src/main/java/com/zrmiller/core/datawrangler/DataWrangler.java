@@ -1,7 +1,5 @@
 package com.zrmiller.core.datawrangler;
 
-import com.zrmiller.core.utility.PlaceInfo;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;

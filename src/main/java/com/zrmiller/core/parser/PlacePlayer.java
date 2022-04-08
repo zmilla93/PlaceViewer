@@ -4,7 +4,6 @@ import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.IDatasetListener;
 import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.enums.Dataset;
-import com.zrmiller.core.utility.PlaceInfo;
 
 import java.io.IOException;
 import java.util.Arrays;
