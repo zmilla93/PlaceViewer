@@ -22,6 +22,9 @@ public class PlaceInfo {
 //    public static int CANVAS_SIZE_X = 1001;
 
     // 2022 Stats
+    public static final long INITIAL_TIME_2017 = 1490136935548L;
+    public static final long FINAL_TIME_2017 = 1491256735739L;
+    public static final int TIME_CORRECTION_2017 = (int) (FINAL_TIME_2017 - INITIAL_TIME_2017);
     public static final long INITIAL_TIME_2022 = 1648835050315L;
     public static final long FINAL_TIME_2022 = 1649135640207L;
     public static final int TIME_CORRECTION_2022 = (int) (FINAL_TIME_2022 - INITIAL_TIME_2022);

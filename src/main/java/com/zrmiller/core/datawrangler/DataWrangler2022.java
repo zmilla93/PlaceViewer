@@ -5,8 +5,6 @@ import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.utility.PlaceInfo;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.zip.GZIPInputStream;
@@ -27,20 +25,11 @@ public class DataWrangler2022 extends DataWrangler {
     private String binaryFileName = prefix + binaryExtension;
 
     private final HashSet<Integer> filesToIgnore = new HashSet<>();
-    private static final int BYTE_BUFFER_SIZE = 1024 * 4;
+
 
     public DataWrangler2022() {
 
     }
-
-//    public void downloadAndUnzipFullDataset() {
-//        for (int i = 0; i < 78; i++) {
-//            System.out.println("Downloading file #" + i + "...");
-//            downloadFile(getIndexedName(zipFileName, i), getUrlString(i));
-//            System.out.println("Unzipping file #" + i + "...");
-//            unzip(getIndexedName(zipFileName, i), getIndexedName(originalFileName, i));
-//        }
-//    }
 
     public void downloadAndProcessFullDataset() {
         for (int i = 0; i < 78; i++) {
@@ -74,29 +63,29 @@ public class DataWrangler2022 extends DataWrangler {
         return downloadURLTemplate.replaceFirst("INDEX", builder.toString());
     }
 
-    public boolean downloadFile(String fileName, String urlString) {
-        try {
-            HttpURLConnection httpConnection = (HttpURLConnection) (new URL(urlString).openConnection());
-            long fileSize = httpConnection.getContentLength();
-            BufferedInputStream inputStream = new BufferedInputStream(httpConnection.getInputStream());
-            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(directory + fileName));
-            byte[] data = new byte[BYTE_BUFFER_SIZE];
-            int bytesDownloaded = 0;
-            int numBytesRead;
-            while ((numBytesRead = inputStream.read(data, 0, BYTE_BUFFER_SIZE)) >= 0) {
-                bytesDownloaded += numBytesRead;
-                float currentProgress = (bytesDownloaded / (float) fileSize);
-                outputStream.write(data, 0, numBytesRead);
-//                System.out.println("CURP:" + currentProgress);
-            }
-            inputStream.close();
-            outputStream.close();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+//    public boolean downloadFile(String fileName, String urlString) {
+//        try {
+//            HttpURLConnection httpConnection = (HttpURLConnection) (new URL(urlString).openConnection());
+//            long fileSize = httpConnection.getContentLength();
+//            BufferedInputStream inputStream = new BufferedInputStream(httpConnection.getInputStream());
+//            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(directory + fileName));
+//            byte[] data = new byte[BYTE_BUFFER_SIZE];
+//            int bytesDownloaded = 0;
+//            int numBytesRead;
+//            while ((numBytesRead = inputStream.read(data, 0, BYTE_BUFFER_SIZE)) >= 0) {
+//                bytesDownloaded += numBytesRead;
+//                float currentProgress = (bytesDownloaded / (float) fileSize);
+//                outputStream.write(data, 0, numBytesRead);
+////                System.out.println("CURP:" + currentProgress);
+//            }
+//            inputStream.close();
+//            outputStream.close();
+//            return true;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
 
     public boolean unzip(String source, String dest) {
         return unzip(source, dest, true);
@@ -115,7 +104,7 @@ public class DataWrangler2022 extends DataWrangler {
             outputStream.close();
             if (deleteSource) {
                 File file = new File(directory + source);
-                boolean success = file.delete();  // Fixme : check delete status
+                boolean success = file.delete();
                 if (!success) {
                     System.out.println("Failed to delete:" + directory + source);
                 }
@@ -140,7 +129,7 @@ public class DataWrangler2022 extends DataWrangler {
                 String[] tokens = tokenizeLine(line, 5);
                 if (tokens == null) continue; // Skip Empty Lines
                 if (!lineStartsWithNumber(tokens[0])) continue; // Skip lines that don't start with a timestamp
-                TileEdit edit = new TileEdit(getTimestamp(tokens[0]), colorConverter.colorToInt(tokens[2]), Short.parseShort(tokens[3].substring(1)), Short.parseShort(tokens[4].substring(0, tokens[4].length() - 1)));
+                TileEdit edit = new TileEdit(getTimestamp(tokens[0], PlaceInfo.TIME_CORRECTION_2022), colorConverter.colorToInt(tokens[2]), Short.parseShort(tokens[3].substring(1)), Short.parseShort(tokens[4].substring(0, tokens[4].length() - 1)));
                 outputStream.write(edit.toByteArray());
             }
             reader.close();
@@ -156,15 +145,15 @@ public class DataWrangler2022 extends DataWrangler {
         }
     }
 
-    private boolean lineStartsWithNumber(String line) {
-        int c = line.charAt(0);
-        return c >= 48 && c <= 57;
-    }
+//    private boolean lineStartsWithNumber(String line) {
+//        int c = line.charAt(0);
+//        return c >= 48 && c <= 57;
+//    }
 
-    private int getTimestamp(String timeToken) throws IllegalArgumentException {
-        String timeString = timeToken.substring(0, timeToken.length() - 4);
-        Timestamp timestamp = Timestamp.valueOf(timeString);
-        return (int) (timestamp.getTime() - (long) PlaceInfo.TIME_CORRECTION_2022);
-    }
+//    private int getTimestamp(String timeToken) throws IllegalArgumentException {
+//        String timeString = timeToken.substring(0, timeToken.length() - 4);
+//        Timestamp timestamp = Timestamp.valueOf(timeString);
+//        return (int) (timestamp.getTime() - (long) PlaceInfo.TIME_CORRECTION_2022);
+//    }
 
 }

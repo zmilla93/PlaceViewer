@@ -2,7 +2,7 @@ package com.zrmiller.core;
 
 import java.nio.ByteBuffer;
 
-public class TileEdit {
+public class TileEdit implements Comparable<TileEdit> {
 
     public final int timestamp;
     public final short color;
@@ -35,4 +35,13 @@ public class TileEdit {
         return buffer.array();
     }
 
+    @Override
+    public String toString() {
+        return timestamp + "," + color + "," + x + "," + y;
+    }
+
+    @Override
+    public int compareTo(TileEdit o) {
+        return timestamp - o.timestamp;
+    }
 }
