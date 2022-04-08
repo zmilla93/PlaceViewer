@@ -32,8 +32,6 @@ public class App {
 //        testParse();
 
         DataWrangler2017 dataWrangler2017 = new DataWrangler2017("D:/Place/2017/", "Place_2017_Original.txt");
-//        dataWrangler2017.downloadFile();
-//        dataWrangler2017.sortAndMinify("Place_2017_Original.txt", "Place_2017.placetiles", false);
 
         DatasetManager.changeDataset(Dataset.PLACE_2022);
     }

@@ -13,14 +13,17 @@ public abstract class DataWrangler {
     private static final int BYTE_BUFFER_SIZE = 1024 * 4;
     protected String directory;
 
+    private int fileSize;
+    private int bytesDownloaded;
+
     public boolean downloadFile(String fileName, String urlString) {
         try {
             HttpURLConnection httpConnection = (HttpURLConnection) (new URL(urlString).openConnection());
-            long fileSize = httpConnection.getContentLength();
+            fileSize = httpConnection.getContentLength();
             BufferedInputStream inputStream = new BufferedInputStream(httpConnection.getInputStream());
             BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(directory + fileName));
             byte[] data = new byte[BYTE_BUFFER_SIZE];
-            int bytesDownloaded = 0;
+            bytesDownloaded = 0;
             int numBytesRead;
             while ((numBytesRead = inputStream.read(data, 0, BYTE_BUFFER_SIZE)) >= 0) {
                 bytesDownloaded += numBytesRead;
@@ -73,6 +76,19 @@ public abstract class DataWrangler {
         String timeString = timeToken.substring(0, timeToken.length() - 4);
         Timestamp timestamp = Timestamp.valueOf(timeString);
         return timestamp.getTime();
+    }
+
+    public long getFileSize() {
+        return fileSize;
+    }
+
+    /**
+     * Returns 0-100
+     *
+     * @return
+     */
+    public int getProgress() {
+        return (int) Math.ceil(bytesDownloaded / (float) fileSize);
     }
 
 }

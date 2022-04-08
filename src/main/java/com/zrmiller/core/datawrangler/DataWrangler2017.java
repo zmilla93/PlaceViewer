@@ -27,7 +27,6 @@ public class DataWrangler2017 extends DataWrangler {
     public boolean sortAndMinify(String source, String dest, boolean deleteSource) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(directory + source));
-
             ColorConverter colorConverter = new ColorConverter();
             TileEdit[] tileEdits = new TileEdit[PlaceInfo.CLEAN_LINE_COUNT];
             int lineCount = 0;
