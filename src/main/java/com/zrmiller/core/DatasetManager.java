@@ -16,7 +16,7 @@ public class DatasetManager {
         }
     }
 
-    public static Dataset getDataset() {
+    public static Dataset currentDataset() {
         return dataset;
     }
 

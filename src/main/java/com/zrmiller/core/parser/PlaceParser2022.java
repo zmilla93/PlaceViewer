@@ -1,5 +1,6 @@
 package com.zrmiller.core.parser;
 
+import com.zrmiller.core.FileNames;
 import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.utility.PlaceInfo;
 
@@ -11,7 +12,6 @@ import java.io.IOException;
 public class PlaceParser2022 implements IPlaceParser {
 
     private String directory;
-    private String fileNameTemplate;
 
     private BufferedInputStream currentStream;
     private BufferedInputStream nextStream;
@@ -20,16 +20,15 @@ public class PlaceParser2022 implements IPlaceParser {
     private int fileLineCount;
     private TileEdit currentLine;
 
-    public PlaceParser2022(String directory, String fileNameTemplate) {
+    public PlaceParser2022(String directory) {
         this.directory = directory;
-        this.fileNameTemplate = fileNameTemplate;
     }
 
     @Override
     public boolean openStream() {
         try {
-            currentStream = new BufferedInputStream(new FileInputStream(directory + getIndexedName(fileNameTemplate, PlaceInfo.fileOrder[0])));
-            nextStream = new BufferedInputStream(new FileInputStream(directory + getIndexedName(fileNameTemplate, PlaceInfo.fileOrder[1])));
+            currentStream = new BufferedInputStream(new FileInputStream(directory + getIndexedName(FileNames.minified2022, PlaceInfo.fileOrder[0])));
+            nextStream = new BufferedInputStream(new FileInputStream(directory + getIndexedName(FileNames.minified2022, PlaceInfo.fileOrder[1])));
             fileIndex = 2;
             return true;
         } catch (FileNotFoundException e) {
@@ -95,7 +94,7 @@ public class PlaceParser2022 implements IPlaceParser {
         currentStream = nextStream;
         if (fileIndex < PlaceInfo.fileOrder.length) {
             try {
-                nextStream = new BufferedInputStream(new FileInputStream(directory + getIndexedName(fileNameTemplate, PlaceInfo.fileOrder[fileIndex])));
+                nextStream = new BufferedInputStream(new FileInputStream(directory + getIndexedName(FileNames.minified2022, PlaceInfo.fileOrder[fileIndex])));
                 fileIndex++;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

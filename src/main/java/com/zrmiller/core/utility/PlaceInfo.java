@@ -16,8 +16,8 @@ public class PlaceInfo {
     public static int CANVAS_2022_X = 2000;
     public static int CANVAS_2022_Y = 2000;
 
-    public static int CANVAS_SIZE_X = 2000;
-    public static int CANVAS_SIZE_Y = 2000;
+//    public static int CANVAS_SIZE_X = 2000;
+//    public static int CANVAS_SIZE_Y = 2000;
 
 //    public static int CANVAS_SIZE_X = 1001;
 

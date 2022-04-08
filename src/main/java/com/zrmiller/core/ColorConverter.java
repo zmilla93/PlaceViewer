@@ -7,7 +7,7 @@ public class ColorConverter {
 
     private final HashMap<String, Short> colorToIntMap;
 
-    public static final Color[] intToColor = new Color[]{
+    public static final Color[] intToColorArr = new Color[]{
             new Color(109, 0, 26),
             new Color(190, 0, 57),
             new Color(255, 69, 0),
@@ -80,6 +80,10 @@ public class ColorConverter {
 
     public short colorToInt(String colorString) {
         return colorToIntMap.get(colorString);
+    }
+
+    public static Color intToColor(int color){
+        return intToColorArr[color];
     }
 
 }

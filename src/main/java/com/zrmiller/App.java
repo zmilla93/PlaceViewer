@@ -1,10 +1,13 @@
 package com.zrmiller;
 
+import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.datawrangler.DataWrangler2017;
 import com.zrmiller.core.datawrangler.DataWrangler2022;
+import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.parser.PlaceParser2022;
 import com.zrmiller.core.utility.PlaceInfo;
+import com.zrmiller.gui.FrameManager;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -20,7 +23,7 @@ public class App {
     public static void main(String[] args) {
         try {
             SwingUtilities.invokeAndWait(() -> {
-//                FrameManager.init();
+                FrameManager.init();
             });
         } catch (InterruptedException | InvocationTargetException e) {
             e.printStackTrace();
@@ -31,22 +34,14 @@ public class App {
 
         DataWrangler2017 dataWrangler2017 = new DataWrangler2017("D:/Place/2017/", "Place_2017_Original.txt");
 //        dataWrangler2017.downloadFile();
-        dataWrangler2017.sortAndMinify("Place_2017_Original.txt", "Place_2017.placetiles", false);
+//        dataWrangler2017.sortAndMinify("Place_2017_Original.txt", "Place_2017.placetiles", false);
 
-        Timestamp start = Timestamp.valueOf("2022-04-01 12:44:10.315");
-        Timestamp end = Timestamp.valueOf("2022-04-05 00:14:00.207");
-        System.out.println("START TIME : " + start.getTime());
-        System.out.println("END TIME : " + end.getTime());
-        System.out.println("ELAPSED TIME : " + (end.getTime() - start.getTime()));
-
-        System.out.println("2017:" + (PlaceInfo.FINAL_TIME_2017 - PlaceInfo.INITIAL_TIME_2017));
-        System.out.println("2022:" + (PlaceInfo.FINAL_TIME_2022 - PlaceInfo.INITIAL_TIME_2022));
-
+        DatasetManager.changeDataset(Dataset.PLACE_2022);
     }
 
 
     private static void testParse() {
-        PlaceParser2022 p = new PlaceParser2022("D:/Place/2022-Binary/", "Place_2022_INDEX.placetiles");
+        PlaceParser2022 p = new PlaceParser2022("D:/Place/2022-Binary/");
         p.openStream();
         while (true) {
             try {

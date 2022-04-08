@@ -1,65 +1,67 @@
 package com.zrmiller.core.parser;
 
-import com.zrmiller.core.utility.PlaceInfo;
+import com.zrmiller.core.FileNames;
+import com.zrmiller.core.TileEdit;
 
 import java.io.*;
 
-public class PlaceParser2017 {
+public class PlaceParser2017 implements IPlaceParser {
 
-    private BufferedReader reader;
-    private BufferedWriter writer;
-    private boolean running;
+    private BufferedInputStream reader;
+    private final String directory;
+    private TileEdit currentTile;
 
-    private int lineCount;
+    public PlaceParser2017(String directory) {
+        this.directory = directory;
+    }
 
-    private int[] colorBuffer = new int[PlaceInfo.CANVAS_SIZE_X * PlaceInfo.CANVAS_SIZE_Y];
-
-    public void openInputStream(String inputPath) {
+    @Override
+    public boolean openStream() {
         try {
-            reader = new BufferedReader(new FileReader(inputPath));
-            lineCount = 0;
+            reader = new BufferedInputStream(new FileInputStream(directory + FileNames.minified2017));
+            return true;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
-    public boolean ready() throws IOException {
-        return reader.ready();
-    }
-
-    /**
-     * Reads the next line from the file and returns the result.
-     *
-     * @return An array of 3 integers. [0] = x, [1] = y, [2] = color
-     * @throws IOException
-     */
-    public int[] getNextLine() throws IOException {
-        // FIXME : Replace split with faster method
-        String[] line = reader.readLine().split(",");
-        int[] ints = new int[]{Integer.parseInt(line[0]), Integer.parseInt(line[1]), Integer.parseInt(line[2])};
-        int index = ints[0] + ints[1] * PlaceInfo.CANVAS_SIZE_X;
-        colorBuffer[index] = ints[2];
-        lineCount++;
-        return ints;
-    }
-
-    public int getLineCount() {
-        return lineCount;
-    }
-
-    public int[] getColorBuffer() {
-        return colorBuffer;
-    }
-
-    public void close() {
+    @Override
+    public boolean closeStream() {
         if (reader != null) {
             try {
                 reader.close();
-                reader = null;
+                return true;
             } catch (IOException e) {
                 e.printStackTrace();
+                return false;
             }
         }
+        return true;
+    }
+
+    @Override
+    public boolean ready() throws IOException {
+        return tryReadLine();
+    }
+
+    @Override
+    public TileEdit readNextLine() {
+        return currentTile;
+    }
+
+    @Override
+    public boolean jumpToFrame(int frame) {
+        return false;
+    }
+
+    private boolean tryReadLine() throws IOException {
+        byte[] line = new byte[TileEdit.BYTE_COUNT];
+        int numBytesRead = reader.read(line);
+        if (numBytesRead == -1)
+            return false;
+        currentTile = new TileEdit(line);
+        return true;
     }
 
 }

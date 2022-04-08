@@ -2,9 +2,9 @@ package com.zrmiller.gui;
 
 import com.zrmiller.core.ColorConverter;
 import com.zrmiller.core.DatasetManager;
+import com.zrmiller.core.IDatasetListener;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.parser.PlacePlayer;
-import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.modules.styles.ColorManager;
 import com.zrmiller.modules.styles.IThemeListener;
@@ -15,11 +15,11 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class CanvasPanel extends JPanel implements IThemeListener {
+public class CanvasPanel extends JPanel implements IThemeListener, IDatasetListener {
 
     // FIXME : update canvas to dataset size
-    private static int LOCAL_CANVAS_SIZE_X = PlaceInfo.CANVAS_SIZE_X;
-    private static int LOCAL_CANVAS_SIZE_Y = PlaceInfo.CANVAS_SIZE_Y;
+    private static int LOCAL_CANVAS_SIZE_X = DatasetManager.currentDataset().CANVAS_SIZE_X;
+    private static int LOCAL_CANVAS_SIZE_Y = DatasetManager.currentDataset().CANVAS_SIZE_Y;
 
     // Viewport
     public int viewportWidth = 1400;
@@ -38,7 +38,7 @@ public class CanvasPanel extends JPanel implements IThemeListener {
     private int initialPanY;
 
     // Painting
-    private final PlacePlayer player = new PlacePlayer("D:/Place/2017/place_tiles_final");
+    private final PlacePlayer player = new PlacePlayer("D:/Place/");
     int[] rgbColorBuffer = new int[viewportWidth * viewportHeight * 3]; // 3 entries per pixel
     private BufferedImage bufferedImage = new BufferedImage(viewportWidth, viewportHeight, BufferedImage.TYPE_INT_RGB);
     private boolean markForRepaint;
@@ -51,6 +51,7 @@ public class CanvasPanel extends JPanel implements IThemeListener {
     private ArrayList<ICanvasListener> canvasListeners = new ArrayList<>();
 
     public CanvasPanel() {
+//        changeDataset();
         setRequestFocusEnabled(true);
         int delay = targetFPS == -1 ? 0 : 1000 / targetFPS;
         timer = new Timer(delay, e -> {
@@ -62,14 +63,19 @@ public class CanvasPanel extends JPanel implements IThemeListener {
         });
         timer.start();
         addListeners();
+        DatasetManager.addListener(this);
     }
 
     private void tryRepaint() {
+        tryRepaint(false);
+    }
+
+    private void tryRepaint(boolean force) {
 //        if (lastPaintedFrame != player.getFrameCount()) {
 //            markForRepaint = true;
 //            lastPaintedFrame = player.getFrameCount();
 //        }
-        if (markForRepaint) {
+        if (markForRepaint || force) {
             updateColorBuffer();
             repaint();
             markForRepaint = false;
@@ -127,7 +133,8 @@ public class CanvasPanel extends JPanel implements IThemeListener {
 
         // FIXME : Allow old palette
 //        Color color = PlaceInfo.canvasColors[colorIndex];
-        Color color = ColorConverter.intToColor[colorIndex];
+//        Color color = ColorConverter.intToColorArr[colorIndex];
+        Color color = DatasetManager.currentDataset().colorArray[colorIndex];
 //        Color color = c;
         int checkX = zoom < 1 ? LOCAL_CANVAS_SIZE_X / z : LOCAL_CANVAS_SIZE_X * z;
         int checkY = zoom < 1 ? LOCAL_CANVAS_SIZE_Y / z : LOCAL_CANVAS_SIZE_Y * z;
@@ -141,19 +148,6 @@ public class CanvasPanel extends JPanel implements IThemeListener {
             rgbColorBuffer[colorBufferIndex] = color.getRed();
             rgbColorBuffer[colorBufferIndex + 1] = color.getGreen();
             rgbColorBuffer[colorBufferIndex + 2] = color.getBlue();
-        }
-    }
-
-    public void changeDataset() {
-        switch (DatasetManager.getDataset()) {
-            case PLACE_2017:
-                LOCAL_CANVAS_SIZE_X = PlaceInfo.CANVAS_2017_X;
-                LOCAL_CANVAS_SIZE_Y = PlaceInfo.CANVAS_2017_Y;
-                break;
-            case PLACE_2022:
-                LOCAL_CANVAS_SIZE_X = PlaceInfo.CANVAS_2022_X;
-                LOCAL_CANVAS_SIZE_Y = PlaceInfo.CANVAS_2022_Y;
-                break;
         }
     }
 
@@ -236,8 +230,13 @@ public class CanvasPanel extends JPanel implements IThemeListener {
     @Override
     public void onThemeChange() {
         backgroundColor = UIManager.getColor("ComboBox.background");
-        markForRepaint = true;
-        tryRepaint();
+        tryRepaint(true);
     }
 
+    @Override
+    public void onDatasetChanged(Dataset dataset) {
+        LOCAL_CANVAS_SIZE_X = DatasetManager.currentDataset().CANVAS_SIZE_X;
+        LOCAL_CANVAS_SIZE_Y = DatasetManager.currentDataset().CANVAS_SIZE_Y;
+        tryRepaint(true);
+    }
 }

@@ -1,6 +1,9 @@
 package com.zrmiller.core.parser;
 
+import com.zrmiller.core.DatasetManager;
+import com.zrmiller.core.IDatasetListener;
 import com.zrmiller.core.TileEdit;
+import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.utility.PlaceInfo;
 
 import java.io.IOException;
@@ -8,7 +11,7 @@ import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class PlacePlayer {
+public class PlacePlayer implements IDatasetListener {
 
     //    PlaceParser2017 parser = new PlaceParser2017();
     IPlaceParser parser;
@@ -17,21 +20,25 @@ public class PlacePlayer {
     private Timer timer = new Timer();
     int frameCount = 0;
 
-    private int[] colorBuffer = new int[PlaceInfo.CANVAS_SIZE_X * PlaceInfo.CANVAS_SIZE_Y];
-    private final String inputPath;
+    private int[] colorBuffer = new int[DatasetManager.currentDataset().CANVAS_SIZE_X * DatasetManager.currentDataset().CANVAS_SIZE_Y];
 
     // Heatmap
-    private int[] heatmapBuffer = new int[PlaceInfo.CANVAS_SIZE_X * PlaceInfo.CANVAS_SIZE_Y];
+    private int[] heatmapBuffer = new int[DatasetManager.currentDataset().CANVAS_SIZE_X * DatasetManager.currentDataset().CANVAS_SIZE_Y];
     public static int heatmapWeight = 10000;
     public static int heatmapMax = 100000;
     public static int heatmapDecay = 10;
 
     private boolean playing;
 
-    public PlacePlayer(String inputPath) {
-        this.inputPath = inputPath;
-        parser = new PlaceParser2022("D:/Place/2022-Binary/", "Place_2022_INDEX.placetiles");
+    private final String directory;
+
+    public PlacePlayer(String directory) {
+        this.directory = directory;
+//        this.inputPath = inputTemplate;
+//        Arrays.fill(colorBuffer, DatasetManager.currentDataset().colorArray[DatasetManager.currentDataset().whiteIndex));
+        parser = new PlaceParser2022(directory + "2022-Binary/");
         parser.openStream();
+        DatasetManager.addListener(this);
     }
 
     public void play() {
@@ -68,9 +75,8 @@ public class PlacePlayer {
         pause();
         parser.closeStream();
         frameCount = 0;
-        Arrays.fill(colorBuffer, 0);
+        Arrays.fill(colorBuffer, DatasetManager.currentDataset().whiteIndex);
         Arrays.fill(heatmapBuffer, 0);
-//        parser.openInputStream(inputPath);
         parser.openStream();
     }
 
@@ -84,7 +90,7 @@ public class PlacePlayer {
             TileEdit tile = parser.readNextLine();
 
 //            int index = tokens[0] + tokens[1] * PlaceInfo.CANVAS_SIZE_X;
-            int index = tile.x + tile.y * PlaceInfo.CANVAS_SIZE_X;
+            int index = tile.x + tile.y * DatasetManager.currentDataset().CANVAS_SIZE_X;
             colorBuffer[index] = tile.color;
             heatmapBuffer[index] += heatmapWeight;
             if (heatmapBuffer[index] > heatmapMax) heatmapBuffer[index] = heatmapMax;
@@ -116,8 +122,33 @@ public class PlacePlayer {
 
     public void resizeCanvas(int width, int height) {
         pause();
-        colorBuffer = new int[PlaceInfo.CANVAS_SIZE_X * PlaceInfo.CANVAS_SIZE_Y];
-        heatmapBuffer = new int[PlaceInfo.CANVAS_SIZE_X * PlaceInfo.CANVAS_SIZE_Y];
+        colorBuffer = new int[DatasetManager.currentDataset().CANVAS_SIZE_X * DatasetManager.currentDataset().CANVAS_SIZE_Y];
+        heatmapBuffer = new int[DatasetManager.currentDataset().CANVAS_SIZE_X * DatasetManager.currentDataset().CANVAS_SIZE_Y];
     }
 
+    private void resizeCanvas() {
+        pause();
+        parser.closeStream();
+        colorBuffer = new int[DatasetManager.currentDataset().CANVAS_SIZE_X * DatasetManager.currentDataset().CANVAS_SIZE_Y];
+        heatmapBuffer = new int[DatasetManager.currentDataset().CANVAS_SIZE_X * DatasetManager.currentDataset().CANVAS_SIZE_Y];
+        Arrays.fill(colorBuffer, DatasetManager.currentDataset().whiteIndex);
+    }
+
+    @Override
+    public void onDatasetChanged(Dataset dataset) {
+        pause();
+        parser.closeStream();
+        resizeCanvas();
+        frameCount = 0;
+        switch (dataset) {
+            case PLACE_2017:
+                parser = new PlaceParser2017(directory + "2017/");
+                parser.openStream();
+                break;
+            case PLACE_2022:
+                parser = new PlaceParser2022(directory + "2022-Binary/");
+                parser.openStream();
+                break;
+        }
+    }
 }
