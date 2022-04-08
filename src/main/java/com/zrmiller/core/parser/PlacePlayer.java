@@ -80,11 +80,26 @@ public class PlacePlayer implements IDatasetListener {
         parser.openStream();
     }
 
-    public void jumpToFrame(int frame) {
-        parser.jumpToFrame(frame);
+    public boolean jumpToFrame(int frame) {
+//        if (frame < frameCount) {
+//            reset();
+//        }
+        reset();
+        ;
+        try {
+            while (frameCount < frame) {
+//                System.out.println("APPLY..." + frameCount);
+                if (!applyNextFrame())
+                    break;
+            }
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    private void applyNextFrame() throws IOException {
+    private boolean applyNextFrame() throws IOException {
         if (parser.ready()) {
 //            int[] tokens = parser.getNextLine();
             TileEdit tile = parser.readNextLine();
@@ -95,8 +110,10 @@ public class PlacePlayer implements IDatasetListener {
             heatmapBuffer[index] += heatmapWeight;
             if (heatmapBuffer[index] > heatmapMax) heatmapBuffer[index] = heatmapMax;
             frameCount++;
+            return true;
         } else {
             pause();
+            return false;
         }
     }
 

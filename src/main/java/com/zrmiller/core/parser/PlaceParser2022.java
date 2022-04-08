@@ -64,12 +64,6 @@ public class PlaceParser2022 implements IPlaceParser {
         return currentLine;
     }
 
-    @Override
-    public boolean jumpToFrame(int frame) {
-        // FIXME:
-        return false;
-    }
-
     private boolean tryReadNextTile() throws IOException {
         byte[] line = new byte[TileEdit.BYTE_COUNT];
         int numBytesRead = currentStream.read(line);

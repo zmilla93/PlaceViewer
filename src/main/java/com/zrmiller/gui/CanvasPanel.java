@@ -70,7 +70,11 @@ public class CanvasPanel extends JPanel implements IThemeListener, IDatasetListe
         tryRepaint(false);
     }
 
-    private void tryRepaint(boolean force) {
+    public void clear(){
+
+    }
+
+    public void tryRepaint(boolean force) {
 //        if (lastPaintedFrame != player.getFrameCount()) {
 //            markForRepaint = true;
 //            lastPaintedFrame = player.getFrameCount();
