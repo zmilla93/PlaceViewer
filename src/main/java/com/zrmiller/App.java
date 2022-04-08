@@ -6,7 +6,6 @@ import com.zrmiller.core.datawrangler.DataWrangler2017;
 import com.zrmiller.core.datawrangler.DataWrangler2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.parser.PlaceParser2022;
-import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.gui.FrameManager;
 
 import javax.swing.*;
@@ -27,14 +26,8 @@ public class App {
         } catch (InterruptedException | InvocationTargetException e) {
             e.printStackTrace();
         }
-        System.out.println(PlaceInfo.TIME_CORRECTION_2022);
-        System.out.println("file count : " + PlaceInfo.fileOrder.length);
-//        testParse();
 
         DataWrangler2017 dataWrangler2017 = new DataWrangler2017("D:/Place/2017/", "Place_2017_Original.txt");
-//        dataWrangler2017.downloadFile();
-//        dataWrangler2017.sortAndMinify("Place_2017_Original.txt", "Place_2017.placetiles", false);
-
         DatasetManager.changeDataset(Dataset.PLACE_2022);
     }
 
