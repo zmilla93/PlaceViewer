@@ -8,8 +8,6 @@ import com.zrmiller.gui.windows.DatasetManagerFrame;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class DownloaderPanel2017 extends DownloaderDatasetPanel {
 
@@ -17,7 +15,6 @@ public class DownloaderPanel2017 extends DownloaderDatasetPanel {
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel cardPanel = new JPanel(cardLayout);
     private final JLabel fileSizeLabel = new JLabel();
-    private final JLabel directoryLabel = new JLabel();
 
     public DownloaderPanel2017(DatasetManagerFrame datasetManagerFrame) {
         super();
@@ -56,7 +53,6 @@ public class DownloaderPanel2017 extends DownloaderDatasetPanel {
         gc.gridy++;
         infoPanel.add(new JLabel("Compressed Size: 162 MB"), gc);
         gc.gridy++;
-        gc.gridy++;
         infoPanel.add(new JLabel("Data will be downloaded into a single file, sorted, compressed, then the original file deleted."), gc);
         gc.gridy++;
         JPanel infoBufferPanel = new JPanel(new GridBagLayout());
@@ -64,7 +60,6 @@ public class DownloaderPanel2017 extends DownloaderDatasetPanel {
         gc.weightx = 1;
         gc.fill = GridBagConstraints.HORIZONTAL;
         infoBufferPanel.add(infoPanel, gc);
-
         return infoPanel;
     }
 
@@ -76,25 +71,17 @@ public class DownloaderPanel2017 extends DownloaderDatasetPanel {
             datasetManagerFrame.getProgressPanel().displayDownload2017();
             datasetManagerFrame.swapToDownloadPanel();
         });
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-//                System.out.println("kil");
-//                DataWrangler2017 wrangler2017 = new DataWrangler2017();
-//                System.out.println(wrangler2017.deleteData());
-//                validateData();
-            }
-        });
-
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String confirm = JOptionPane.showInputDialog(self, "Are you sure you want to delete this dataset?\nType '2017' to confirm.", "Delete 2017 Dataset", JOptionPane.PLAIN_MESSAGE);
-                if (confirm != null && confirm.equals("2017")) {
-                    DataWrangler2017 dataWrangler2017 = new DataWrangler2017();
-                    dataWrangler2017.deleteData();
-                    validateData();
+        deleteButton.addActionListener(e -> {
+            String confirm = JOptionPane.showInputDialog(self, "Are you sure you want to delete this dataset?\nType '2017' to confirm.", "Delete 2017 Dataset", JOptionPane.PLAIN_MESSAGE);
+            if (confirm != null && confirm.equals("2017")) {
+                DataWrangler2017 dataWrangler2017 = new DataWrangler2017();
+                if (!dataWrangler2017.deleteData()) {
+                    JOptionPane.showMessageDialog(self,
+                            "Failed to delete data. Make sure the player is stopped, then try again.\n" +
+                                    "If this problem persists, close this app and manually delete the files.",
+                            "Delete Failed", JOptionPane.PLAIN_MESSAGE);
                 }
+                validateData();
             }
         });
     }
@@ -111,10 +98,6 @@ public class DownloaderPanel2017 extends DownloaderDatasetPanel {
             downloadButton.setEnabled(true);
             cardLayout.show(cardPanel, "P1");
         }
-    }
-
-    private void updateDirectory() {
-
     }
 
 }

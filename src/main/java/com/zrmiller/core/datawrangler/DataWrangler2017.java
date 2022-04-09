@@ -14,29 +14,18 @@ import java.util.Arrays;
 public class DataWrangler2017 extends DataWrangler {
 
     private String downloadURL = "https://storage.googleapis.com/place_data_share/place_tiles.csv";
-    private Thread thread;
     private final ArrayList<IStatusTracker2017> statusTrackers = new ArrayList<>();
 
     public void downloadDataset() {
         if (!validateDirectory(Dataset.PLACE_2017.YEAR_STRING))
             return;
         downloadFile(FileNames.original2017, Dataset.PLACE_2017.YEAR_STRING, downloadURL);
-        System.out.println("FILE DOWNLOAD FINISHED");
         for (IStatusTracker2017 tracker : statusTrackers)
             tracker.onFileDownloadComplete();
-//        thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//            }
-//        });
-//        thread.start();
-//        executor.execute(() -> downloadFile(FileNames.original2017, downloadURL));
     }
 
     public boolean sortAndMinify(boolean deleteSource) {
         try {
-            System.out.println("sort and minify!");
             System.out.flush();
             BufferedReader reader = new BufferedReader(new FileReader(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileNames.original2017));
             TileEdit[] tileEdits = new TileEdit[PlaceInfo.CLEAN_LINE_COUNT];
@@ -44,7 +33,6 @@ public class DataWrangler2017 extends DataWrangler {
 
             bytesDownloaded = 0;
             while (reader.ready()) {
-//                System.out.println("B:" + bytesDownloaded);
                 String line = reader.readLine();
                 String[] tokens = tokenizeLine(line, 5);
                 if (tokens == null) continue; // Skip Empty Lines
@@ -92,21 +80,15 @@ public class DataWrangler2017 extends DataWrangler {
         }
     }
 
+    // FIXME : deleting data will fail if PlacePlayer has an open stream
     public boolean deleteData() {
-
         File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileNames.minified2017);
         if (file.exists()) {
-            System.out.println("file found");
             if (!file.isFile())
                 return false;
             Stopwatch.start();
-            boolean del = file.delete();
-            System.out.println("K ::" + Stopwatch.getElapsedSeconds());
-            System.out.println("DEL ::: " + del);
-            return del;
+            return file.delete();
         }
-
-        System.out.println("no file");
         return true;
     }
 

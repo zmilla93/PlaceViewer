@@ -106,7 +106,7 @@ public class DownloadProgressPanel extends BaseDownloaderPanel {
 
             @Override
             public void onFileSortComplete() {
-                setInfoUpper("Compressing dataset...");
+                setInfoUpper("Saving dataset...");
                 setInfoLower("This should be quick...");
                 downloadStage2017 = DownloadStage2017.MINIFYING;
             }
