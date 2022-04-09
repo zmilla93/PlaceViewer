@@ -15,15 +15,16 @@ public class DownloaderPanel2017 extends DownloaderDatasetPanel {
     protected JButton deleteButton = new JButton("Delete");
     protected JButton downloadButton = new JButton("Download");
 
+    private enum Panel {UNINSTALLED, INSTALLED}
+
     public DownloaderPanel2017(DatasetManagerFrame datasetManagerFrame) {
         super(datasetManagerFrame);
         deleteButton.setText("Delete 2017");
         downloadButton.setText("Download 2017");
 
-        cardPanel.add(uninstalledPanel(), "P1");
-        cardPanel.add(installedPanel(), "P2");
+        cardPanel.add(uninstalledPanel(), Panel.UNINSTALLED.toString());
+        cardPanel.add(installedPanel(), Panel.INSTALLED.toString());
 
-        cardLayout.show(cardPanel, "P1");
         centerPanel.add(cardPanel, BorderLayout.CENTER);
 
         addEastButton(deleteButton);
@@ -34,34 +35,34 @@ public class DownloaderPanel2017 extends DownloaderDatasetPanel {
     }
 
     private JPanel installedPanel() {
-        JPanel completePanel = new JPanel(new GridBagLayout());
+        JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gc = ZUtil.getGC();
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.weightx = 1;
-        completePanel.add(new JLabel("Dataset Installed"), gc);
+        panel.add(new JLabel("Dataset Installed"), gc);
         gc.gridy++;
-        completePanel.add(fileSizeLabel, gc);
+        panel.add(fileSizeLabel, gc);
         gc.gridy++;
-        return completePanel;
+        return panel;
     }
 
     private JPanel uninstalledPanel() {
-        JPanel infoPanel = new JPanel(new GridBagLayout());
+        JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gc = ZUtil.getGC();
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.weightx = 1;
-        infoPanel.add(new JLabel("Download Size: 1 GB"), gc);
+        panel.add(new JLabel("Download Size: 1 GB"), gc);
         gc.gridy++;
-        infoPanel.add(new JLabel("Compressed Size: 162 MB"), gc);
+        panel.add(new JLabel("Compressed Size: 162 MB"), gc);
         gc.gridy++;
-        infoPanel.add(new JLabel("Data will be downloaded into a single file, sorted, compressed, then the original file deleted."), gc);
+        panel.add(new JLabel("Data will be downloaded into a single file, sorted, compressed, then the original file deleted."), gc);
         gc.gridy++;
         JPanel infoBufferPanel = new JPanel(new GridBagLayout());
         gc = ZUtil.getGC();
         gc.weightx = 1;
         gc.fill = GridBagConstraints.HORIZONTAL;
-        infoBufferPanel.add(infoPanel, gc);
-        return infoPanel;
+        infoBufferPanel.add(panel, gc);
+        return panel;
     }
 
     private void addListeners() {
@@ -73,7 +74,8 @@ public class DownloaderPanel2017 extends DownloaderDatasetPanel {
             datasetManagerFrame.swapToDownloadPanel();
         });
         deleteButton.addActionListener(e -> {
-            String confirm = JOptionPane.showInputDialog(self, "Are you sure you want to delete this dataset?\nType '2017' to confirm.", "Delete 2017 Dataset", JOptionPane.PLAIN_MESSAGE);
+            String confirm = JOptionPane.showInputDialog(self, "Are you sure you want to delete this dataset?\n" +
+                    "Type '2017' to confirm.", "Delete 2017 Dataset", JOptionPane.PLAIN_MESSAGE);
             if (confirm != null && confirm.equals("2017")) {
                 DataWrangler2017 dataWrangler2017 = new DataWrangler2017();
                 if (!dataWrangler2017.deleteData()) {
@@ -94,10 +96,11 @@ public class DownloaderPanel2017 extends DownloaderDatasetPanel {
             downloadButton.setEnabled(false);
             fileSizeLabel.setText("File Size: " + fileSize / 1000000 + " MB");
             cardLayout.show(cardPanel, "P2");
+            cardLayout.show(cardPanel, Panel.INSTALLED.toString());
         } else {
             deleteButton.setEnabled(false);
             downloadButton.setEnabled(true);
-            cardLayout.show(cardPanel, "P1");
+            cardLayout.show(cardPanel, Panel.UNINSTALLED.toString());
         }
     }
 
