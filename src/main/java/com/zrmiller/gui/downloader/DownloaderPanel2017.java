@@ -91,11 +91,6 @@ public class DownloaderPanel2017 extends BaseDownloaderPanel {
     private void addListeners() {
         DownloaderPanel2017 self = this;
         downloadButton.addActionListener(e -> {
-//            DataWrangler2017 dataWrangler2017 = DownloadManager.downloadAndMinify2017();
-//            datasetManagerFrame.getProgressPanel().setWrangler(dataWrangler2017);
-//            datasetManagerFrame.getProgressPanel().displayDownload2017();
-//            datasetManagerFrame.swapToDownloadPanel();
-//            datasetManagerFrame.swapToDownloadPanel();
             runDownload();
         });
         deleteButton.addActionListener(e -> {
@@ -126,7 +121,7 @@ public class DownloaderPanel2017 extends BaseDownloaderPanel {
             downloadButton.setEnabled(true);
             cardLayout.show(cardPanel, Panel.UNINSTALLED.toString());
         }
-        if(SHOW_TEST_SCREEN){
+        if (SHOW_TEST_SCREEN) {
             downloadButton.setText("Download 2017*");
             downloadButton.setEnabled(true);
         }
