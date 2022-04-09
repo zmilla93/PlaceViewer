@@ -21,7 +21,6 @@ public class DownloadProgressPanel extends BaseDownloaderPanel {
     private final JLabel labelUpper = new JLabel();
     private final JLabel labelLower = new JLabel();
     private final JButton cancelButton = new JButton("Cancel");
-    private final DatasetManagerFrame datasetManagerFrame;
     private Timer timer;
 
     private DownloadStage2017 downloadStage2017;
@@ -31,7 +30,7 @@ public class DownloadProgressPanel extends BaseDownloaderPanel {
 
 
     public DownloadProgressPanel(DatasetManagerFrame datasetManagerFrame) {
-        this.datasetManagerFrame = datasetManagerFrame;
+        super(datasetManagerFrame);
         centerPanel.setLayout(new GridBagLayout());
         progressBar.setMaximum(0);
         progressBar.setMaximum(100);

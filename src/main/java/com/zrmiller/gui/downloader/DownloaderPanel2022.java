@@ -6,7 +6,7 @@ import com.zrmiller.gui.windows.DatasetManagerFrame;
 import javax.swing.*;
 import java.awt.*;
 
-public class DownloaderPanel2022 extends DownloaderDatasetPanel {
+public class DownloaderPanel2022 extends BaseDownloaderPanel {
 
     public enum Panel {NOT_INSTALLED, PARTIALLY_INSTALLED, FULLY_INSTALLED}
 
@@ -16,7 +16,7 @@ public class DownloaderPanel2022 extends DownloaderDatasetPanel {
         cardPanel.add(partiallyInstalledPanel(), Panel.PARTIALLY_INSTALLED.toString());
         cardPanel.add(fullyInstalledPanel(), Panel.FULLY_INSTALLED.toString());
         showPanel(Panel.FULLY_INSTALLED);
-        centerPanel.add(cardPanel, BorderLayout.CENTER);
+
     }
 
     private JPanel uninstalledPanel() {

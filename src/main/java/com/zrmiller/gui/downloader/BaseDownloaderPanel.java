@@ -1,6 +1,7 @@
 package com.zrmiller.gui.downloader;
 
 import com.zrmiller.core.utility.ZUtil;
+import com.zrmiller.gui.windows.DatasetManagerFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,11 +15,17 @@ public abstract class BaseDownloaderPanel extends JPanel {
     private final GridBagConstraints eastGC = ZUtil.getGC();
     private final GridBagConstraints westGC = ZUtil.getGC();
 
+    protected final CardLayout cardLayout = new CardLayout();
+    protected final JPanel cardPanel = new JPanel(cardLayout);
+
+    protected final DatasetManagerFrame datasetManagerFrame;
+
     /**
      * Add content to centerPanel.
      * Add buttons with addEastButton and addWestButton.
      */
-    public BaseDownloaderPanel() {
+    public BaseDownloaderPanel(DatasetManagerFrame datasetManagerFrame) {
+        this.datasetManagerFrame = datasetManagerFrame;
         setLayout(new BorderLayout());
         bottomBar.add(buttonPanelWest, BorderLayout.WEST);
         bottomBar.add(buttonPanelEast, BorderLayout.EAST);
@@ -27,6 +34,7 @@ public abstract class BaseDownloaderPanel extends JPanel {
         westGC.insets = new Insets(inset, 0, inset, inset);
         add(centerPanel, BorderLayout.CENTER);
         add(bottomBar, BorderLayout.SOUTH);
+        centerPanel.add(cardPanel, BorderLayout.CENTER);
     }
 
     protected void addEastButton(JComponent component) {

@@ -9,7 +9,7 @@ import com.zrmiller.gui.windows.DatasetManagerFrame;
 import javax.swing.*;
 import java.awt.*;
 
-public class DownloaderPanel2017 extends DownloaderDatasetPanel {
+public class DownloaderPanel2017 extends BaseDownloaderPanel {
 
     private final JLabel fileSizeLabel = new JLabel();
     protected JButton deleteButton = new JButton("Delete");
