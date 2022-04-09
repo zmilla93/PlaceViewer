@@ -53,6 +53,7 @@ public class PlaceParser2017 implements IPlaceParser {
     }
 
     private boolean tryReadLine() throws IOException {
+        // FIXME : This can throw a null pointer exception when switching datasets
         byte[] line = new byte[TileEdit.BYTE_COUNT];
         int numBytesRead = reader.read(line);
         if (numBytesRead == -1)

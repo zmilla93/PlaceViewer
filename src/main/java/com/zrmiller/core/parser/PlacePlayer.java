@@ -97,6 +97,8 @@ public class PlacePlayer implements IDatasetListener {
     public boolean jumpToFrame(int frame) {
         state = State.SEEKING;
         stop();
+        parser.openStream();
+        streamIsOpen = true;
         try {
             while (frameCount < frame) {
                 if (!applyNextFrame())

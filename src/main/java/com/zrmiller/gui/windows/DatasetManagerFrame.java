@@ -15,6 +15,7 @@ import java.io.File;
 public class DatasetManagerFrame extends JDialog implements IThemeListener {
 
     private final JButton browseButton = new JButton("Select Folder");
+    private final JButton openFolderButton = new JButton("Open Folder");
     private final JFileChooser fileChooser = new JFileChooser();
 
     private final JLabel directoryLabel = new JLabel();
