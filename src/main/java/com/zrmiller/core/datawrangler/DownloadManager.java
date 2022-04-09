@@ -11,50 +11,28 @@ public class DownloadManager {
         DataWrangler2017 wrangler = new DataWrangler2017();
         IStatusTracker2017 tracker = new IStatusTracker2017() {
             @Override
-            public void onFileDownloaded() {
-                System.out.println("here we go...");
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        wrangler.sortAndMinify(false);
-                    }
-                });
-                thread.start();
-//                executor.execute(() -> wrangler.sortAndMinify(false));
+            public void onFileDownloadComplete() {
+                executor.execute(() -> wrangler.sortAndMinify(true));
             }
 
             @Override
-            public void onFileRead() {
+            public void onFileReadComplete() {
 
             }
 
             @Override
-            public void onFileSorted() {
+            public void onFileSortComplete() {
 
             }
 
             @Override
-            public void onMinifiyComplete() {
+            public void onCompressComplete() {
 
             }
         };
         wrangler.addStatusTracker(tracker);
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                wrangler.downloadFile();
-            }
-        });
-        thread.start();
-
-//        executor.execute(wrangler::downloadFile);
-//        executor.execute(() -> wrangler.sortAndMinify(false));
+        executor.execute(wrangler::downloadDataset);
         return wrangler;
-    }
-
-    public static void downloadAndMinify2022() {
-
     }
 
 }

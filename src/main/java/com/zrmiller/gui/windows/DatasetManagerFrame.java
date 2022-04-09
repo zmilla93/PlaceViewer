@@ -24,19 +24,21 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel cardPanel = new JPanel(cardLayout);
 
+    private DownloaderPanel2017 downloaderPanel2017 = new DownloaderPanel2017(this);
+    private DownloaderPanel2022 downloaderPanel2022 = new DownloaderPanel2022();
     private DownloadProgressPanel downloadProgressPanel = new DownloadProgressPanel(this);
 
     public DatasetManagerFrame() {
 //        super("Dataset Manager");
         setTitle("Dataset Manager");
-        setModalityType(ModalityType.APPLICATION_MODAL);
-        setModal(true);
+//        setModalityType(ModalityType.APPLICATION_MODAL);
+//        setModal(true);
         container.setLayout(new BorderLayout());
         setMinimumSize(new Dimension(500, 300));
         setSize(500, 300);
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        tabbedPane.addTab("2017", new DownloaderPanel2017(this));
-        tabbedPane.addTab("2022", new DownloaderPanel2022());
+        tabbedPane.addTab("2017 Data", downloaderPanel2017);
+        tabbedPane.addTab("2022 Data", downloaderPanel2022);
 
         directoryLabel.setText(SaveManager.settingsSaveFile.data.dataDirectory);
 
@@ -52,7 +54,7 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
         gc.weightx = 1;
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.insets.left = 15;
-        infoPanel.add(new JLabel("Select a folder for downloaded files."), gc);
+        infoPanel.add(new JLabel("Select a folder to store downloaded files."), gc);
         gc.gridy++;
         infoPanel.add(new JLabel("Subfolders will be created automatically for each year."), gc);
 
@@ -110,6 +112,10 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
 
     public DownloadProgressPanel getProgressPanel() {
         return this.downloadProgressPanel;
+    }
+
+    public void validate2017() {
+        downloaderPanel2017.validateData();
     }
 
     @Override

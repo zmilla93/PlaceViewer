@@ -2,12 +2,12 @@ package com.zrmiller.core.datawrangler;
 
 public interface IStatusTracker2017 {
 
-    void onFileDownloaded();
+    void onFileDownloadComplete();
 
-    void onFileRead();
+    void onFileReadComplete();
 
-    void onFileSorted();
+    void onFileSortComplete();
 
-    void onMinifiyComplete();
+    void onCompressComplete();
 
 }

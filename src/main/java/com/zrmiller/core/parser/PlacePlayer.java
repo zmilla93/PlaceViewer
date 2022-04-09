@@ -30,6 +30,7 @@ public class PlacePlayer implements IDatasetListener {
     public static int heatmapDecay = 10;
 
     private boolean playing;
+    private boolean open;
 
     public PlacePlayer() {
 //        this.inputPath = inputTemplate;
@@ -41,6 +42,8 @@ public class PlacePlayer implements IDatasetListener {
 
     public void play() {
         if (playing) return;
+        if (!open)
+            if (!(open = parser.openStream())) return;
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -75,7 +78,8 @@ public class PlacePlayer implements IDatasetListener {
         frameCount = 0;
         Arrays.fill(colorBuffer, DatasetManager.currentDataset().WHITE_INDEX);
         Arrays.fill(heatmapBuffer, 0);
-        parser.openStream();
+        open = false;
+//        parser.openStream();
     }
 
     public boolean jumpToFrame(int frame) {
@@ -158,11 +162,11 @@ public class PlacePlayer implements IDatasetListener {
         switch (dataset) {
             case PLACE_2017:
                 parser = new PlaceParser2017();
-                parser.openStream();
+//                parser.openStream();
                 break;
             case PLACE_2022:
                 parser = new PlaceParser2022("D:/Place/");
-                parser.openStream();
+//                parser.openStream();
                 break;
         }
     }

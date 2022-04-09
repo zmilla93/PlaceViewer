@@ -5,6 +5,7 @@ import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.PlaceInfo;
+import com.zrmiller.modules.stopwatch.Stopwatch;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -16,13 +17,13 @@ public class DataWrangler2017 extends DataWrangler {
     private Thread thread;
     private final ArrayList<IStatusTracker2017> statusTrackers = new ArrayList<>();
 
-    public void downloadFile() {
+    public void downloadDataset() {
         if (!validateDirectory(Dataset.PLACE_2017.YEAR_STRING))
             return;
         downloadFile(FileNames.original2017, Dataset.PLACE_2017.YEAR_STRING, downloadURL);
         System.out.println("FILE DOWNLOAD FINISHED");
         for (IStatusTracker2017 tracker : statusTrackers)
-            tracker.onFileDownloaded();
+            tracker.onFileDownloadComplete();
 //        thread = new Thread(new Runnable() {
 //            @Override
 //            public void run() {
@@ -58,16 +59,16 @@ public class DataWrangler2017 extends DataWrangler {
                 lineCount++;
             }
             for (IStatusTracker2017 tracker : statusTrackers)
-                tracker.onFileRead();
+                tracker.onFileReadComplete();
             // Sort
             TileEdit.sortCount = 0;
             Arrays.sort(tileEdits);
             for (IStatusTracker2017 tracker : statusTrackers)
-                tracker.onFileSorted();
+                tracker.onFileSortComplete();
             // Write Output
             tilesWritten = 0;
             bytesWritten = 0;
-            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + FileNames.minified2017));
+            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileNames.minified2017));
             for (TileEdit tile : tileEdits) {
                 outputStream.write(tile.toByteArray());
                 bytesWritten = TileEdit.BYTE_COUNT;
@@ -79,9 +80,9 @@ public class DataWrangler2017 extends DataWrangler {
             reader.close();
 //            outputStream.close();
             for (IStatusTracker2017 tracker : statusTrackers)
-                tracker.onMinifiyComplete();
+                tracker.onCompressComplete();
             if (deleteSource) {
-                File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + FileNames.original2017);
+                File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileNames.original2017);
                 return file.delete();
             }
             return true;
@@ -89,6 +90,24 @@ public class DataWrangler2017 extends DataWrangler {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public boolean deleteData() {
+
+        File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileNames.minified2017);
+        if (file.exists()) {
+            System.out.println("file found");
+            if (!file.isFile())
+                return false;
+            Stopwatch.start();
+            boolean del = file.delete();
+            System.out.println("K ::" + Stopwatch.getElapsedSeconds());
+            System.out.println("DEL ::: " + del);
+            return del;
+        }
+
+        System.out.println("no file");
+        return true;
     }
 
     public void addStatusTracker(IStatusTracker2017 tracker) {

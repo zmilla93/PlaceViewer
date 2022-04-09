@@ -89,29 +89,31 @@ public class DownloadProgressPanel extends BaseDownloaderPanel {
     public void displayDownload2017() {
         downloadStage2017 = DownloadStage2017.DOWNLOADING;
         setInfoUpper("Downloading 2017 dataset...");
+        setInfoLower("Loading...");
         IStatusTracker2017 tracker = new IStatusTracker2017() {
             @Override
-            public void onFileDownloaded() {
+            public void onFileDownloadComplete() {
                 setInfoUpper("Scanning dataset...");
                 downloadStage2017 = DownloadStage2017.READING;
             }
 
             @Override
-            public void onFileRead() {
-                setInfoUpper("Sorting dataset...");
+            public void onFileReadComplete() {
+                setInfoUpper("");
+                setInfoLower("Sorting dataset... 0%");
                 downloadStage2017 = DownloadStage2017.SORTING;
             }
 
             @Override
-            public void onFileSorted() {
+            public void onFileSortComplete() {
                 setInfoUpper("Compressing dataset...");
+                setInfoLower("This should be quick...");
                 downloadStage2017 = DownloadStage2017.MINIFYING;
             }
 
             @Override
-            public void onMinifiyComplete() {
-                setInfoUpper("");
-                setInfoUpper("Complete!");
+            public void onCompressComplete() {
+                datasetManagerFrame.validate2017();
                 datasetManagerFrame.swapToDatasetPanel();
             }
         };
@@ -138,15 +140,15 @@ public class DownloadProgressPanel extends BaseDownloaderPanel {
             public void displaySorting() {
                 progressBar.setValue(TileEdit.getSortProgress());
                 if (TileEdit.sortCount == 0)
-                    setInfoLower("Loading...");
+                    setInfoLower("Sorting dataset... 0%");
                 else
-                    setInfoLower(TileEdit.getSortProgress() + "%");
+                    setInfoLower("Sorting dataset... " + TileEdit.getSortProgress() + "%");
             }
 
             @Override
             public void displayMinifying() {
                 progressBar.setValue(TileEdit.getSortProgress());
-                if (wrangler.getBytesWritten() == 0)
+                if (wrangler.getBytesWritten() < 1000)
                     setInfoLower("This should be quick...");
                 else
                     setInfoLower(wrangler.getBytesWritten() / 1000000 + " / " + PlaceInfo.CLEAN_LINE_COUNT * TileEdit.BYTE_COUNT);
