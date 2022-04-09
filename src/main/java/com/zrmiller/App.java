@@ -5,6 +5,7 @@ import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.datawrangler.DataWrangler2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.parser.PlaceParser2022;
+import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.gui.FrameManager;
 
 import javax.swing.*;
