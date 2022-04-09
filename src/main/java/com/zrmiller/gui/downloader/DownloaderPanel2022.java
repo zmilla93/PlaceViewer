@@ -19,7 +19,6 @@ public class DownloaderPanel2022 extends DownloaderDatasetPanel {
         gc.weightx = 1;
 
 
-
         return panel;
     }
 

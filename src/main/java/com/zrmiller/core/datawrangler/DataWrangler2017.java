@@ -1,6 +1,6 @@
 package com.zrmiller.core.datawrangler;
 
-import com.zrmiller.core.FileNames;
+import com.zrmiller.core.FileName;
 import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
@@ -19,7 +19,7 @@ public class DataWrangler2017 extends DataWrangler {
     public void downloadDataset() {
         if (!validateDirectory(Dataset.PLACE_2017.YEAR_STRING))
             return;
-        downloadFile(FileNames.original2017, Dataset.PLACE_2017.YEAR_STRING, downloadURL);
+        downloadFile(FileName.ORIGINAL_2017.toString(), Dataset.PLACE_2017.YEAR_STRING, downloadURL);
         for (IStatusTracker2017 tracker : statusTrackers)
             tracker.onFileDownloadComplete();
     }
@@ -27,7 +27,7 @@ public class DataWrangler2017 extends DataWrangler {
     public boolean sortAndMinify(boolean deleteSource) {
         try {
             System.out.flush();
-            BufferedReader reader = new BufferedReader(new FileReader(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileNames.original2017));
+            BufferedReader reader = new BufferedReader(new FileReader(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.ORIGINAL_2017));
             TileEdit[] tileEdits = new TileEdit[PlaceInfo.CLEAN_LINE_COUNT];
             int lineCount = 0;
 
@@ -56,7 +56,7 @@ public class DataWrangler2017 extends DataWrangler {
             // Write Output
             tilesWritten = 0;
             bytesWritten = 0;
-            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileNames.minified2017));
+            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017));
             for (TileEdit tile : tileEdits) {
                 outputStream.write(tile.toByteArray());
                 bytesWritten = TileEdit.BYTE_COUNT;
@@ -70,7 +70,7 @@ public class DataWrangler2017 extends DataWrangler {
             for (IStatusTracker2017 tracker : statusTrackers)
                 tracker.onCompressComplete();
             if (deleteSource) {
-                File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileNames.original2017);
+                File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.ORIGINAL_2017);
                 return file.delete();
             }
             return true;
@@ -82,7 +82,7 @@ public class DataWrangler2017 extends DataWrangler {
 
     // FIXME : deleting data will fail if PlacePlayer has an open stream
     public boolean deleteData() {
-        File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileNames.minified2017);
+        File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017);
         if (file.exists()) {
             if (!file.isFile())
                 return false;

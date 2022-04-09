@@ -31,7 +31,7 @@ public enum Dataset {
         return YEAR_STRING;
     }
 
-    public String getYearPath(){
+    public String getYearPath() {
         return YEAR_STRING + File.separator;
     }
 

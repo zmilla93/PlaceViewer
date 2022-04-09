@@ -1,6 +1,6 @@
 package com.zrmiller.core.parser;
 
-import com.zrmiller.core.FileNames;
+import com.zrmiller.core.FileName;
 import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.utility.PlaceInfo;
 
@@ -27,8 +27,8 @@ public class PlaceParser2022 implements IPlaceParser {
     @Override
     public boolean openStream() {
         try {
-            currentStream = new BufferedInputStream(new FileInputStream(directory + getIndexedName(FileNames.minified2022, PlaceInfo.fileOrder[0])));
-            nextStream = new BufferedInputStream(new FileInputStream(directory + getIndexedName(FileNames.minified2022, PlaceInfo.fileOrder[1])));
+            currentStream = new BufferedInputStream(new FileInputStream(directory + getIndexedName(FileName.BINARY_2022.toString(), PlaceInfo.fileOrder[0])));
+            nextStream = new BufferedInputStream(new FileInputStream(directory + getIndexedName(FileName.BINARY_2022.toString(), PlaceInfo.fileOrder[1])));
             fileIndex = 2;
             return true;
         } catch (FileNotFoundException e) {
@@ -88,7 +88,7 @@ public class PlaceParser2022 implements IPlaceParser {
         currentStream = nextStream;
         if (fileIndex < PlaceInfo.fileOrder.length) {
             try {
-                nextStream = new BufferedInputStream(new FileInputStream(directory + getIndexedName(FileNames.minified2022, PlaceInfo.fileOrder[fileIndex])));
+                nextStream = new BufferedInputStream(new FileInputStream(directory + getIndexedName(FileName.BINARY_2022.toString(), PlaceInfo.fileOrder[fileIndex])));
                 fileIndex++;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

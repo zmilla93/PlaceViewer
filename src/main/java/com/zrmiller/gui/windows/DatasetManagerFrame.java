@@ -31,6 +31,7 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
     public DatasetManagerFrame() {
 //        super("Dataset Manager");
         setTitle("Dataset Manager");
+        //FIXME:
         setModalityType(ModalityType.APPLICATION_MODAL);
         setModal(true);
         container.setLayout(new BorderLayout());
