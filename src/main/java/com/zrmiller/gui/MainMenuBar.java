@@ -19,7 +19,6 @@ public class MainMenuBar extends JMenuBar {
     private final JMenu themeMenu = new JMenu("Color Theme");
     private final JMenuItem githubButton = new JMenuItem("Github");
     private final JMenuItem paypalButton = new JMenuItem("Paypal");
-    private final JMenuItem patreonButton = new JMenuItem("Patreon");
 
     private final JMenuItem quitButton = new JMenuItem("Quit");
 
@@ -31,6 +30,8 @@ public class MainMenuBar extends JMenuBar {
     private final JMenuItem datasetManagerButton = new JMenuItem("Manage Datasets...");
 
     private final ColorTheme[] themeList = new ColorTheme[]{ColorTheme.SOLARIZED_LIGHT, ColorTheme.CARBON};
+
+    private static final int iconSize = 20;
 
     public MainMenuBar() {
         // Create theme list
@@ -47,7 +48,6 @@ public class MainMenuBar extends JMenuBar {
         optionsMenu.add(new JSeparator());
         optionsMenu.add(githubButton);
         optionsMenu.add(paypalButton);
-        optionsMenu.add(patreonButton);
         optionsMenu.add(new JSeparator());
         optionsMenu.add(quitButton);
 

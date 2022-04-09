@@ -3,7 +3,7 @@ package com.zrmiller.gui;
 import com.zrmiller.core.enums.PlaybackSpeed;
 import com.zrmiller.core.parser.PlacePlayer;
 import com.zrmiller.core.utility.ZUtil;
-import com.zrmiller.modules.styles.components.IconButton;
+import com.zrmiller.modules.styles.components.FlatColorIconButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,9 +14,9 @@ public class PlayerControlPanel extends JPanel {
 
     private PlacePlayer player;
 
-    private JButton resetButton = new IconButton("/icons/refresh.png");
-    private JButton playButton = new IconButton("icons/media-play.png");
-    private JButton pauseButton = new IconButton("icons/media-pause.png");
+    private JButton resetButton = new FlatColorIconButton("/icons/refresh.png");
+    private JButton playButton = new FlatColorIconButton("icons/media-play.png");
+    private JButton pauseButton = new FlatColorIconButton("icons/media-pause.png");
     private JSlider speedSlider = new JSlider();
     private JLabel speedLabel = new JLabel();
     private JComboBox<PlaybackSpeed> speedCombo = new JComboBox<>();

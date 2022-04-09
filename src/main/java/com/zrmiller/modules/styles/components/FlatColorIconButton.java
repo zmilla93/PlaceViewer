@@ -10,8 +10,7 @@ import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.util.Objects;
 
-
-public class IconButton extends JButton {
+public class FlatColorIconButton extends JButton {
 
     private Image original;
     private BufferedImage bufferedImage;
@@ -20,7 +19,7 @@ public class IconButton extends JButton {
     private Icon icon;
     private int size = 20;
 
-    public IconButton(String path) {
+    public FlatColorIconButton(String path) {
         this.path = path.startsWith("/") ? path : "/" + path;
         if (!getImageFromFile()) {
             System.err.println("[IconButton] File not found: /resources" + path);
