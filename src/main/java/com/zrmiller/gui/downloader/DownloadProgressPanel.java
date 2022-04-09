@@ -26,8 +26,6 @@ public class DownloadProgressPanel extends BaseDownloaderPanel {
     private DownloadStage2017 downloadStage2017;
 
     private DataWrangler wrangler;
-//    private DataWrangler2017 wrangler;
-
 
     public DownloadProgressPanel(DatasetManagerFrame datasetManagerFrame) {
         super(datasetManagerFrame);
@@ -166,4 +164,7 @@ public class DownloadProgressPanel extends BaseDownloaderPanel {
         timer.start();
     }
 
+    public JProgressBar getProgressBar() {
+        return progressBar;
+    }
 }

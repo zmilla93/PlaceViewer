@@ -14,6 +14,7 @@ public class DownloaderPanel2017 extends BaseDownloaderPanel {
     private final JLabel fileSizeLabel = new JLabel();
     protected JButton deleteButton = new JButton("Delete");
     protected JButton downloadButton = new JButton("Download");
+    private static final boolean SHOW_TEST_SCREEN = false;
 
     private enum Panel {UNINSTALLED, INSTALLED}
 
@@ -65,13 +66,37 @@ public class DownloaderPanel2017 extends BaseDownloaderPanel {
         return panel;
     }
 
+
+    private void runDownload() {
+        if (SHOW_TEST_SCREEN) {
+            showTestScreen();
+            return;
+        }
+        DataWrangler2017 dataWrangler2017 = DownloadManager.downloadAndMinify2017();
+        datasetManagerFrame.getProgressPanel().setWrangler(dataWrangler2017);
+        datasetManagerFrame.getProgressPanel().displayDownload2017();
+        datasetManagerFrame.swapToDownloadPanel();
+    }
+
+    private void showTestScreen() {
+        datasetManagerFrame.getProgressPanel().setInfoUpper("Downloading 2017 Dataset...");
+        int low = 1245, high = 5835;
+        datasetManagerFrame.getProgressPanel().setInfoLower(low + " MB / " + high + " MB");
+        datasetManagerFrame.getProgressPanel().getProgressBar().setMinimum(0);
+        datasetManagerFrame.getProgressPanel().getProgressBar().setMaximum(high);
+        datasetManagerFrame.getProgressPanel().getProgressBar().setValue(low);
+        datasetManagerFrame.swapToDownloadPanel();
+    }
+
     private void addListeners() {
         DownloaderPanel2017 self = this;
         downloadButton.addActionListener(e -> {
-            DataWrangler2017 dataWrangler2017 = DownloadManager.downloadAndMinify2017();
-            datasetManagerFrame.getProgressPanel().setWrangler(dataWrangler2017);
-            datasetManagerFrame.getProgressPanel().displayDownload2017();
-            datasetManagerFrame.swapToDownloadPanel();
+//            DataWrangler2017 dataWrangler2017 = DownloadManager.downloadAndMinify2017();
+//            datasetManagerFrame.getProgressPanel().setWrangler(dataWrangler2017);
+//            datasetManagerFrame.getProgressPanel().displayDownload2017();
+//            datasetManagerFrame.swapToDownloadPanel();
+//            datasetManagerFrame.swapToDownloadPanel();
+            runDownload();
         });
         deleteButton.addActionListener(e -> {
             String confirm = JOptionPane.showInputDialog(self, "Are you sure you want to delete this dataset?\n" +
@@ -100,6 +125,10 @@ public class DownloaderPanel2017 extends BaseDownloaderPanel {
             deleteButton.setEnabled(false);
             downloadButton.setEnabled(true);
             cardLayout.show(cardPanel, Panel.UNINSTALLED.toString());
+        }
+        if(SHOW_TEST_SCREEN){
+            downloadButton.setText("Download 2017*");
+            downloadButton.setEnabled(true);
         }
     }
 

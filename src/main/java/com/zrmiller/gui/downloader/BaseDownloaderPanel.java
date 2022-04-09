@@ -19,6 +19,7 @@ public abstract class BaseDownloaderPanel extends JPanel {
     protected final JPanel cardPanel = new JPanel(cardLayout);
 
     protected final DatasetManagerFrame datasetManagerFrame;
+    private static final int BUTTON_INSET = 4;
 
     /**
      * Add content to centerPanel.
@@ -29,9 +30,9 @@ public abstract class BaseDownloaderPanel extends JPanel {
         setLayout(new BorderLayout());
         bottomBar.add(buttonPanelWest, BorderLayout.WEST);
         bottomBar.add(buttonPanelEast, BorderLayout.EAST);
-        int inset = 2;
-        eastGC.insets = new Insets(inset, inset, inset, 0);
-        westGC.insets = new Insets(inset, 0, inset, inset);
+
+        eastGC.insets = new Insets(BUTTON_INSET, 0, BUTTON_INSET, BUTTON_INSET);
+        westGC.insets = new Insets(BUTTON_INSET, BUTTON_INSET, BUTTON_INSET, 0);
         add(centerPanel, BorderLayout.CENTER);
         add(bottomBar, BorderLayout.SOUTH);
         centerPanel.add(cardPanel, BorderLayout.CENTER);

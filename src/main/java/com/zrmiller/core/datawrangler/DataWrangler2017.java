@@ -62,22 +62,21 @@ public class DataWrangler2017 extends DataWrangler {
                 bytesWritten = TileEdit.BYTE_COUNT;
                 tilesWritten++;
             }
-
             outputStream.close();
-
             reader.close();
-//            outputStream.close();
             for (IStatusTracker2017 tracker : statusTrackers)
                 tracker.onCompressComplete();
             if (deleteSource) {
                 File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.ORIGINAL_2017);
                 return file.delete();
             }
-            return true;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            System.gc();
         }
+        return true;
     }
 
     // FIXME : deleting data will fail if PlacePlayer has an open stream
