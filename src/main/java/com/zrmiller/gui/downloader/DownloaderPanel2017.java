@@ -11,15 +11,12 @@ import java.awt.*;
 
 public class DownloaderPanel2017 extends DownloaderDatasetPanel {
 
-    private final DatasetManagerFrame datasetManagerFrame;
-    private final CardLayout cardLayout = new CardLayout();
-    private final JPanel cardPanel = new JPanel(cardLayout);
     private final JLabel fileSizeLabel = new JLabel();
+    protected JButton deleteButton = new JButton("Delete");
+    protected JButton downloadButton = new JButton("Download");
 
     public DownloaderPanel2017(DatasetManagerFrame datasetManagerFrame) {
-        super();
-        this.datasetManagerFrame = datasetManagerFrame;
-
+        super(datasetManagerFrame);
         deleteButton.setText("Delete 2017");
         downloadButton.setText("Download 2017");
 
@@ -28,6 +25,10 @@ public class DownloaderPanel2017 extends DownloaderDatasetPanel {
 
         cardLayout.show(cardPanel, "P1");
         centerPanel.add(cardPanel, BorderLayout.CENTER);
+
+        addEastButton(deleteButton);
+        addEastButton(downloadButton);
+
         addListeners();
         validateData();
     }

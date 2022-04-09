@@ -4,6 +4,7 @@ import com.zrmiller.core.ColorConverter;
 import com.zrmiller.core.utility.PlaceInfo;
 
 import java.awt.*;
+import java.io.File;
 
 public enum Dataset {
 
@@ -28,6 +29,10 @@ public enum Dataset {
     @Override
     public String toString() {
         return YEAR_STRING;
+    }
+
+    public String getYearPath(){
+        return YEAR_STRING + File.separator;
     }
 
 }

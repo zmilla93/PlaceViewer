@@ -14,25 +14,25 @@ import java.io.File;
 
 public class DatasetManagerFrame extends JDialog implements IThemeListener {
 
-    private JButton browseButton = new JButton("Select Folder");
-    private JFileChooser fileChooser = new JFileChooser();
+    private final JButton browseButton = new JButton("Select Folder");
+    private final JFileChooser fileChooser = new JFileChooser();
 
-    private JLabel directoryLabel = new JLabel();
-    private Container container = getContentPane();
-    private JTabbedPane tabbedPane = new JTabbedPane();
+    private final JLabel directoryLabel = new JLabel();
+    private final Container container = getContentPane();
+    private final JTabbedPane tabbedPane = new JTabbedPane();
 
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel cardPanel = new JPanel(cardLayout);
 
-    private DownloaderPanel2017 downloaderPanel2017 = new DownloaderPanel2017(this);
-    private DownloaderPanel2022 downloaderPanel2022 = new DownloaderPanel2022();
-    private DownloadProgressPanel downloadProgressPanel = new DownloadProgressPanel(this);
+    private final DownloaderPanel2017 downloaderPanel2017 = new DownloaderPanel2017(this);
+    private final DownloaderPanel2022 downloaderPanel2022 = new DownloaderPanel2022(this);
+    private final DownloadProgressPanel downloadProgressPanel = new DownloadProgressPanel(this);
 
     public DatasetManagerFrame() {
 //        super("Dataset Manager");
         setTitle("Dataset Manager");
-//        setModalityType(ModalityType.APPLICATION_MODAL);
-//        setModal(true);
+        setModalityType(ModalityType.APPLICATION_MODAL);
+        setModal(true);
         container.setLayout(new BorderLayout());
         setMinimumSize(new Dimension(500, 300));
         setSize(500, 300);
