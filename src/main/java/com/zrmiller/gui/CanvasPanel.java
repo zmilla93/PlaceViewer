@@ -37,7 +37,7 @@ public class CanvasPanel extends JPanel implements IThemeListener, IDatasetListe
     private int initialPanY;
 
     // Painting
-    private final PlacePlayer player = new PlacePlayer("D:/Place/");
+    private final PlacePlayer player = new PlacePlayer();
     int[] rgbColorBuffer = new int[viewportWidth * viewportHeight * 3]; // 3 entries per pixel
     private BufferedImage bufferedImage = new BufferedImage(viewportWidth, viewportHeight, BufferedImage.TYPE_INT_RGB);
     private boolean markForRepaint;
@@ -137,7 +137,7 @@ public class CanvasPanel extends JPanel implements IThemeListener, IDatasetListe
         // FIXME : Allow old palette
 //        Color color = PlaceInfo.canvasColors[colorIndex];
 //        Color color = ColorConverter.intToColorArr[colorIndex];
-        Color color = DatasetManager.currentDataset().colorArray[colorIndex];
+        Color color = DatasetManager.currentDataset().COLOR_ARRAY[colorIndex];
 //        Color color = c;
         int checkX = zoom < 1 ? LOCAL_CANVAS_SIZE_X / z : LOCAL_CANVAS_SIZE_X * z;
         int checkY = zoom < 1 ? LOCAL_CANVAS_SIZE_Y / z : LOCAL_CANVAS_SIZE_Y * z;

@@ -4,7 +4,9 @@ import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.IDatasetListener;
 import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.managers.SaveManager;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Timer;
@@ -29,14 +31,11 @@ public class PlacePlayer implements IDatasetListener {
 
     private boolean playing;
 
-    private final String directory;
-
-    public PlacePlayer(String directory) {
-        this.directory = directory;
+    public PlacePlayer() {
 //        this.inputPath = inputTemplate;
 //        Arrays.fill(colorBuffer, DatasetManager.currentDataset().colorArray[DatasetManager.currentDataset().whiteIndex));
-        parser = new PlaceParser2022(directory + "2022-Binary/");
-        parser.openStream();
+        parser = new PlaceParser2022(SaveManager.settingsSaveFile.data.dataDirectory + DatasetManager.currentDataset().YEAR_STRING + File.separator);
+//        parser.openStream();
         DatasetManager.addListener(this);
     }
 
@@ -74,7 +73,7 @@ public class PlacePlayer implements IDatasetListener {
         pause();
         parser.closeStream();
         frameCount = 0;
-        Arrays.fill(colorBuffer, DatasetManager.currentDataset().whiteIndex);
+        Arrays.fill(colorBuffer, DatasetManager.currentDataset().WHITE_INDEX);
         Arrays.fill(heatmapBuffer, 0);
         parser.openStream();
     }
@@ -147,7 +146,7 @@ public class PlacePlayer implements IDatasetListener {
         parser.closeStream();
         colorBuffer = new int[DatasetManager.currentDataset().CANVAS_SIZE_X * DatasetManager.currentDataset().CANVAS_SIZE_Y];
         heatmapBuffer = new int[DatasetManager.currentDataset().CANVAS_SIZE_X * DatasetManager.currentDataset().CANVAS_SIZE_Y];
-        Arrays.fill(colorBuffer, DatasetManager.currentDataset().whiteIndex);
+        Arrays.fill(colorBuffer, DatasetManager.currentDataset().WHITE_INDEX);
     }
 
     @Override
@@ -158,11 +157,11 @@ public class PlacePlayer implements IDatasetListener {
         frameCount = 0;
         switch (dataset) {
             case PLACE_2017:
-                parser = new PlaceParser2017(directory + "2017/");
+                parser = new PlaceParser2017();
                 parser.openStream();
                 break;
             case PLACE_2022:
-                parser = new PlaceParser2022(directory + "2022-Binary/");
+                parser = new PlaceParser2022("D:/Place/");
                 parser.openStream();
                 break;
         }

@@ -1,7 +1,10 @@
 package com.zrmiller.core.saving.savefiles;
 
+import com.zrmiller.modules.styles.ColorTheme;
+
 public class SettingsSaveFile {
 
-    public int targetFPS;
+    public String dataDirectory;
+    public ColorTheme colorTheme;
 
 }

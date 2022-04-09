@@ -2,6 +2,7 @@ package com.zrmiller.core.datawrangler;
 
 import com.zrmiller.core.ColorConverter;
 import com.zrmiller.core.TileEdit;
+import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.utility.PlaceInfo;
 
 import java.io.*;
@@ -39,7 +40,7 @@ public class DataWrangler2022 extends DataWrangler {
     public void downloadUnzipAndMinify(int index) {
         int fileCount = index + 1;
         System.out.println("Downloading file #" + fileCount + "...");
-        downloadFile(getIndexedName(zipFileName, index), getUrlString(index));
+        downloadFile(getIndexedName(zipFileName, index), Dataset.PLACE_2017.YEAR_STRING, getUrlString(index));
         System.out.println("Unzipping file #" + fileCount + "...");
         unzip(getIndexedName(zipFileName, index), getIndexedName(originalFileName, index));
         System.out.println("Minifying file #" + fileCount + "...");

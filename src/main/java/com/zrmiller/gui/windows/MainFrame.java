@@ -32,8 +32,7 @@ public class MainFrame extends JFrame {
                 // TODO
             }
         });
-
-        setVisible(true);
+        setLocationRelativeTo(null);
     }
 
 }

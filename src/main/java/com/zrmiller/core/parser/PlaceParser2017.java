@@ -2,26 +2,25 @@ package com.zrmiller.core.parser;
 
 import com.zrmiller.core.FileNames;
 import com.zrmiller.core.TileEdit;
+import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.managers.SaveManager;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 
 public class PlaceParser2017 implements IPlaceParser {
 
     private BufferedInputStream reader;
-    private final String directory;
+    //    private final String directory;
     private TileEdit currentTile;
 
-    public PlaceParser2017(String directory) {
-        this.directory = directory;
+    public PlaceParser2017() {
+//        this.directory = directory;
     }
 
     @Override
     public boolean openStream() {
         try {
-            reader = new BufferedInputStream(new FileInputStream(directory + FileNames.minified2017));
+            reader = new BufferedInputStream(new FileInputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileNames.minified2017));
             return true;
         } catch (FileNotFoundException e) {
             e.printStackTrace();

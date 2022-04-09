@@ -1,26 +1,34 @@
 package com.zrmiller.core.datawrangler;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import com.zrmiller.core.managers.SaveManager;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 public abstract class DataWrangler {
 
     private static final int BYTE_BUFFER_SIZE = 1024 * 4;
-    protected String directory;
+//    protected String directory;
 
-    public boolean downloadFile(String fileName, String urlString) {
+    protected int fileSize;
+    protected int bytesDownloaded;
+    protected int bytesWritten;
+    protected int tilesWritten;
+
+    //    protected static Executor executor = Executors.newSingleThreadExecutor();
+    private final ArrayList<IStatusListener> statusListeners = new ArrayList<>();
+
+    protected boolean downloadFile(String fileName, String yearString, String urlString) {
         try {
             HttpURLConnection httpConnection = (HttpURLConnection) (new URL(urlString).openConnection());
-            long fileSize = httpConnection.getContentLength();
+            fileSize = httpConnection.getContentLength();
             BufferedInputStream inputStream = new BufferedInputStream(httpConnection.getInputStream());
-            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(directory + fileName));
+            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settingsSaveFile.data.dataDirectory + yearString + File.separator + fileName));
             byte[] data = new byte[BYTE_BUFFER_SIZE];
-            int bytesDownloaded = 0;
+            bytesDownloaded = 0;
             int numBytesRead;
             while ((numBytesRead = inputStream.read(data, 0, BYTE_BUFFER_SIZE)) >= 0) {
                 bytesDownloaded += numBytesRead;
@@ -58,6 +66,13 @@ public abstract class DataWrangler {
         return tokens;
     }
 
+    public boolean validateDirectory(String yearString) {
+        File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + yearString);
+        if (file.exists())
+            return file.isDirectory();
+        return file.mkdirs();
+    }
+
     protected boolean lineStartsWithNumber(String line) {
         int c = line.charAt(0);
         return c >= 48 && c <= 57;
@@ -73,6 +88,43 @@ public abstract class DataWrangler {
         String timeString = timeToken.substring(0, timeToken.length() - 4);
         Timestamp timestamp = Timestamp.valueOf(timeString);
         return timestamp.getTime();
+    }
+
+    public int getBytesDownloaded() {
+        return bytesDownloaded;
+    }
+
+    public int getFileSizeInBytes() {
+        return fileSize;
+    }
+
+    public int getTilesWritten() {
+        return tilesWritten;
+    }
+
+    public int getBytesWritten() {
+        return bytesWritten;
+    }
+
+    public void addListener(IStatusListener listener) {
+        statusListeners.add(listener);
+    }
+
+    public void removeListener(IStatusListener listener) {
+        statusListeners.add(listener);
+    }
+
+    public void removeAllListeners() {
+        statusListeners.clear();
+    }
+
+    /**
+     * Returns 0-100
+     *
+     * @return
+     */
+    public int getProgress() {
+        return (int) Math.ceil(bytesDownloaded / (float) fileSize * 100);
     }
 
 }

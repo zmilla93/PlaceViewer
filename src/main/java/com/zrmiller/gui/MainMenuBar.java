@@ -2,6 +2,7 @@ package com.zrmiller.gui;
 
 import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.modules.styles.ColorManager;
 import com.zrmiller.modules.styles.ColorTheme;
 
@@ -16,6 +17,9 @@ public class MainMenuBar extends JMenuBar {
 
     // Options
     private final JMenu themeMenu = new JMenu("Color Theme");
+    private final JMenuItem githubButton = new JMenuItem("Github");
+    private final JMenuItem paypalButton = new JMenuItem("Paypal");
+    private final JMenuItem patreonButton = new JMenuItem("Patreon");
 
     private final JMenuItem quitButton = new JMenuItem("Quit");
 
@@ -24,7 +28,7 @@ public class MainMenuBar extends JMenuBar {
     // Dataset
     private final JMenuItem dataset2017Button = new JMenuItem("Place 2017");
     private final JMenuItem dataset2022Button = new JMenuItem("Place 2022");
-    private final JMenuItem downloadDataButton = new JMenuItem("Download Datasets...");
+    private final JMenuItem datasetManagerButton = new JMenuItem("Manage Datasets...");
 
     private final ColorTheme[] themeList = new ColorTheme[]{ColorTheme.SOLARIZED_LIGHT, ColorTheme.CARBON};
 
@@ -41,13 +45,17 @@ public class MainMenuBar extends JMenuBar {
         // Options
         optionsMenu.add(themeMenu);
         optionsMenu.add(new JSeparator());
+        optionsMenu.add(githubButton);
+        optionsMenu.add(paypalButton);
+        optionsMenu.add(patreonButton);
+        optionsMenu.add(new JSeparator());
         optionsMenu.add(quitButton);
 
         // Datasets
         datasetMenu.add(dataset2017Button);
         datasetMenu.add(dataset2022Button);
         datasetMenu.add(new JSeparator());
-        datasetMenu.add(downloadDataButton);
+        datasetMenu.add(datasetManagerButton);
 
         // Build Menubar
         add(optionsMenu);
@@ -62,7 +70,9 @@ public class MainMenuBar extends JMenuBar {
         // Datasets
         dataset2017Button.addActionListener(e -> DatasetManager.changeDataset(Dataset.PLACE_2017));
         dataset2022Button.addActionListener(e -> DatasetManager.changeDataset(Dataset.PLACE_2022));
-
+        datasetManagerButton.addActionListener(e -> FrameManager.dataDownloader.setVisible(true));
+        githubButton.addActionListener(e -> ZUtil.openLink("https://github.com/zmilla93/PlaceViewer"));
+        paypalButton.addActionListener(e -> ZUtil.openLink("https://www.paypal.com/paypalme/zmilla93"));
         quitButton.addActionListener(e -> System.exit(0));
     }
 
