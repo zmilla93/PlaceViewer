@@ -1,6 +1,5 @@
 package com.zrmiller.gui.downloader;
 
-import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.datawrangler.DataWrangler2017;
 import com.zrmiller.core.datawrangler.DownloadManager;
 import com.zrmiller.core.utility.ZUtil;

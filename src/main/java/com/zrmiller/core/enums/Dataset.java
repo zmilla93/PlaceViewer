@@ -23,7 +23,7 @@ public enum Dataset {
         CANVAS_SIZE_Y = y;
         COLOR_ARRAY = colorArray;
         WHITE_INDEX = whiteIndex;
-   }
+    }
 
     @Override
     public String toString() {
