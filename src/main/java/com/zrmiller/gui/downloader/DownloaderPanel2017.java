@@ -20,8 +20,8 @@ public class DownloaderPanel2017 extends DownloaderDatasetPanel {
         deleteButton.setText("Delete 2017");
         downloadButton.setText("Download 2017");
 
-        cardPanel.add(infoPanel(), "P1");
-        cardPanel.add(completePanel(), "P2");
+        cardPanel.add(uninstalledPanel(), "P1");
+        cardPanel.add(installedPanel(), "P2");
 
         cardLayout.show(cardPanel, "P1");
         centerPanel.add(cardPanel, BorderLayout.CENTER);
@@ -33,7 +33,7 @@ public class DownloaderPanel2017 extends DownloaderDatasetPanel {
         validateData();
     }
 
-    private JPanel completePanel() {
+    private JPanel installedPanel() {
         JPanel completePanel = new JPanel(new GridBagLayout());
         GridBagConstraints gc = ZUtil.getGC();
         gc.fill = GridBagConstraints.HORIZONTAL;
@@ -45,7 +45,7 @@ public class DownloaderPanel2017 extends DownloaderDatasetPanel {
         return completePanel;
     }
 
-    private JPanel infoPanel() {
+    private JPanel uninstalledPanel() {
         JPanel infoPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gc = ZUtil.getGC();
         gc.fill = GridBagConstraints.HORIZONTAL;

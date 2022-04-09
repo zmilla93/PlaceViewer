@@ -9,7 +9,7 @@ public class DownloaderPanel2022 extends DownloaderDatasetPanel {
 
     public DownloaderPanel2022(DatasetManagerFrame datasetManagerFrame) {
         super(datasetManagerFrame);
-        add(infoPanel());
+        cardPanel.add(infoPanel(), "P1");
     }
 
     private JPanel infoPanel() {
@@ -17,8 +17,8 @@ public class DownloaderPanel2022 extends DownloaderDatasetPanel {
         GridBagConstraints gc = new GridBagConstraints();
         gc.fill = GridBagConstraints.BOTH;
         gc.weightx = 1;
-
-
+        add(new JLabel(), gc);
+        gc.gridy++;
         return panel;
     }
 
