@@ -95,7 +95,6 @@ public class DownloaderPanel2017 extends DownloaderDatasetPanel {
             deleteButton.setEnabled(true);
             downloadButton.setEnabled(false);
             fileSizeLabel.setText("File Size: " + fileSize / 1000000 + " MB");
-            cardLayout.show(cardPanel, "P2");
             cardLayout.show(cardPanel, Panel.INSTALLED.toString());
         } else {
             deleteButton.setEnabled(false);
