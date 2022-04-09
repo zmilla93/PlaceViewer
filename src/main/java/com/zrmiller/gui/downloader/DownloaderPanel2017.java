@@ -1,6 +1,8 @@
 package com.zrmiller.gui.downloader;
 
+import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.datawrangler.DataWrangler2017;
+import com.zrmiller.core.datawrangler.DownloadManager;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.windows.DatasetManagerFrame;
 
@@ -22,7 +24,7 @@ public class DownloaderPanel2017 extends DownloaderDatasetPanel {
         gc.gridy++;
         infoPanel.add(new JLabel("Compressed Size: 162 MB"), gc);
         gc.gridy++;
-        infoPanel.add(new JLabel("Data will be downloaded into a single file, compressed, then the original file deleted."), gc);
+        infoPanel.add(new JLabel("Data will be downloaded into a single file, sorted, compressed, then the original file deleted."), gc);
         gc.gridy++;
 
         JPanel infoBufferPanel = new JPanel(new GridBagLayout());
@@ -42,13 +44,13 @@ public class DownloaderPanel2017 extends DownloaderDatasetPanel {
 
     private void addListeners() {
         downloadButton.addActionListener(e -> {
-            datasetManagerFrame.swapToDownloadPanel();
-            DataWrangler2017 dataWrangler2017 = new DataWrangler2017();
-//            dataWrangler2017.addListener();
+            DataWrangler2017 dataWrangler2017 = DownloadManager.downloadAndMinify2017();
             datasetManagerFrame.getProgressPanel().setWrangler(dataWrangler2017);
-            datasetManagerFrame.getProgressPanel().startTimer();
-            datasetManagerFrame.getProgressPanel().setInfoLower("Downloading 2017 Dataset...");
-            dataWrangler2017.downloadFile();
+//            datasetManagerFrame.getProgressPanel().startTimer();
+//            datasetManagerFrame.getProgressPanel().setInfoUpper("Downloading 2017 Dataset...");
+            datasetManagerFrame.getProgressPanel().displayDownload2017();
+            datasetManagerFrame.swapToDownloadPanel();
+//            DownloadManager.downloadAndMinify2017();
         });
     }
 

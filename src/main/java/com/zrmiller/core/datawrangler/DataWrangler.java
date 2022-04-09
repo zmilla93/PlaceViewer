@@ -2,34 +2,31 @@ package com.zrmiller.core.datawrangler;
 
 import com.zrmiller.core.managers.SaveManager;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public abstract class DataWrangler {
 
     private static final int BYTE_BUFFER_SIZE = 1024 * 4;
 //    protected String directory;
 
-    private int fileSize;
-    private int bytesDownloaded;
+    protected int fileSize;
+    protected int bytesDownloaded;
+    protected int bytesWritten;
+    protected int tilesWritten;
 
-//    protected static Executor executor = Executors.newSingleThreadExecutor();
+    //    protected static Executor executor = Executors.newSingleThreadExecutor();
     private final ArrayList<IStatusListener> statusListeners = new ArrayList<>();
 
-    public boolean downloadFile(String fileName, String urlString) {
+    protected boolean downloadFile(String fileName, String yearString, String urlString) {
         try {
             HttpURLConnection httpConnection = (HttpURLConnection) (new URL(urlString).openConnection());
             fileSize = httpConnection.getContentLength();
             BufferedInputStream inputStream = new BufferedInputStream(httpConnection.getInputStream());
-            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settingsSaveFile.data.dataDirectory + fileName));
+            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settingsSaveFile.data.dataDirectory + yearString + File.separator + fileName));
             byte[] data = new byte[BYTE_BUFFER_SIZE];
             bytesDownloaded = 0;
             int numBytesRead;
@@ -69,6 +66,13 @@ public abstract class DataWrangler {
         return tokens;
     }
 
+    public boolean validateDirectory(String yearString) {
+        File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + yearString);
+        if (file.exists())
+            return file.isDirectory();
+        return file.mkdirs();
+    }
+
     protected boolean lineStartsWithNumber(String line) {
         int c = line.charAt(0);
         return c >= 48 && c <= 57;
@@ -86,17 +90,31 @@ public abstract class DataWrangler {
         return timestamp.getTime();
     }
 
-    public long getFileSize() {
+    public int getBytesDownloaded() {
+        return bytesDownloaded;
+    }
+
+    public int getFileSizeInBytes() {
         return fileSize;
     }
 
-    public void addListener(IStatusListener listener){
+    public int getTilesWritten() {
+        return tilesWritten;
+    }
+
+    public int getBytesWritten() {
+        return bytesWritten;
+    }
+
+    public void addListener(IStatusListener listener) {
         statusListeners.add(listener);
     }
-    public void removeListener(IStatusListener listener){
+
+    public void removeListener(IStatusListener listener) {
         statusListeners.add(listener);
     }
-    public void removeAllListeners(){
+
+    public void removeAllListeners() {
         statusListeners.clear();
     }
 
