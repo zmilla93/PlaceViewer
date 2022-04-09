@@ -57,6 +57,8 @@ public class DataWrangler2017 extends DataWrangler {
             tilesWritten = 0;
             bytesWritten = 0;
             BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017));
+            writeYear(outputStream, Dataset.PLACE_2017.YEAR);
+            writeMetaInt(outputStream);
             for (TileEdit tile : tileEdits) {
                 outputStream.write(tile.toByteArray());
                 bytesWritten = TileEdit.BYTE_COUNT;

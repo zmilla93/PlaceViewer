@@ -6,6 +6,7 @@ import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 
 import java.io.*;
+import java.nio.ByteBuffer;
 
 public class PlaceParser2017 implements IPlaceParser {
 
@@ -21,8 +22,18 @@ public class PlaceParser2017 implements IPlaceParser {
     public boolean openStream() {
         try {
             reader = new BufferedInputStream(new FileInputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017));
+            byte[] meta = new byte[6];
+            int numBytesRead = reader.read(meta);
+            if (numBytesRead != 6)
+                return false;
+            // TODO : Validate file
+//            ByteBuffer buffer = ByteBuffer.wrap(meta);
+//            short year = buffer.getShort();
+//            int m = buffer.getInt();
+//            System.out.println("YEAR : " + year);
+//            System.out.println("META : " + m);
             return true;
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             return false;
         }

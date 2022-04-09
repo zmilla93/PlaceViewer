@@ -20,6 +20,7 @@ public class App {
 
     public static void main(String[] args) {
         System.out.println("File size : " + PlaceInfo.CLEAN_LINE_COUNT * TileEdit.BYTE_COUNT);
+        System.out.println("M:" + Dataset.PLACE_2017.ordinal());
         try {
             SwingUtilities.invokeAndWait(() -> {
                 FrameManager.init();

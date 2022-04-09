@@ -5,21 +5,19 @@ import com.zrmiller.core.managers.SaveManager;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 
+/**
+ * IMPORTANT : When writing binary, first make a call to writeYear, then writeMetaInt.
+ */
 public abstract class DataWrangler {
-
-    private static final int BYTE_BUFFER_SIZE = 1024 * 4;
-//    protected String directory;
 
     protected int fileSize;
     protected int bytesDownloaded;
     protected int bytesWritten;
     protected int tilesWritten;
-
-    //    protected static Executor executor = Executors.newSingleThreadExecutor();
-    private final ArrayList<IStatusListener> statusListeners = new ArrayList<>();
+    private static final int BYTE_BUFFER_SIZE = 1024 * 4;
 
     protected boolean downloadFile(String fileName, String yearString, String urlString) {
         try {
@@ -32,9 +30,7 @@ public abstract class DataWrangler {
             int numBytesRead;
             while ((numBytesRead = inputStream.read(data, 0, BYTE_BUFFER_SIZE)) >= 0) {
                 bytesDownloaded += numBytesRead;
-                float currentProgress = (bytesDownloaded / (float) fileSize);
                 outputStream.write(data, 0, numBytesRead);
-//                System.out.println("CURP:" + currentProgress);
             }
             inputStream.close();
             outputStream.close();
@@ -51,7 +47,6 @@ public abstract class DataWrangler {
         int tokenIndex = 0;
         for (int i = 0; i < input.length(); i++) {
             if (tokenIndex >= tokenCount) {
-                // TODO : FIXME
                 return null;
             }
             if (input.charAt(i) == ',') {
@@ -106,16 +101,20 @@ public abstract class DataWrangler {
         return bytesWritten;
     }
 
-    public void addListener(IStatusListener listener) {
-        statusListeners.add(listener);
+    protected void writeYear(BufferedOutputStream outputStream, int year) throws IOException {
+        ByteBuffer buffer = ByteBuffer.allocate(2);
+        buffer.putShort((short) year);
+        outputStream.write(buffer.array());
     }
 
-    public void removeListener(IStatusListener listener) {
-        statusListeners.add(listener);
+    protected void writeMetaInt(BufferedOutputStream outputStream) throws IOException {
+        writeMetaInt(outputStream, 0);
     }
 
-    public void removeAllListeners() {
-        statusListeners.clear();
+    protected void writeMetaInt(BufferedOutputStream outputStream, int value) throws IOException {
+        ByteBuffer buffer = ByteBuffer.allocate(4);
+        buffer.putInt(value);
+        outputStream.write(buffer.array());
     }
 
     /**

@@ -8,18 +8,20 @@ import java.io.File;
 
 public enum Dataset {
 
-    PLACE_2017("2017", 1001, 1001, PlaceInfo.canvasColors, 0),
-    PLACE_2022("2012", 2000, 2000, ColorConverter.intToColorArr, 31),
+    PLACE_2017(2017, 1001, 1001, PlaceInfo.canvasColors, 0),
+    PLACE_2022(2022, 2000, 2000, ColorConverter.intToColorArr, 31),
     ;
 
+    public final int YEAR;
     public final String YEAR_STRING;
     public final int CANVAS_SIZE_X;
     public final int CANVAS_SIZE_Y;
     public final Color[] COLOR_ARRAY;
     public final int WHITE_INDEX;
 
-    Dataset(String yearString, int x, int y, Color[] colorArray, int whiteIndex) {
-        YEAR_STRING = yearString;
+    Dataset(int year, int x, int y, Color[] colorArray, int whiteIndex) {
+        YEAR = year;
+        YEAR_STRING = Integer.toString(year);
         CANVAS_SIZE_X = x;
         CANVAS_SIZE_Y = y;
         COLOR_ARRAY = colorArray;
