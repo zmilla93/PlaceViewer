@@ -53,7 +53,7 @@ public class PlayerControlPanel extends JPanel {
     }
 
     private void addListeners() {
-        resetButton.addActionListener(e -> player.reset());
+        resetButton.addActionListener(e -> player.stop());
         playButton.addActionListener(e -> player.play());
         pauseButton.addActionListener(e -> player.pause());
         speedCombo.addActionListener(e -> setPlaybackSpeed((PlaybackSpeed) Objects.requireNonNull(speedCombo.getSelectedItem())));

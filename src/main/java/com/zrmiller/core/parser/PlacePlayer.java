@@ -14,41 +14,52 @@ import java.util.TimerTask;
 
 public class PlacePlayer implements IDatasetListener {
 
-    //    PlaceParser2017 parser = new PlaceParser2017();
-    IPlaceParser parser;
-    private int updatesPerSecond = 1000000;
-    private int TEMP_FPS = 60;
+    // General
+    private IPlaceParser parser;
+    private int tileUpdatesPerSecond = 1000000;
+    private final int LOGIC_UPDATES_PER_SECOND = 60;
+    private int frameCount = 0;
+    private boolean streamIsOpen;
     private Timer timer = new Timer();
-    int frameCount = 0;
 
+    // Data Arrays
     private int[] colorBuffer = new int[DatasetManager.currentDataset().CANVAS_SIZE_X * DatasetManager.currentDataset().CANVAS_SIZE_Y];
+    private int[] heatmapBuffer = new int[DatasetManager.currentDataset().CANVAS_SIZE_X * DatasetManager.currentDataset().CANVAS_SIZE_Y];
 
     // Heatmap
-    private int[] heatmapBuffer = new int[DatasetManager.currentDataset().CANVAS_SIZE_X * DatasetManager.currentDataset().CANVAS_SIZE_Y];
     public static int heatmapWeight = 10000;
     public static int heatmapMax = 100000;
     public static int heatmapDecay = 10;
 
-    private boolean playing;
-    private boolean open;
+    private State state = State.STOPPED;
 
+    /**
+     * Provides a media player style state machine for interacting with a dataset.
+     * Stores color and heatmap data in flat arrays.
+     */
     public PlacePlayer() {
-//        this.inputPath = inputTemplate;
-//        Arrays.fill(colorBuffer, DatasetManager.currentDataset().colorArray[DatasetManager.currentDataset().whiteIndex));
         parser = new PlaceParser2022(SaveManager.settingsSaveFile.data.dataDirectory + DatasetManager.currentDataset().YEAR_STRING + File.separator);
-//        parser.openStream();
         DatasetManager.addListener(this);
     }
 
+    private enum State {STOPPED, PLAYING, PAUSED, SEEKING}
+
+    //
+    // Public Stuff
+    //
+
     public void play() {
-        if (playing) return;
-        if (!open)
-            if (!(open = parser.openStream())) return;
+        if (state == State.PLAYING) return;
+        if (!streamIsOpen) {
+            streamIsOpen = parser.openStream();
+            if (!streamIsOpen) return;
+        }
+        // FIXME: tileUpdatesPerSecond can't go below LOGIC_UPDATES_PER_SECOND
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                int iterations = updatesPerSecond / TEMP_FPS;
+                int iterations = tileUpdatesPerSecond / LOGIC_UPDATES_PER_SECOND;
                 try {
                     for (int i = 0; i < iterations; i++) {
                         applyNextFrame();
@@ -58,55 +69,67 @@ public class PlacePlayer implements IDatasetListener {
                 }
                 decayHeatmap(iterations);
             }
-        }, 0, 1000 / TEMP_FPS);
-        playing = true;
+        }, 0, 1000 / LOGIC_UPDATES_PER_SECOND);
+        state = State.PLAYING;
     }
 
     public void pause() {
+        if (state == State.PAUSED) return;
         timer.cancel();
         timer.purge();
-        playing = false;
+        state = State.PAUSED;
     }
 
-    public void setSpeed(int speed) {
-        updatesPerSecond = speed;
-    }
-
-    public void reset() {
+    public void stop() {
         pause();
         parser.closeStream();
         frameCount = 0;
         Arrays.fill(colorBuffer, DatasetManager.currentDataset().WHITE_INDEX);
         Arrays.fill(heatmapBuffer, 0);
-        open = false;
-//        parser.openStream();
+        streamIsOpen = false;
+        state = State.STOPPED;
+    }
+
+    public void setSpeed(int speed) {
+        tileUpdatesPerSecond = speed;
     }
 
     public boolean jumpToFrame(int frame) {
-//        if (frame < frameCount) {
-//            reset();
-//        }
-        reset();
-        ;
+        state = State.SEEKING;
+        stop();
         try {
             while (frameCount < frame) {
-//                System.out.println("APPLY..." + frameCount);
                 if (!applyNextFrame())
                     break;
             }
+            state = State.PAUSED;
             return true;
         } catch (IOException e) {
             e.printStackTrace();
+            stop();
             return false;
         }
     }
 
+    public int getFrameCount() {
+        return frameCount;
+    }
+
+    public int[] getColorBuffer() {
+        return colorBuffer;
+    }
+
+    public int[] getHeatmapBuffer() {
+        return heatmapBuffer;
+    }
+
+    //
+    // Private Stuff
+    //
+
     private boolean applyNextFrame() throws IOException {
         if (parser.ready()) {
-//            int[] tokens = parser.getNextLine();
             TileEdit tile = parser.readNextLine();
-
-//            int index = tokens[0] + tokens[1] * PlaceInfo.CANVAS_SIZE_X;
             int index = tile.x + tile.y * DatasetManager.currentDataset().CANVAS_SIZE_X;
             colorBuffer[index] = tile.color;
             heatmapBuffer[index] += heatmapWeight;
@@ -127,24 +150,6 @@ public class PlacePlayer implements IDatasetListener {
         }
     }
 
-    public int getFrameCount() {
-        return frameCount;
-    }
-
-    public int[] getColorBuffer() {
-        return colorBuffer;
-    }
-
-    public int[] getHeatmapBuffer() {
-        return heatmapBuffer;
-    }
-
-    public void resizeCanvas(int width, int height) {
-        pause();
-        colorBuffer = new int[DatasetManager.currentDataset().CANVAS_SIZE_X * DatasetManager.currentDataset().CANVAS_SIZE_Y];
-        heatmapBuffer = new int[DatasetManager.currentDataset().CANVAS_SIZE_X * DatasetManager.currentDataset().CANVAS_SIZE_Y];
-    }
-
     private void resizeCanvas() {
         pause();
         parser.closeStream();
@@ -162,11 +167,10 @@ public class PlacePlayer implements IDatasetListener {
         switch (dataset) {
             case PLACE_2017:
                 parser = new PlaceParser2017();
-//                parser.openStream();
                 break;
             case PLACE_2022:
+                // FIXME:
                 parser = new PlaceParser2022("D:/Place/");
-//                parser.openStream();
                 break;
         }
     }
