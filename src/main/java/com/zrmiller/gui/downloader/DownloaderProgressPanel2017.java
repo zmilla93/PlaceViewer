@@ -3,42 +3,26 @@ package com.zrmiller.gui.downloader;
 import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.datawrangler.DataWrangler2017;
 import com.zrmiller.core.datawrangler.DownloadDisplay2017;
-import com.zrmiller.core.datawrangler.IStatusTracker2017;
+import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2017;
 import com.zrmiller.core.enums.DownloadStage2017;
 import com.zrmiller.core.utility.PlaceInfo;
-import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.windows.DatasetManagerFrame;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class DownloaderProgressPanel2017 extends DownloadProgressPanel{
+public class DownloaderProgressPanel2017 extends DownloadProgressPanel {
 
     private DownloadStage2017 downloadStage2017;
 
-    public DownloaderProgressPanel2017(DatasetManagerFrame datasetManagerFrame){
+    public DownloaderProgressPanel2017(DatasetManagerFrame datasetManagerFrame) {
         super(datasetManagerFrame);
-        centerPanel.setLayout(new GridBagLayout());
-        progressBar.setMaximum(0);
-        progressBar.setMaximum(100);
-        GridBagConstraints gc = ZUtil.getGC();
-        centerPanel.add(labelUpper, gc);
-        gc.gridy++;
-        centerPanel.add(labelLower, gc);
-        gc.gridy++;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        gc.weightx = 1;
-        int inset = 100;
-        gc.insets = new Insets(0, inset, 0, inset);
-        centerPanel.add(progressBar, gc);
-        gc.gridy++;
-        addWestButton(cancelButton);
         addListeners();
     }
 
     private void addListeners() {
+        // FIXME:
         cancelButton.addActionListener(e -> datasetManagerFrame.swapToDatasetPanel());
     }
 

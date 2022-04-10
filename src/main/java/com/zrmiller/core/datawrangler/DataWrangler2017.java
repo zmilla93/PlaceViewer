@@ -2,6 +2,7 @@ package com.zrmiller.core.datawrangler;
 
 import com.zrmiller.core.FileName;
 import com.zrmiller.core.TileEdit;
+import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2017;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.PlaceInfo;

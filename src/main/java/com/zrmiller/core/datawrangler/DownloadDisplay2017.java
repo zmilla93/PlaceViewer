@@ -1,5 +1,6 @@
 package com.zrmiller.core.datawrangler;
 
+import com.zrmiller.core.datawrangler.callbacks.IDownloadDisplay2017;
 import com.zrmiller.core.enums.DownloadStage2017;
 
 public class DownloadDisplay2017 implements IDownloadDisplay2017 {

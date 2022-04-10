@@ -1,9 +1,11 @@
 package com.zrmiller.gui.downloader;
 
 import com.zrmiller.core.datawrangler.DataWrangler;
+import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.windows.DatasetManagerFrame;
 
 import javax.swing.*;
+import java.awt.*;
 
 public abstract class DownloadProgressPanel extends BaseDownloaderPanel {
 
@@ -16,6 +18,21 @@ public abstract class DownloadProgressPanel extends BaseDownloaderPanel {
 
     public DownloadProgressPanel(DatasetManagerFrame datasetManagerFrame) {
         super(datasetManagerFrame);
+        centerPanel.setLayout(new GridBagLayout());
+        progressBar.setMaximum(0);
+        progressBar.setMaximum(100);
+        GridBagConstraints gc = ZUtil.getGC();
+        centerPanel.add(labelUpper, gc);
+        gc.gridy++;
+        centerPanel.add(labelLower, gc);
+        gc.gridy++;
+        gc.fill = GridBagConstraints.HORIZONTAL;
+        gc.weightx = 1;
+        int inset = 100;
+        gc.insets = new Insets(0, inset, 0, inset);
+        centerPanel.add(progressBar, gc);
+        gc.gridy++;
+        addWestButton(cancelButton);
     }
 
     public void setInfoUpper(String text) {
