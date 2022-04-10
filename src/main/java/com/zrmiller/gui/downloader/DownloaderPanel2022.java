@@ -8,8 +8,6 @@ import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.windows.DatasetManagerFrame;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class DownloaderPanel2022 extends CardDownloaderPanel {
 
@@ -58,13 +56,10 @@ public class DownloaderPanel2022 extends CardDownloaderPanel {
     }
 
     private void addListeners() {
-        downloadButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                DataWrangler2022 wrangler2022 = DownloadManager.runDownload2022();
-                datasetManagerFrame.getProgressPanel2022().setWrangler(wrangler2022);
-                datasetManagerFrame.swapToProgress2022();
-            }
+        downloadButton.addActionListener(e -> {
+            DataWrangler2022 wrangler2022 = DownloadManager.runDownload2022();
+            datasetManagerFrame.getProgressPanel2022().setWrangler(wrangler2022);
+            datasetManagerFrame.swapToProgress2022();
         });
     }
 

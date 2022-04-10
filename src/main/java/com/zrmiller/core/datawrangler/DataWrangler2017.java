@@ -32,7 +32,7 @@ public class DataWrangler2017 extends DataWrangler {
             TileEdit[] tileEdits = new TileEdit[PlaceInfo.CLEAN_LINE_COUNT];
             int lineCount = 0;
 
-            bytesDownloaded = 0;
+            bytesProcessed = 0;
             while (reader.ready()) {
                 String line = reader.readLine();
                 String[] tokens = tokenizeLine(line, 5);
@@ -44,7 +44,7 @@ public class DataWrangler2017 extends DataWrangler {
                         Short.parseShort(tokens[2]),
                         Short.parseShort(tokens[3]));
                 tileEdits[lineCount] = tile;
-                bytesDownloaded += line.length();
+                bytesProcessed += line.length();
                 lineCount++;
             }
             for (IStatusTracker2017 tracker : statusTrackers)
@@ -55,15 +55,14 @@ public class DataWrangler2017 extends DataWrangler {
             for (IStatusTracker2017 tracker : statusTrackers)
                 tracker.onFileSortComplete();
             // Write Output
-            tilesWritten = 0;
-            bytesWritten = 0;
+            bytesProcessed = 0;
+            fileSize = tileEdits.length * TileEdit.BYTE_COUNT;
             BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017));
             writeYear(outputStream, Dataset.PLACE_2017.YEAR);
             writeMetaInt(outputStream);
             for (TileEdit tile : tileEdits) {
                 outputStream.write(tile.toByteArray());
-                bytesWritten = TileEdit.BYTE_COUNT;
-                tilesWritten++;
+                bytesProcessed += TileEdit.BYTE_COUNT;
             }
             outputStream.close();
             reader.close();

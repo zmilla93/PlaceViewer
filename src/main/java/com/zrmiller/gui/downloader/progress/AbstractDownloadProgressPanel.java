@@ -14,7 +14,7 @@ public abstract class AbstractDownloadProgressPanel extends BaseDownloaderPanel 
     protected final JLabel labelUpper = new JLabel();
     protected final JLabel labelLower = new JLabel();
     protected final JButton cancelButton = new JButton("Cancel");
-    protected final int FPS = 10;
+    protected final int DOWNLOADER_PROGRESS_FPS = 10;
     protected Timer timer;
     protected DataWrangler wrangler;
 
@@ -48,7 +48,6 @@ public abstract class AbstractDownloadProgressPanel extends BaseDownloaderPanel 
     }
 
     public void setWrangler(DataWrangler wrangler) {
-        System.out.println("SET WRANGLER:" + wrangler);
         this.wrangler = wrangler;
         bindWrangler();
     }

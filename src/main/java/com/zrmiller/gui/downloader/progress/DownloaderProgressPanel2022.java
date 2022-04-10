@@ -5,8 +5,6 @@ import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2022;
 import com.zrmiller.gui.windows.DatasetManagerFrame;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class DownloaderProgressPanel2022 extends AbstractDownloadProgressPanel {
 
@@ -49,12 +47,7 @@ public class DownloaderProgressPanel2022 extends AbstractDownloadProgressPanel {
             }
         };
         // FIXME: Timer Cleanup
-        timer = new Timer(1000 / FPS, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                proc();
-            }
-        });
+        timer = new Timer(1000 / DOWNLOADER_PROGRESS_FPS, e -> proc());
         dataWrangler2022.addStatusTracker(tracker);
         timer.start();
     }
@@ -75,19 +68,19 @@ public class DownloaderProgressPanel2022 extends AbstractDownloadProgressPanel {
 
     private void updateDownloading() {
         setInfoUpper("Downloading file " + (dataWrangler2022.getFilesDownloaded() + 1) + " / " + dataWrangler2022.getExpectedFiles() + "...");
-        setInfoLower((dataWrangler2022.getBytesDownloaded() / 1000000) + " MB / " + dataWrangler2022.getFileSizeInBytes() / 1000000 + " MB");
+        setInfoLower((dataWrangler2022.getBytesProcessed() / 1000000) + " MB / " + dataWrangler2022.getFileSizeInBytes() / 1000000 + " MB");
         progressBar.setValue(dataWrangler2022.getProgress());
     }
 
     private void updateUnzipping() {
         setInfoUpper("Unzipping file " + (dataWrangler2022.getFilesDownloaded() + 1) + " / " + dataWrangler2022.getExpectedFiles() + "...");
-        setInfoLower((dataWrangler2022.getBytesDownloaded() / 1000000) + " MB / " + dataWrangler2022.getFileSizeInBytes() / 1000000 + " MB");
+        setInfoLower((dataWrangler2022.getBytesProcessed() / 1000000) + " MB / " + dataWrangler2022.getFileSizeInBytes() / 1000000 + " MB");
         progressBar.setValue(dataWrangler2022.getProgress());
     }
 
     private void updateCompressing() {
         setInfoUpper("Compressing file " + (dataWrangler2022.getFilesDownloaded() + 1) + " / " + dataWrangler2022.getExpectedFiles() + "...");
-        setInfoLower((dataWrangler2022.getBytesDownloaded() / 1000000) + " MB / " + dataWrangler2022.getFileSizeInBytes() / 1000000 + " MB");
+        setInfoLower((dataWrangler2022.getBytesProcessed() / 1000000) + " MB / " + dataWrangler2022.getFileSizeInBytes() / 1000000 + " MB");
         progressBar.setValue(dataWrangler2022.getProgress());
     }
 

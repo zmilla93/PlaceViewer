@@ -15,9 +15,6 @@ public abstract class BaseDownloaderPanel extends JPanel {
     private final GridBagConstraints eastGC = ZUtil.getGC();
     private final GridBagConstraints westGC = ZUtil.getGC();
 
-//    protected final CardLayout cardLayout = new CardLayout();
-//    protected final JPanel cardPanel = new JPanel(cardLayout);
-
     protected final DatasetManagerFrame datasetManagerFrame;
     private static final int BUTTON_INSET = 4;
 
@@ -35,7 +32,6 @@ public abstract class BaseDownloaderPanel extends JPanel {
         westGC.insets = new Insets(BUTTON_INSET, BUTTON_INSET, BUTTON_INSET, 0);
         add(centerPanel, BorderLayout.CENTER);
         add(bottomBar, BorderLayout.SOUTH);
-//        centerPanel.add(cardPanel, BorderLayout.CENTER);
     }
 
     protected void addEastButton(JComponent component) {

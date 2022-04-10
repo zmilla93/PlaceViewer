@@ -21,6 +21,7 @@ public class DataValidator {
         return -1;
     }
 
+
     public static int validateFileCount2022() {
         int fileCount = 0;
         for (int i = 0; i < PlaceInfo.fileOrder.length; i++) {

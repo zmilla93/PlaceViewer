@@ -9,14 +9,12 @@ import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 
 /**
- * IMPORTANT : When writing binary, first make a call to writeYear, then writeMetaInt.
+ * IMPORTANT : When writing binary files, first make a call to writeYear, then writeMetaInt.
  */
 public abstract class DataWrangler {
 
     protected int fileSize;
-    protected int bytesDownloaded;
-    protected int bytesWritten;
-    protected int tilesWritten;
+    protected int bytesProcessed;
     private static final int BYTE_BUFFER_SIZE = 1024 * 4;
 
     protected boolean downloadFile(String fileName, String yearString, String urlString) {
@@ -28,10 +26,10 @@ public abstract class DataWrangler {
             BufferedInputStream inputStream = new BufferedInputStream(httpConnection.getInputStream());
             BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settings.data.dataDirectory + yearString + File.separator + fileName));
             byte[] data = new byte[BYTE_BUFFER_SIZE];
-            bytesDownloaded = 0;
+            bytesProcessed = 0;
             int numBytesRead;
             while ((numBytesRead = inputStream.read(data, 0, BYTE_BUFFER_SIZE)) >= 0) {
-                bytesDownloaded += numBytesRead;
+                bytesProcessed += numBytesRead;
                 outputStream.write(data, 0, numBytesRead);
             }
             inputStream.close();
@@ -87,20 +85,12 @@ public abstract class DataWrangler {
         return timestamp.getTime();
     }
 
-    public int getBytesDownloaded() {
-        return bytesDownloaded;
+    public int getBytesProcessed() {
+        return bytesProcessed;
     }
 
     public int getFileSizeInBytes() {
         return fileSize;
-    }
-
-    public int getTilesWritten() {
-        return tilesWritten;
-    }
-
-    public int getBytesWritten() {
-        return bytesWritten;
     }
 
     protected void writeYear(BufferedOutputStream outputStream, int year) throws IOException {
@@ -125,7 +115,7 @@ public abstract class DataWrangler {
      * @return
      */
     public int getProgress() {
-        return (int) Math.ceil(bytesDownloaded / (float) fileSize * 100);
+        return (int) Math.ceil(bytesProcessed / (float) fileSize * 100);
     }
 
 }

@@ -69,11 +69,11 @@ public class DataWrangler2022 extends DataWrangler {
             final int BUFFER_SIZE = 1024;
             byte[] buffer = new byte[BUFFER_SIZE];
             int length;
-            bytesDownloaded = 0;
+            bytesProcessed = 0;
             fileSize = (int) Files.size(Paths.get(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source));
             while ((length = inputStream.read(buffer)) > 0) {
                 outputStream.write(buffer, 0, length);
-                bytesDownloaded += 512;
+                bytesProcessed += 512;
             }
             inputStream.close();
             outputStream.close();
