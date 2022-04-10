@@ -1,12 +1,12 @@
 package com.zrmiller.core.datawrangler;
 
-import com.zrmiller.core.utility.ColorConverter2022;
-import com.zrmiller.core.strings.FileName;
-import com.zrmiller.core.utility.TileEdit;
 import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
+import com.zrmiller.core.strings.FileName;
+import com.zrmiller.core.utility.ColorConverter2022;
 import com.zrmiller.core.utility.PlaceInfo;
+import com.zrmiller.core.utility.TileEdit;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -24,7 +24,7 @@ public class DataWrangler2022 extends DataWrangler {
     private int filesDownloaded;
 
     public void downloadAndProcessFullDataset() {
-        expectedFiles = PlaceInfo.FILE_COUNT_2022 - DataValidator.validateFileCount2022();
+        expectedFiles = PlaceInfo.FILE_COUNT_2022 - DataValidator.getFileCount2022();
         for (int i = 0; i < PlaceInfo.FILE_COUNT_2022; i++) {
             File file = new File(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i));
             if (file.exists())

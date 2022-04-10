@@ -1,9 +1,9 @@
-package com.zrmiller.gui;
+package com.zrmiller.gui.mainframe;
 
 import com.zrmiller.core.enums.PlaybackSpeed;
 import com.zrmiller.core.parser.PlacePlayer;
 import com.zrmiller.core.utility.ZUtil;
-import com.zrmiller.modules.styles.components.FlatColorIconButton;
+import com.zrmiller.modules.colortheme.components.FlatColorIconButton;
 
 import javax.swing.*;
 import java.awt.*;

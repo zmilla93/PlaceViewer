@@ -1,9 +1,9 @@
 package com.zrmiller.core.parser;
 
 import com.zrmiller.App;
+import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.utility.TileEdit;
-import com.zrmiller.core.enums.Dataset;
 
 import java.io.IOException;
 import java.util.Arrays;

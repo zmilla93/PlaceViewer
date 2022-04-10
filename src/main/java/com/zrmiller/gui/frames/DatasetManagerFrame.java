@@ -1,4 +1,4 @@
-package com.zrmiller.gui.windows;
+package com.zrmiller.gui.frames;
 
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.ZUtil;
@@ -7,8 +7,8 @@ import com.zrmiller.gui.downloader.DownloaderPanel2022;
 import com.zrmiller.gui.downloader.progress.AbstractDownloadProgressPanel;
 import com.zrmiller.gui.downloader.progress.DownloaderProgressPanel2017;
 import com.zrmiller.gui.downloader.progress.DownloaderProgressPanel2022;
-import com.zrmiller.modules.styles.ColorManager;
-import com.zrmiller.modules.styles.IThemeListener;
+import com.zrmiller.modules.colortheme.ColorManager;
+import com.zrmiller.modules.colortheme.IThemeListener;
 
 import javax.swing.*;
 import java.awt.*;

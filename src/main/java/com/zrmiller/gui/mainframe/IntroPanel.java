@@ -1,6 +1,7 @@
-package com.zrmiller.gui;
+package com.zrmiller.gui.mainframe;
 
 import com.zrmiller.core.utility.ZUtil;
+import com.zrmiller.gui.FrameManager;
 
 import javax.swing.*;
 import java.awt.*;

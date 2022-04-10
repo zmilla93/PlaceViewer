@@ -4,7 +4,7 @@ import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.DataWrangler2017;
 import com.zrmiller.core.datawrangler.DownloadManager;
 import com.zrmiller.core.utility.ZUtil;
-import com.zrmiller.gui.windows.DatasetManagerFrame;
+import com.zrmiller.gui.frames.DatasetManagerFrame;
 
 import javax.swing.*;
 
@@ -83,7 +83,7 @@ public class DownloaderPanel2017 extends CardDownloaderPanel {
     }
 
     public void validateData() {
-        long fileSize = DataValidator.validate2017();
+        long fileSize = DataValidator.getFileSize2017();
         if (fileSize > 0) {
             deleteButton.setEnabled(true);
             downloadButton.setEnabled(false);

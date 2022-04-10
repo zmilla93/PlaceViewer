@@ -1,4 +1,4 @@
-package com.zrmiller.gui;
+package com.zrmiller.gui.misc;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;

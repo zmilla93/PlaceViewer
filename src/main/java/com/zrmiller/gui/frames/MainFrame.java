@@ -1,11 +1,11 @@
-package com.zrmiller.gui.windows;
+package com.zrmiller.gui.frames;
 
 import com.zrmiller.App;
+import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.strings.References;
-import com.zrmiller.core.enums.Dataset;
-import com.zrmiller.gui.MainMenuBar;
-import com.zrmiller.gui.MainPanel;
+import com.zrmiller.gui.mainframe.MainMenuBar;
+import com.zrmiller.gui.mainframe.MainPanel;
 
 import javax.swing.*;
 import java.awt.*;

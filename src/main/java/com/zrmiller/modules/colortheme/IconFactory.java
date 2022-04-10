@@ -1,4 +1,4 @@
-package com.zrmiller.modules.styles;
+package com.zrmiller.modules.colortheme;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

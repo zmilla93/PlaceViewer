@@ -1,10 +1,10 @@
 package com.zrmiller.gui.downloader.progress;
 
-import com.zrmiller.core.utility.TileEdit;
 import com.zrmiller.core.datawrangler.DataWrangler2017;
 import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2017;
+import com.zrmiller.core.utility.TileEdit;
 import com.zrmiller.core.utility.ZUtil;
-import com.zrmiller.gui.windows.DatasetManagerFrame;
+import com.zrmiller.gui.frames.DatasetManagerFrame;
 
 import javax.swing.*;
 
@@ -106,7 +106,7 @@ public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
     }
 
     public void updateSaving() {
-        progressBar.setValue(TileEdit.getSortProgress());
+        progressBar.setValue(wrangler.getProgress());
         if (wrangler.getBytesProcessed() < 0)
             setInfoLower("This should be quick...");
         else

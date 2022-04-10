@@ -1,4 +1,4 @@
-package com.zrmiller.gui;
+package com.zrmiller.gui.mainframe.listeners;
 
 import java.awt.*;
 

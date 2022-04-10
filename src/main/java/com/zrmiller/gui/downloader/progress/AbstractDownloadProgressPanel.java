@@ -3,7 +3,7 @@ package com.zrmiller.gui.downloader.progress;
 import com.zrmiller.core.datawrangler.DataWrangler;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.downloader.BaseDownloaderPanel;
-import com.zrmiller.gui.windows.DatasetManagerFrame;
+import com.zrmiller.gui.frames.DatasetManagerFrame;
 
 import javax.swing.*;
 import java.awt.*;

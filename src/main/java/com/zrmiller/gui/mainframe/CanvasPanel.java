@@ -1,13 +1,14 @@
-package com.zrmiller.gui;
+package com.zrmiller.gui.mainframe;
 
 import com.zrmiller.App;
-import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.parser.PlacePlayer;
 import com.zrmiller.core.utility.ZUtil;
+import com.zrmiller.gui.mainframe.listeners.ICanvasListener;
+import com.zrmiller.modules.colortheme.ColorManager;
+import com.zrmiller.modules.colortheme.IThemeListener;
 import com.zrmiller.modules.listening.ListenManagerPanel;
-import com.zrmiller.modules.styles.ColorManager;
-import com.zrmiller.modules.styles.IThemeListener;
 
 import javax.swing.*;
 import java.awt.*;

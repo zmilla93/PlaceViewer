@@ -1,4 +1,4 @@
-package com.zrmiller.modules.styles;
+package com.zrmiller.modules.colortheme;
 
 public interface IThemeListener {
 

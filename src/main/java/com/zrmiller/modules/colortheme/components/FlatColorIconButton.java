@@ -1,4 +1,4 @@
-package com.zrmiller.modules.styles.components;
+package com.zrmiller.modules.colortheme.components;
 
 import com.formdev.flatlaf.ui.FlatButtonBorder;
 

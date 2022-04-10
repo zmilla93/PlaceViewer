@@ -1,9 +1,11 @@
-package com.zrmiller.gui;
+package com.zrmiller.gui.mainframe;
 
 import com.zrmiller.App;
-import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.utility.PlaceInfo;
+import com.zrmiller.gui.mainframe.listeners.ICanvasListener;
+import com.zrmiller.modules.colortheme.components.SeparatorPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,7 +32,7 @@ public class MainPanel extends JPanel implements ICanvasListener, IDatasetListen
         // North Panel
         JPanel northBuffer = new JPanel(new BorderLayout());
         northBuffer.add(new PlayerControlPanel(canvasPanel.getPlayer()), BorderLayout.WEST);
-        northBuffer.add(new jumpToFramePanel(canvasPanel, canvasPanel.getPlayer()), BorderLayout.EAST);
+        northBuffer.add(new JumpToFramePanel(canvasPanel, canvasPanel.getPlayer()), BorderLayout.EAST);
 
         northPanel.add(northBuffer, BorderLayout.CENTER);
         northPanel.add(new SeparatorPanel(), BorderLayout.SOUTH);

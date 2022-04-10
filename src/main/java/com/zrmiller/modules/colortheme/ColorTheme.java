@@ -1,4 +1,4 @@
-package com.zrmiller.modules.styles;
+package com.zrmiller.modules.colortheme;
 
 import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.intellijthemes.*;

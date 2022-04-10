@@ -1,4 +1,4 @@
-package com.zrmiller.gui;
+package com.zrmiller.gui.mainframe;
 
 import javax.swing.*;
 import java.text.NumberFormat;

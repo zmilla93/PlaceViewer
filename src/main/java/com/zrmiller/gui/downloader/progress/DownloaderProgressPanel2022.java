@@ -2,7 +2,7 @@ package com.zrmiller.gui.downloader.progress;
 
 import com.zrmiller.core.datawrangler.DataWrangler2022;
 import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2022;
-import com.zrmiller.gui.windows.DatasetManagerFrame;
+import com.zrmiller.gui.frames.DatasetManagerFrame;
 
 import javax.swing.*;
 

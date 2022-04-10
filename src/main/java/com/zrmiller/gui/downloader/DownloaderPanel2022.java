@@ -5,7 +5,7 @@ import com.zrmiller.core.datawrangler.DataWrangler2022;
 import com.zrmiller.core.datawrangler.DownloadManager;
 import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.core.utility.ZUtil;
-import com.zrmiller.gui.windows.DatasetManagerFrame;
+import com.zrmiller.gui.frames.DatasetManagerFrame;
 
 import javax.swing.*;
 
@@ -64,10 +64,10 @@ public class DownloaderPanel2022 extends CardDownloaderPanel {
     }
 
     public void validateData() {
-        int fileCount = DataValidator.validateFileCount2022();
+        int fileCount = DataValidator.getFileCount2022();
         if (fileCount == PlaceInfo.FILE_COUNT_2022) {
             cardLayout.show(cardPanel, Panel.FULLY_INSTALLED.toString());
-            fileSizeLabel.setText("Total File Size: " + ZUtil.byteCountToString(DataValidator.validateFileSize2022()));
+            fileSizeLabel.setText("Total File Size: " + ZUtil.byteCountToString(DataValidator.getTotalFileSize2022()));
             downloadButton.setEnabled(false);
             deleteButton.setEnabled(true);
         } else if (fileCount < PlaceInfo.FILE_COUNT_2022 && fileCount > 0) {

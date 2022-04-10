@@ -4,10 +4,11 @@ import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.PlaceInfo;
-import com.zrmiller.gui.windows.DatasetManagerFrame;
-import com.zrmiller.gui.windows.MainFrame;
-import com.zrmiller.modules.styles.ColorManager;
-import com.zrmiller.modules.styles.ColorTheme;
+import com.zrmiller.gui.frames.DatasetManagerFrame;
+import com.zrmiller.gui.frames.MainFrame;
+import com.zrmiller.gui.mainframe.MainPanel;
+import com.zrmiller.modules.colortheme.ColorManager;
+import com.zrmiller.modules.colortheme.ColorTheme;
 
 public class FrameManager {
 
@@ -40,13 +41,13 @@ public class FrameManager {
         }
         switch (dataset) {
             case PLACE_2017:
-                if (DataValidator.validate2017() > 0)
+                if (DataValidator.getFileSize2017() > 0)
                     mainFrame.showCard(MainPanel.Card.CANVAS);
                 else
                     mainFrame.showCard(MainPanel.Card.INTRO);
                 break;
             case PLACE_2022:
-                if (DataValidator.validateFileCount2022() == PlaceInfo.FILE_COUNT_2022)
+                if (DataValidator.getFileCount2022() == PlaceInfo.FILE_COUNT_2022)
                     mainFrame.showCard(MainPanel.Card.CANVAS);
                 else
                     mainFrame.showCard(MainPanel.Card.INTRO);

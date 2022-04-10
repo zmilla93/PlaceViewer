@@ -1,4 +1,4 @@
-package com.zrmiller.gui;
+package com.zrmiller.modules.colortheme.components;
 
 import javax.swing.*;
 import java.awt.*;

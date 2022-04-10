@@ -1,7 +1,8 @@
-package com.zrmiller.gui;
+package com.zrmiller.gui.mainframe;
 
 import com.zrmiller.core.parser.PlacePlayer;
 import com.zrmiller.core.utility.ZUtil;
+import com.zrmiller.gui.misc.NumberDocumentFilter;
 
 import javax.swing.*;
 import javax.swing.text.PlainDocument;
@@ -9,7 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class jumpToFramePanel extends JPanel {
+public class JumpToFramePanel extends JPanel {
 
     private final PlacePlayer player;
     private final CanvasPanel canvasPanel;
@@ -17,7 +18,7 @@ public class jumpToFramePanel extends JPanel {
     private final JButton jumpToFrameButton = new JButton("Jump to Frame");
     private final JTextField frameInput = new JTextField("0");
 
-    public jumpToFramePanel(CanvasPanel canvasPanel, PlacePlayer player) {
+    public JumpToFramePanel(CanvasPanel canvasPanel, PlacePlayer player) {
         this.canvasPanel = canvasPanel;
         this.player = player;
         setLayout(new GridBagLayout());
