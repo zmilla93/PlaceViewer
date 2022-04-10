@@ -5,6 +5,7 @@ import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.datawrangler.DataWrangler2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.parser.PlaceParser2022;
+import com.zrmiller.core.utility.OneTimeUtil;
 import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.gui.FrameManager;
 
@@ -27,6 +28,7 @@ public class App {
             e.printStackTrace();
         }
         DatasetManager.changeDataset(Dataset.PLACE_2017);
+        OneTimeUtil.runDataScan("D:\\PlaceData\\2022\\");
     }
 
     private static void testParse() {

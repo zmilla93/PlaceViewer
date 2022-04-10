@@ -1,6 +1,13 @@
 package com.zrmiller.core.utility;
 
+import com.zrmiller.core.FileName;
+import com.zrmiller.core.TileEdit;
+import com.zrmiller.core.parser.PlaceParser2022;
+
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -11,6 +18,49 @@ public class OneTimeUtil {
     private static String directory = "D:/Place";
     private static String sortFileName = "";
     private static String originalFileName = "";
+
+    public static String runDataScan(String directory) {
+        TileEdit[] tiles = new TileEdit[PlaceInfo.FILE_COUNT_2022];
+        HashMap<Integer, Integer> orderMap = new HashMap<>();
+        int badTimes = 0;
+        try {
+            for (int i = 0; i < PlaceInfo.FILE_COUNT_2022; i++) {
+                BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(directory + FileName.BINARY_2022.getIndexedName(i)));
+                byte[] meta = new byte[6];
+                inputStream.read(meta);
+                // Read All Tiles
+                byte[] tileBytes = new byte[TileEdit.BYTE_COUNT];
+                int bytesRead = 0;
+//                ArrayList<TileEdit> tileEdits = new ArrayList<>();
+                int time = 0;
+                boolean badTime = false;
+                while ((bytesRead = inputStream.read(tileBytes)) > 0) {
+                    TileEdit tile = new TileEdit(tileBytes);
+//                    orderMap.put(tile.timestamp, i);
+                    tiles[i] = tile;
+                    if (tile.timestamp < time) {
+                        badTime = true;
+                    }
+                    time = tile.timestamp;
+                }
+                if (badTime) badTimes++;
+                inputStream.close();
+                System.out.println("Read #" + i);
+            }
+        } catch (IOException e) {
+
+        }
+        System.out.println("BAD TIMES : " + badTimes);
+        System.out.println("TILE:" + tiles);
+        Arrays.sort(tiles);
+        int[] order = new int[tiles.length];
+//        for (int i = 0; i < order.length; i++) {
+//            order[i] = orderMap.get(tiles[i].timestamp);
+//        }
+        System.out.println(Arrays.toString(order));
+        System.out.println(order.length);
+        return null;
+    }
 
     public static long getDownloadSize2022() {
         return 0;
