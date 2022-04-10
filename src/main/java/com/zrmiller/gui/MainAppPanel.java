@@ -1,7 +1,6 @@
 package com.zrmiller.gui;
 
 import com.zrmiller.core.utility.PlaceInfo;
-import com.zrmiller.core.utility.ZUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +10,6 @@ public class MainAppPanel extends JPanel implements ICanvasListener {
 
     private final CanvasPanel canvasPanel = new CanvasPanel();
 
-    private final JPanel sidebarPanel = new JPanel(new BorderLayout());
     private final JPanel southPanel = new JPanel(new BorderLayout());
     private final JLabel positionLabel = new JLabel("Pos -");
     private final JLabel frameCountLabel = new JLabel("-");
@@ -21,43 +19,33 @@ public class MainAppPanel extends JPanel implements ICanvasListener {
 
     public MainAppPanel() {
         setLayout(new BorderLayout());
-        buildPanels();
-
-        onPan(new Point(0, 0));
-        canvasPanel.addListener(this);
-    }
-
-    private void buildPanels() {
-        // Sidebar???
-        sidebarPanel.add(new JButton("ASJFKLSDJAF"), BorderLayout.CENTER);
-        sidebarPanel.add(new SeparatorPanel(), BorderLayout.EAST);
-        GridBagConstraints gc = ZUtil.getGC();
 
         // North Panel
-//        northPanel.add(menubar, BorderLayout.NORTH);
+        JPanel northBuffer = new JPanel(new BorderLayout());
+        northBuffer.add(new PlayerControlPanel(canvasPanel.getPlayer()), BorderLayout.WEST);
+        northBuffer.add(new jumpToFramePanel(canvasPanel, canvasPanel.getPlayer()), BorderLayout.EAST);
 
-        northPanel.add(new PlayerControlPanel(canvasPanel.getPlayer()), BorderLayout.WEST);
-        northPanel.add(new jumpToFramePanel(canvasPanel, canvasPanel.getPlayer()), BorderLayout.EAST);
-//        northPanel.add(speedLabelPanel, BorderLayout.EAST);
-
-        JPanel northContainer = new JPanel(new BorderLayout());
-        northContainer.add(northPanel, BorderLayout.CENTER);
-//        northContainer.add(new SeparatorPanel(), BorderLayout.SOUTH);
-        northContainer.add(new SeparatorPanel(), BorderLayout.SOUTH);
-
+        northPanel.add(northBuffer, BorderLayout.CENTER);
+        northPanel.add(new SeparatorPanel(), BorderLayout.SOUTH);
 
         // South Panel
         JPanel southRightPanel = new JPanel();
         southRightPanel.add(zoomLabel);
-//        southPanel.add(positionLabel, BorderLayout.CENTER);
         southPanel.add(frameCountLabel, BorderLayout.WEST);
         southPanel.add(southRightPanel, BorderLayout.EAST);
         southPanel.add(new SeparatorPanel(), BorderLayout.NORTH);
 
         // Main Panel
-        add(northContainer, BorderLayout.NORTH);
-        add(canvasPanel, BorderLayout.CENTER);
+        add(northPanel, BorderLayout.NORTH);
         add(southPanel, BorderLayout.SOUTH);
+        add(canvasPanel, BorderLayout.CENTER);
+
+        onPan(new Point(0, 0));
+        addListeners();
+    }
+
+    private void addListeners() {
+        canvasPanel.addListener(this);
     }
 
     @Override
