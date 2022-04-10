@@ -1,9 +1,8 @@
 package com.zrmiller.core.parser;
 
 import com.zrmiller.App;
-import com.zrmiller.core.DatasetManager;
-import com.zrmiller.core.IDatasetListener;
-import com.zrmiller.core.TileEdit;
+import com.zrmiller.core.managers.listeners.IDatasetListener;
+import com.zrmiller.core.utility.TileEdit;
 import com.zrmiller.core.enums.Dataset;
 
 import java.io.IOException;

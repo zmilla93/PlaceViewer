@@ -1,6 +1,6 @@
 package com.zrmiller.core.parser;
 
-import com.zrmiller.core.TileEdit;
+import com.zrmiller.core.utility.TileEdit;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;

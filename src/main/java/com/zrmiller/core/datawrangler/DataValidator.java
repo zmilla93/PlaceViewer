@@ -1,6 +1,6 @@
 package com.zrmiller.core.datawrangler;
 
-import com.zrmiller.core.FileName;
+import com.zrmiller.core.strings.FileName;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.PlaceInfo;

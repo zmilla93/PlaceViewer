@@ -1,9 +1,8 @@
 package com.zrmiller.gui.windows;
 
 import com.zrmiller.App;
-import com.zrmiller.core.DatasetManager;
-import com.zrmiller.core.IDatasetListener;
-import com.zrmiller.core.References;
+import com.zrmiller.core.managers.listeners.IDatasetListener;
+import com.zrmiller.core.strings.References;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.gui.MainMenuBar;
 import com.zrmiller.gui.MainPanel;

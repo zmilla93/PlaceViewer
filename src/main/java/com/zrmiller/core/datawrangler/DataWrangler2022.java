@@ -1,8 +1,8 @@
 package com.zrmiller.core.datawrangler;
 
-import com.zrmiller.core.ColorConverter;
-import com.zrmiller.core.FileName;
-import com.zrmiller.core.TileEdit;
+import com.zrmiller.core.utility.ColorConverter2022;
+import com.zrmiller.core.strings.FileName;
+import com.zrmiller.core.utility.TileEdit;
 import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
@@ -99,7 +99,7 @@ public class DataWrangler2022 extends DataWrangler {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source));
             BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + dest));
-            ColorConverter colorConverter = new ColorConverter();
+            ColorConverter2022 colorConverter = new ColorConverter2022();
             writeYear(outputStream, Dataset.PLACE_2022.YEAR);
             writeMetaInt(outputStream);
             while (reader.ready()) {

@@ -1,7 +1,7 @@
 package com.zrmiller.core.parser;
 
-import com.zrmiller.core.FileName;
-import com.zrmiller.core.TileEdit;
+import com.zrmiller.core.strings.FileName;
+import com.zrmiller.core.utility.TileEdit;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 

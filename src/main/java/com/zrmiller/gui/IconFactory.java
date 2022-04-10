@@ -1,4 +1,4 @@
-package com.zrmiller.core;
+package com.zrmiller.gui;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

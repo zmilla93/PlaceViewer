@@ -1,6 +1,6 @@
 package com.zrmiller.gui.downloader.progress;
 
-import com.zrmiller.core.TileEdit;
+import com.zrmiller.core.utility.TileEdit;
 import com.zrmiller.core.datawrangler.DataWrangler2017;
 import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2017;
 import com.zrmiller.core.utility.ZUtil;

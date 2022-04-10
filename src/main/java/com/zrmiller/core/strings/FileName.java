@@ -1,4 +1,4 @@
-package com.zrmiller.core;
+package com.zrmiller.core.strings;
 
 public enum FileName {
 

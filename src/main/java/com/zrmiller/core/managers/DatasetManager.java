@@ -1,10 +1,11 @@
-package com.zrmiller.core;
+package com.zrmiller.core.managers;
 
 import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.modules.listening.ListenManager;
 
 /**
- * Controls which dataset is loaded and alerts all listeners.
+ * Controls which dataset is loaded. Notifies all listeners when dataset is changed.
  */
 public class DatasetManager extends ListenManager<IDatasetListener> {
 

@@ -1,7 +1,6 @@
 package com.zrmiller.gui;
 
 import com.zrmiller.App;
-import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.ZUtil;

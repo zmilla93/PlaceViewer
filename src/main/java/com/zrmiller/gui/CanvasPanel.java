@@ -1,7 +1,7 @@
 package com.zrmiller.gui;
 
 import com.zrmiller.App;
-import com.zrmiller.core.IDatasetListener;
+import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.parser.PlacePlayer;
 import com.zrmiller.core.utility.ZUtil;

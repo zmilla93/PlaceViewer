@@ -1,9 +1,12 @@
-package com.zrmiller.core;
+package com.zrmiller.core.utility;
 
 import java.awt.*;
 import java.util.HashMap;
 
-public class ColorConverter {
+/**
+ * Handles converting between string values, int keys, and actual Colors for 2022
+ */
+public class ColorConverter2022 {
 
     private final HashMap<String, Short> colorToIntMap;
 
@@ -42,7 +45,7 @@ public class ColorConverter {
             new Color(255, 255, 255),
     };
 
-    public ColorConverter() {
+    public ColorConverter2022() {
         colorToIntMap = new HashMap<>();
         colorToIntMap.put("#6D001A", (short) 0);
         colorToIntMap.put("#BE0039", (short) 1);

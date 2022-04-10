@@ -1,6 +1,6 @@
 package com.zrmiller.core.enums;
 
-import com.zrmiller.core.ColorConverter;
+import com.zrmiller.core.utility.ColorConverter2022;
 import com.zrmiller.core.utility.PlaceInfo;
 
 import java.awt.*;
@@ -9,7 +9,7 @@ import java.io.File;
 public enum Dataset {
 
     PLACE_2017(2017, 1001, 1001, PlaceInfo.canvasColors, 0),
-    PLACE_2022(2022, 2000, 2000, ColorConverter.intToColorArr, 31),
+    PLACE_2022(2022, 2000, 2000, ColorConverter2022.intToColorArr, 31),
     ;
 
     public final int YEAR;

@@ -1,7 +1,6 @@
 package com.zrmiller.core.utility;
 
-import com.zrmiller.core.FileName;
-import com.zrmiller.core.TileEdit;
+import com.zrmiller.core.strings.FileName;
 
 import java.io.*;
 import java.util.Arrays;
@@ -10,8 +9,9 @@ import java.util.HashSet;
 
 /**
  * Random utility code that was used once for modifying data.
+ * Mostly broken now, just here for legacy purposes.
  */
-public class OneTimeUtil {
+public class OneShotUtil {
 
     private static String directory = "D:/Place";
     private static String sortFileName = "";

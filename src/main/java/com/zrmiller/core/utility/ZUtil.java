@@ -12,9 +12,13 @@ public class ZUtil {
     private static final int BYTE_TO_MB = 1000000;
     private static final int BYTE_TO_GB = 1000000000;
 
-    //    private static final DecimalFormat mbFormat = new DecimalFormat("#.");
     private static final DecimalFormat gbFormat = new DecimalFormat("#.##");
 
+    /**
+     * Formats and labels a given number of bytes.
+     * @param byteCount
+     * @return
+     */
     public static String byteCountToString(long byteCount) {
         String text = null;
         if (byteCount > BYTE_TO_GB) {
@@ -62,24 +66,6 @@ public class ZUtil {
         gc.gridx = 0;
         gc.gridy = 0;
         return gc;
-    }
-
-    /**
-     * Given a point on the screen, returns the bounds of the monitor containing that point.
-     *
-     * @param point
-     * @return
-     */
-    public static Rectangle getScreenBoundsFromPoint(Point point) {
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice[] devices = ge.getScreenDevices();
-        for (GraphicsDevice device : devices) {
-            Rectangle bounds = device.getDefaultConfiguration().getBounds();
-            if (bounds.contains(point)) {
-                return bounds;
-            }
-        }
-        return null;
     }
 
     public static boolean openLink(String link) {
