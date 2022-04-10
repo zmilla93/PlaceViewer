@@ -1,40 +1,24 @@
 package com.zrmiller.core;
 
 import com.zrmiller.core.enums.Dataset;
-
-import java.util.ArrayList;
+import com.zrmiller.modules.utility.ListeningManager;
 
 /**
- * Controls which dataset is loaded.
- * If something needs to change when the dataset changes,
- * implement IDatasetListener
+ * Controls which dataset is loaded and alerts all listeners.
  */
-public class DatasetManager {
+public class DatasetManager extends ListeningManager<IDatasetListener> {
 
-    private static Dataset dataset = Dataset.PLACE_2017;
-    private static final ArrayList<IDatasetListener> datasetListeners = new ArrayList<>();
+    private Dataset dataset = Dataset.PLACE_2017;
 
-    public static void changeDataset(Dataset dataset) {
-        DatasetManager.dataset = dataset;
-        for (IDatasetListener listener : datasetListeners) {
+    public void changeDataset(Dataset dataset) {
+        this.dataset = dataset;
+        for (IDatasetListener listener : listeners) {
             listener.onDatasetChanged(dataset);
         }
     }
 
-    public static Dataset currentDataset() {
+    public Dataset currentDataset() {
         return dataset;
-    }
-
-    public static void addListener(IDatasetListener listener) {
-        datasetListeners.add(listener);
-    }
-
-    public static void removeListener(IDatasetListener listener) {
-        datasetListeners.remove(listener);
-    }
-
-    public static void removeAllListeners() {
-        datasetListeners.clear();
     }
 
 }

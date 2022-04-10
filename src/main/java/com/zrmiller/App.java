@@ -1,7 +1,9 @@
 package com.zrmiller;
 
+import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.datawrangler.DataWrangler2022;
+import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.parser.PlaceParser2022;
 import com.zrmiller.gui.FrameManager;
@@ -15,6 +17,7 @@ import java.util.Objects;
 public class App {
 
     public static ImageIcon APP_ICON = new ImageIcon(Objects.requireNonNull(App.class.getResource("/place.png")));
+    public static DatasetManager datasetManager = new DatasetManager();
 
     public static void main(String[] args) {
 
@@ -60,6 +63,10 @@ public class App {
     private static void tempDownloadDataset() {
         DataWrangler2022 dataDownloader = new DataWrangler2022();
         dataDownloader.downloadUnzipAndCompress(23);
+    }
+
+    public static Dataset dataset(){
+        return datasetManager.currentDataset();
     }
 
 }

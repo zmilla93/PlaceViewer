@@ -1,5 +1,6 @@
 package com.zrmiller.gui;
 
+import com.zrmiller.App;
 import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.IDatasetListener;
 import com.zrmiller.core.enums.Dataset;
@@ -58,7 +59,7 @@ public class MainPanel extends JPanel implements ICanvasListener, IDatasetListen
 
         onPan(new Point(0, 0));
         addListeners();
-        DatasetManager.addListener(this);
+        App.datasetManager.addListener(this);
     }
 
     public void showCard(Card card) {

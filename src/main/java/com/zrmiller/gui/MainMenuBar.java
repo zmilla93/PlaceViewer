@@ -1,5 +1,6 @@
 package com.zrmiller.gui;
 
+import com.zrmiller.App;
 import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
@@ -71,8 +72,8 @@ public class MainMenuBar extends JMenuBar {
     private void addListeners() {
         // Note: Color theme listeners are added during construction
         // Datasets
-        dataset2017Button.addActionListener(e -> DatasetManager.changeDataset(Dataset.PLACE_2017));
-        dataset2022Button.addActionListener(e -> DatasetManager.changeDataset(Dataset.PLACE_2022));
+        dataset2017Button.addActionListener(e -> App.datasetManager.changeDataset(Dataset.PLACE_2017));
+        dataset2022Button.addActionListener(e -> App.datasetManager.changeDataset(Dataset.PLACE_2022));
         datasetManagerButton.addActionListener(e -> FrameManager.dataDownloader.setVisible(true));
         githubButton.addActionListener(e -> ZUtil.openLink("https://github.com/zmilla93/PlaceViewer"));
         paypalButton.addActionListener(e -> ZUtil.openLink("https://www.paypal.com/paypalme/zmilla93"));

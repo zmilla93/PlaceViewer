@@ -1,5 +1,6 @@
 package com.zrmiller.core.parser;
 
+import com.zrmiller.App;
 import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.IDatasetListener;
 import com.zrmiller.core.TileEdit;
@@ -21,8 +22,8 @@ public class PlacePlayer implements IDatasetListener {
     private Timer timer = new Timer();
 
     // Data Arrays
-    private int[] colorBuffer = new int[DatasetManager.currentDataset().CANVAS_SIZE_X * DatasetManager.currentDataset().CANVAS_SIZE_Y];
-    private int[] heatmapBuffer = new int[DatasetManager.currentDataset().CANVAS_SIZE_X * DatasetManager.currentDataset().CANVAS_SIZE_Y];
+    private int[] colorBuffer = new int[App.dataset().CANVAS_SIZE_X * App.dataset().CANVAS_SIZE_Y];
+    private int[] heatmapBuffer = new int[App.dataset().CANVAS_SIZE_X * App.dataset().CANVAS_SIZE_Y];
 
     // Heatmap
     public static int heatmapWeight = 10000;
@@ -37,7 +38,7 @@ public class PlacePlayer implements IDatasetListener {
      */
     public PlacePlayer() {
         parser = new PlaceParser2022();
-        DatasetManager.addListener(this);
+        App.datasetManager.addListener(this);
     }
 
     private enum State {STOPPED, PLAYING, PAUSED, SEEKING}
@@ -82,7 +83,7 @@ public class PlacePlayer implements IDatasetListener {
         pause();
         parser.closeStream();
         frameCount = 0;
-        Arrays.fill(colorBuffer, DatasetManager.currentDataset().WHITE_INDEX);
+        Arrays.fill(colorBuffer, App.dataset().WHITE_INDEX);
         Arrays.fill(heatmapBuffer, 0);
         streamIsOpen = false;
         state = State.STOPPED;
@@ -130,7 +131,7 @@ public class PlacePlayer implements IDatasetListener {
     private boolean applyNextFrame() throws IOException {
         if (parser.ready()) {
             TileEdit tile = parser.readNextLine();
-            int index = tile.x + tile.y * DatasetManager.currentDataset().CANVAS_SIZE_X;
+            int index = tile.x + tile.y * App.dataset().CANVAS_SIZE_X;
             colorBuffer[index] = tile.color;
             heatmapBuffer[index] += heatmapWeight;
             if (heatmapBuffer[index] > heatmapMax) heatmapBuffer[index] = heatmapMax;
@@ -153,9 +154,9 @@ public class PlacePlayer implements IDatasetListener {
     private void resizeCanvas() {
         pause();
         parser.closeStream();
-        colorBuffer = new int[DatasetManager.currentDataset().CANVAS_SIZE_X * DatasetManager.currentDataset().CANVAS_SIZE_Y];
-        heatmapBuffer = new int[DatasetManager.currentDataset().CANVAS_SIZE_X * DatasetManager.currentDataset().CANVAS_SIZE_Y];
-        Arrays.fill(colorBuffer, DatasetManager.currentDataset().WHITE_INDEX);
+        colorBuffer = new int[App.dataset().CANVAS_SIZE_X * App.dataset().CANVAS_SIZE_Y];
+        heatmapBuffer = new int[App.dataset().CANVAS_SIZE_X * App.dataset().CANVAS_SIZE_Y];
+        Arrays.fill(colorBuffer, App.dataset().WHITE_INDEX);
     }
 
     @Override

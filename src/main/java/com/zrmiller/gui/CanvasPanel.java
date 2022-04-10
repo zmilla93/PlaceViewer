@@ -1,5 +1,6 @@
 package com.zrmiller.gui;
 
+import com.zrmiller.App;
 import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.IDatasetListener;
 import com.zrmiller.core.enums.Dataset;
@@ -17,8 +18,8 @@ import java.util.ArrayList;
 public class CanvasPanel extends JPanel implements IThemeListener, IDatasetListener {
 
     // FIXME : update canvas to dataset size
-    private static int LOCAL_CANVAS_SIZE_X = DatasetManager.currentDataset().CANVAS_SIZE_X;
-    private static int LOCAL_CANVAS_SIZE_Y = DatasetManager.currentDataset().CANVAS_SIZE_Y;
+    private static int LOCAL_CANVAS_SIZE_X = App.dataset().CANVAS_SIZE_X;
+    private static int LOCAL_CANVAS_SIZE_Y = App.dataset().CANVAS_SIZE_Y;
 
     // Viewport
     public int viewportWidth = 1400;
@@ -62,7 +63,7 @@ public class CanvasPanel extends JPanel implements IThemeListener, IDatasetListe
         });
         timer.start();
         addListeners();
-        DatasetManager.addListener(this);
+        App.datasetManager.addListener(this);
     }
 
     private void tryRepaint() {
@@ -137,7 +138,7 @@ public class CanvasPanel extends JPanel implements IThemeListener, IDatasetListe
         // FIXME : Allow old palette
 //        Color color = PlaceInfo.canvasColors[colorIndex];
 //        Color color = ColorConverter.intToColorArr[colorIndex];
-        Color color = DatasetManager.currentDataset().COLOR_ARRAY[colorIndex];
+        Color color = App.dataset().COLOR_ARRAY[colorIndex];
 //        Color color = c;
         int checkX = zoom < 1 ? LOCAL_CANVAS_SIZE_X / z : LOCAL_CANVAS_SIZE_X * z;
         int checkY = zoom < 1 ? LOCAL_CANVAS_SIZE_Y / z : LOCAL_CANVAS_SIZE_Y * z;
@@ -238,8 +239,8 @@ public class CanvasPanel extends JPanel implements IThemeListener, IDatasetListe
 
     @Override
     public void onDatasetChanged(Dataset dataset) {
-        LOCAL_CANVAS_SIZE_X = DatasetManager.currentDataset().CANVAS_SIZE_X;
-        LOCAL_CANVAS_SIZE_Y = DatasetManager.currentDataset().CANVAS_SIZE_Y;
+        LOCAL_CANVAS_SIZE_X = App.dataset().CANVAS_SIZE_X;
+        LOCAL_CANVAS_SIZE_Y = App.dataset().CANVAS_SIZE_Y;
         tryRepaint(true);
     }
 }

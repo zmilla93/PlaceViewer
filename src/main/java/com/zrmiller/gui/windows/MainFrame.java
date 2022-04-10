@@ -30,7 +30,7 @@ public class MainFrame extends JFrame implements IDatasetListener {
 
         setLocationRelativeTo(null);
 
-        DatasetManager.addListener(this);
+        App.datasetManager.addListener(this);
     }
 
     public void showCard(MainPanel.Card card) {
