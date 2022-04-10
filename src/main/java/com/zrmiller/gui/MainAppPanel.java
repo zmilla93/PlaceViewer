@@ -7,25 +7,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.text.NumberFormat;
 
-public class WindowContainer extends JPanel implements ICanvasListener {
+public class MainAppPanel extends JPanel implements ICanvasListener {
 
-    private CanvasPanel canvasPanel = new CanvasPanel();
+    private final CanvasPanel canvasPanel = new CanvasPanel();
 
-    private JPanel sidebarPanel = new JPanel(new BorderLayout());
-    private JPanel southPanel = new JPanel(new BorderLayout());
-    private JLabel positionLabel = new JLabel("Pos -");
-    private JLabel frameCountLabel = new JLabel("-");
-    private JLabel zoomLabel = new JLabel("100%");
+    private final JPanel sidebarPanel = new JPanel(new BorderLayout());
+    private final JPanel southPanel = new JPanel(new BorderLayout());
+    private final JLabel positionLabel = new JLabel("Pos -");
+    private final JLabel frameCountLabel = new JLabel("-");
+    private final JLabel zoomLabel = new JLabel("100%");
 
-    //    private JMenuBar menubar = new MainMenuBar();
-    private JMenu settingsMenu = new JMenu("Settings");
-    private JMenuItem settingsMenuItem = new JMenu("Settings");
-    private JMenuItem asdf = new JMenuItem("Settings");
-    private JMenuItem aaaa = new JMenuItem("Settings");
+    private final JPanel northPanel = new JPanel(new BorderLayout());
 
-    private JPanel northPanel = new JPanel(new BorderLayout());
-
-    public WindowContainer() {
+    public MainAppPanel() {
         setLayout(new BorderLayout());
         buildPanels();
 
@@ -34,13 +28,6 @@ public class WindowContainer extends JPanel implements ICanvasListener {
     }
 
     private void buildPanels() {
-        // Menubar
-//        menubar.add(settingsMenu);
-//        settingsMenu.add(settingsMenuItem);
-//        settingsMenu.add(new JMenuItem("Whoaaa"));
-//        settingsMenu.add(new JButton("HMMM"));
-//        settingsMenu.add(new JLabel("wowzers"));
-
         // Sidebar???
         sidebarPanel.add(new JButton("ASJFKLSDJAF"), BorderLayout.CENTER);
         sidebarPanel.add(new SeparatorPanel(), BorderLayout.EAST);

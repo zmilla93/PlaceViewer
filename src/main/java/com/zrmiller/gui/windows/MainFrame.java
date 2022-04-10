@@ -2,7 +2,7 @@ package com.zrmiller.gui.windows;
 
 import com.zrmiller.App;
 import com.zrmiller.gui.MainMenuBar;
-import com.zrmiller.gui.WindowContainer;
+import com.zrmiller.gui.MainAppPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,9 +22,9 @@ public class MainFrame extends JFrame {
         container.setLayout(new BorderLayout());
 
         MainMenuBar mainMenuBar = new MainMenuBar();
-        WindowContainer windowContainer = new WindowContainer();
+        MainAppPanel mainAppPanel = new MainAppPanel();
         container.add(mainMenuBar, BorderLayout.NORTH);
-        container.add(windowContainer, BorderLayout.CENTER);
+        container.add(mainAppPanel, BorderLayout.CENTER);
 
         container.addKeyListener(new KeyAdapter() {
             @Override
