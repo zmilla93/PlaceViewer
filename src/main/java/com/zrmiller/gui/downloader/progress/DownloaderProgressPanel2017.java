@@ -1,4 +1,4 @@
-package com.zrmiller.gui.downloader;
+package com.zrmiller.gui.downloader.progress;
 
 import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.datawrangler.DataWrangler2017;
@@ -13,7 +13,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class DownloaderProgressPanel2017 extends DownloadProgressPanel {
+public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
 
     private DownloadStage2017 downloadStage2017;
 

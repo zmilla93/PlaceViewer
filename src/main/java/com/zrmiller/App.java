@@ -1,16 +1,10 @@
 package com.zrmiller;
 
-import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.TileEdit;
-import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.DataWrangler2022;
-import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.parser.PlaceParser2022;
-import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.gui.FrameManager;
-import com.zrmiller.gui.MainPanel;
-import com.zrmiller.gui.windows.MainFrame;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -31,7 +25,7 @@ public class App {
         try {
             SwingUtilities.invokeAndWait(() -> {
                 FrameManager.init();
-                FrameManager.revalidateMainPanel();
+                FrameManager.tryShowDataset(SaveManager.settings.data.preferredDataset);
             });
         } catch (InterruptedException | InvocationTargetException e) {
             e.printStackTrace();

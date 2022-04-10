@@ -1,8 +1,8 @@
 package com.zrmiller.gui.windows;
 
 import com.zrmiller.App;
-import com.zrmiller.gui.MainPanel;
 import com.zrmiller.gui.MainMenuBar;
+import com.zrmiller.gui.MainPanel;
 
 import javax.swing.*;
 import java.awt.*;

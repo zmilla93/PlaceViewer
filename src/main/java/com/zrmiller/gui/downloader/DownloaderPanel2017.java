@@ -23,6 +23,9 @@ public class DownloaderPanel2017 extends CardDownloaderPanel {
         downloadButton.setText("Download 2017");
 
         DownloaderInfoPanel uninstalledPanel = new DownloaderInfoPanel();
+//        uninstalledPanel.add(new JLabel("ASDF"));
+//        uninstalledPanel.add(new JLabel("ASDF"));
+//        uninstalledPanel.add(new JLabel("ASDF"));
         uninstalledPanel.addText("Download Size: 1 GB");
         uninstalledPanel.addText("Compressed Size: 162 MB");
         uninstalledPanel.addText("Data will be downloaded into a single file, compressed, then sorted.");

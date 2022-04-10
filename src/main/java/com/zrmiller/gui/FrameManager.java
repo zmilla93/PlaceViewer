@@ -1,6 +1,5 @@
 package com.zrmiller.gui;
 
-import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
@@ -34,27 +33,25 @@ public class FrameManager {
         mainFrame.setVisible(true);
     }
 
-    public static void revalidateMainPanel(){
-        long size2017 = DataValidator.validate2017();
-        int fileCount2022 = DataValidator.validateFileCount2022();
-
-        // Handle Preference
-        if(fileCount2022 == PlaceInfo.FILE_COUNT_2022 && SaveManager.settings.data.preferredDataset == Dataset.PLACE_2022){
-            mainFrame.showCard(MainPanel.Card.CANVAS);
+    public static void tryShowDataset(Dataset dataset) {
+        if (dataset == null) {
+            mainFrame.showCard(MainPanel.Card.INTRO);
+            return;
         }
-
-        // Normal
-
-
-//        if (DataValidator.validate2017() > 0) {
-//            DatasetManager.changeDataset(Dataset.PLACE_2017);
-//            mainFrame.showCard(MainPanel.Card.CANVAS);
-//        } else if (DataValidator.validateFileCount2022() == PlaceInfo.FILE_COUNT_2022) {
-//            DatasetManager.changeDataset(Dataset.PLACE_2022);
-//            mainFrame.showCard(MainPanel.Card.CANVAS);
-//        } else {
-//            mainFrame.showCard(MainPanel.Card.INTRO);
-//        }
+        switch (dataset) {
+            case PLACE_2017:
+                if (DataValidator.validate2017() > 0)
+                    mainFrame.showCard(MainPanel.Card.CANVAS);
+                else
+                    mainFrame.showCard(MainPanel.Card.INTRO);
+                break;
+            case PLACE_2022:
+                if (DataValidator.validateFileCount2022() == PlaceInfo.FILE_COUNT_2022)
+                    mainFrame.showCard(MainPanel.Card.CANVAS);
+                else
+                    mainFrame.showCard(MainPanel.Card.INTRO);
+                break;
+        }
     }
 
 }

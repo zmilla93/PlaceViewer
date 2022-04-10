@@ -11,9 +11,12 @@ public class DownloaderInfoPanel extends JPanel {
     private final GridBagConstraints gc = ZUtil.getGC();
     private final int TEXT_INSET = 10;
 
+    /**
+     * Adds labels/components line by line.
+     */
     public DownloaderInfoPanel() {
         setLayout(new BorderLayout());
-        add(panel, BorderLayout.NORTH);
+        super.add(panel, BorderLayout.NORTH);
         panel.setLayout(new GridBagLayout());
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.weightx = 1;

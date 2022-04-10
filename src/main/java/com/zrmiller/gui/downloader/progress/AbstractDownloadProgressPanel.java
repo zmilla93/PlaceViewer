@@ -1,13 +1,14 @@
-package com.zrmiller.gui.downloader;
+package com.zrmiller.gui.downloader.progress;
 
 import com.zrmiller.core.datawrangler.DataWrangler;
 import com.zrmiller.core.utility.ZUtil;
+import com.zrmiller.gui.downloader.BaseDownloaderPanel;
 import com.zrmiller.gui.windows.DatasetManagerFrame;
 
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class DownloadProgressPanel extends BaseDownloaderPanel {
+public abstract class AbstractDownloadProgressPanel extends BaseDownloaderPanel {
 
     protected final JProgressBar progressBar = new JProgressBar();
     protected final JLabel labelUpper = new JLabel();
@@ -17,7 +18,7 @@ public abstract class DownloadProgressPanel extends BaseDownloaderPanel {
     protected Timer timer;
     protected DataWrangler wrangler;
 
-    public DownloadProgressPanel(DatasetManagerFrame datasetManagerFrame) {
+    public AbstractDownloadProgressPanel(DatasetManagerFrame datasetManagerFrame) {
         super(datasetManagerFrame);
         centerPanel.setLayout(new GridBagLayout());
         progressBar.setMaximum(0);

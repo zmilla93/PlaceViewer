@@ -72,5 +72,5 @@ public enum ColorTheme {
         }
         return builder.toString();
     }
-    
+
 }

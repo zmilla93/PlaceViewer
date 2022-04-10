@@ -1,4 +1,4 @@
-package com.zrmiller.gui.downloader;
+package com.zrmiller.gui.downloader.progress;
 
 import com.zrmiller.core.datawrangler.DataWrangler2022;
 import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2022;
@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class DownloaderProgressPanel2022 extends DownloadProgressPanel {
+public class DownloaderProgressPanel2022 extends AbstractDownloadProgressPanel {
 
     private DataWrangler2022 dataWrangler2022;
 
