@@ -1,7 +1,7 @@
 package com.zrmiller.gui.downloader;
 
 import com.zrmiller.core.utility.ZUtil;
-import com.zrmiller.gui.windows.DatasetManagerFrame;
+import com.zrmiller.gui.frames.DatasetManagerFrame;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,11 +1,11 @@
 package com.zrmiller;
 
-import com.zrmiller.core.managers.DatasetManager;
-import com.zrmiller.core.utility.TileEdit;
 import com.zrmiller.core.datawrangler.DataWrangler2022;
 import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.parser.PlaceParser2022;
+import com.zrmiller.core.utility.TileEdit;
 import com.zrmiller.gui.FrameManager;
 
 import javax.swing.*;
@@ -65,7 +65,7 @@ public class App {
         dataDownloader.downloadUnzipAndCompress(23);
     }
 
-    public static Dataset dataset(){
+    public static Dataset dataset() {
         return datasetManager.currentDataset();
     }
 
