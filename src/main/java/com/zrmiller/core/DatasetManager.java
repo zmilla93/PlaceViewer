@@ -1,12 +1,12 @@
 package com.zrmiller.core;
 
 import com.zrmiller.core.enums.Dataset;
-import com.zrmiller.modules.utility.ListeningManager;
+import com.zrmiller.modules.listening.ListenManager;
 
 /**
  * Controls which dataset is loaded and alerts all listeners.
  */
-public class DatasetManager extends ListeningManager<IDatasetListener> {
+public class DatasetManager extends ListenManager<IDatasetListener> {
 
     private Dataset dataset = Dataset.PLACE_2017;
 

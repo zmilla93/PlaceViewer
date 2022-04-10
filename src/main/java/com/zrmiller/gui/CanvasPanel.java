@@ -1,11 +1,11 @@
 package com.zrmiller.gui;
 
 import com.zrmiller.App;
-import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.IDatasetListener;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.parser.PlacePlayer;
 import com.zrmiller.core.utility.ZUtil;
+import com.zrmiller.modules.listening.ListenManagerPanel;
 import com.zrmiller.modules.styles.ColorManager;
 import com.zrmiller.modules.styles.IThemeListener;
 
@@ -13,9 +13,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
-public class CanvasPanel extends JPanel implements IThemeListener, IDatasetListener {
+public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements IThemeListener, IDatasetListener {
 
     // FIXME : update canvas to dataset size
     private static int LOCAL_CANVAS_SIZE_X = App.dataset().CANVAS_SIZE_X;
@@ -48,7 +47,6 @@ public class CanvasPanel extends JPanel implements IThemeListener, IDatasetListe
 
     // Other
     private Dataset dataset = Dataset.PLACE_2022;
-    private ArrayList<ICanvasListener> canvasListeners = new ArrayList<>();
 
     public CanvasPanel() {
 //        changeDataset();
@@ -83,7 +81,7 @@ public class CanvasPanel extends JPanel implements IThemeListener, IDatasetListe
             updateColorBuffer();
             repaint();
             markForRepaint = false;
-            for (ICanvasListener listener : canvasListeners)
+            for (ICanvasListener listener : listeners)
                 listener.onDraw(lastPaintedFrame);
         }
     }
@@ -134,12 +132,7 @@ public class CanvasPanel extends JPanel implements IThemeListener, IDatasetListe
 //        float f = heat / (float) PlacePlayer.heatmapMax;
 //        Color c = new Color(f, f, f);
         int colorIndex = player.getColorBuffer()[canvasIndex];
-
-        // FIXME : Allow old palette
-//        Color color = PlaceInfo.canvasColors[colorIndex];
-//        Color color = ColorConverter.intToColorArr[colorIndex];
         Color color = App.dataset().COLOR_ARRAY[colorIndex];
-//        Color color = c;
         int checkX = zoom < 1 ? LOCAL_CANVAS_SIZE_X / z : LOCAL_CANVAS_SIZE_X * z;
         int checkY = zoom < 1 ? LOCAL_CANVAS_SIZE_Y / z : LOCAL_CANVAS_SIZE_Y * z;
         if (x < 0 || x > checkX || y < 0 || y > checkY * z) {
@@ -157,15 +150,12 @@ public class CanvasPanel extends JPanel implements IThemeListener, IDatasetListe
 
     private void addListeners() {
         ColorManager.addListener(this);
-        addMouseWheelListener(new MouseWheelListener() {
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                int mod = e.getPreciseWheelRotation() < 0 ? 1 : -1;
-                zoom += mod;
-                zoom = ZUtil.clamp(zoom, -1, MAX_ZOOM);
-                markForRepaint = true;
-                alertListeners();
-            }
+        addMouseWheelListener(e -> {
+            int mod = e.getPreciseWheelRotation() < 0 ? 1 : -1;
+            zoom += mod;
+            zoom = ZUtil.clamp(zoom, -1, MAX_ZOOM);
+            markForRepaint = true;
+            alertListeners();
         });
         addMouseListener(new MouseAdapter() {
             @Override
@@ -198,27 +188,10 @@ public class CanvasPanel extends JPanel implements IThemeListener, IDatasetListe
     }
 
     private void alertListeners() {
-        for (ICanvasListener listener : canvasListeners)
+        for (ICanvasListener listener : listeners)
             listener.onZoom(zoom);
 //        for (ICanvasListener listener : canvasListeners)
 //            listener.onPan(getCenterPixel());
-    }
-
-    private int getFixedZoom() {
-        return zoom <= 0 ? 2 - zoom : zoom;
-    }
-
-    // Listeners
-    public void addListener(ICanvasListener listener) {
-        canvasListeners.add(listener);
-    }
-
-    public void removeListener(ICanvasListener listener) {
-        canvasListeners.remove(listener);
-    }
-
-    public void removeAllListeners() {
-        canvasListeners.clear();
     }
 
     public PlacePlayer getPlayer() {

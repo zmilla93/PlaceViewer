@@ -1,8 +1,9 @@
-package com.zrmiller.modules.utility;
+package com.zrmiller.modules.listening;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
-public abstract class ListeningManager<T> {
+public class ListenManagerPanel<T> extends JPanel {
 
     protected final ArrayList<T> listeners = new ArrayList<>();
 
