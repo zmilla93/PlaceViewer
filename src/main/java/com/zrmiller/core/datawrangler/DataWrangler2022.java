@@ -22,7 +22,7 @@ public class DataWrangler2022 extends DataWrangler {
     private int filesDownloaded;
 
     public void downloadAndProcessFullDataset() {
-        expectedFiles = DataValidator.validateFileCount2022();
+        expectedFiles = PlaceInfo.FILE_COUNT_2022 - DataValidator.validateFileCount2022();
         for (int i = 0; i < 78; i++) {
             File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i));
             if (file.exists())

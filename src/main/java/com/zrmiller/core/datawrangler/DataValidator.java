@@ -25,7 +25,7 @@ public class DataValidator {
         int fileCount = 0;
         for (int i = 0; i < PlaceInfo.fileOrder.length; i++) {
             File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i));
-            if(file.exists() && file.isFile())
+            if (file.exists() && file.isFile())
                 fileCount++;
         }
         return fileCount;

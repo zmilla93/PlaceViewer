@@ -16,7 +16,6 @@ public abstract class DownloadProgressPanel extends BaseDownloaderPanel {
     protected final int FPS = 10;
     protected Timer timer;
     protected DataWrangler wrangler;
-//    protected DataWrangler wrangler;
 
     public DownloadProgressPanel(DatasetManagerFrame datasetManagerFrame) {
         super(datasetManagerFrame);
@@ -48,7 +47,7 @@ public abstract class DownloadProgressPanel extends BaseDownloaderPanel {
     }
 
     public void setWrangler(DataWrangler wrangler) {
-        System.out.println("SET WRANGLER:"  + wrangler);
+        System.out.println("SET WRANGLER:" + wrangler);
         this.wrangler = wrangler;
         bindWrangler();
     }

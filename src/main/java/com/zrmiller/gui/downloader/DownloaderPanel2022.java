@@ -56,7 +56,7 @@ public class DownloaderPanel2022 extends CardDownloaderPanel {
         cardLayout.show(cardPanel, panel.toString());
     }
 
-    private void addListeners(){
+    private void addListeners() {
         downloadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

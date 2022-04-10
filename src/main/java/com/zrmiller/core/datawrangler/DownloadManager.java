@@ -38,7 +38,7 @@ public class DownloadManager {
         return wrangler;
     }
 
-    public static DataWrangler2022 runDownload2022(){
+    public static DataWrangler2022 runDownload2022() {
         DataWrangler2022 wrangler = new DataWrangler2022();
         executor.execute(new Runnable() {
             @Override
