@@ -2,6 +2,7 @@ package com.zrmiller.gui.mainframe;
 
 import com.zrmiller.App;
 import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.enums.ZoomLevel;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.parser.PlacePlayer;
 import com.zrmiller.core.utility.ZUtil;
@@ -31,6 +32,8 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     //    private int cachedZoom = zoom;
     private final int targetFPS = 60;
 
+    private ZoomLevel zoomLevel = ZoomLevel.Zoom_100;
+
     // Mouse Movement
     private int initialX;
     private int initialY;
@@ -50,8 +53,6 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     private Dataset dataset = Dataset.PLACE_2022;
 
     public CanvasPanel() {
-//        changeDataset();
-        setRequestFocusEnabled(true);
         int delay = targetFPS == -1 ? 0 : 1000 / targetFPS;
         timer = new Timer(delay, e -> {
             if (lastPaintedFrame != player.getFrameCount()) {
@@ -67,10 +68,6 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
 
     private void tryRepaint() {
         tryRepaint(false);
-    }
-
-    public void clear() {
-
     }
 
     public void tryRepaint(boolean force) {
@@ -149,11 +146,28 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
         }
     }
 
+    private void zoomIn() {
+        int zoom = zoomLevel.ordinal();
+        if (zoom >= 0) {
+            zoomLevel = ZoomLevel.values()[zoom - 1];
+        }
+    }
+
+    private void zoomOut() {
+        int zoom = zoomLevel.ordinal();
+        if ((zoom < ZoomLevel.values().length - 1)) {
+            zoomLevel = ZoomLevel.values()[zoom + 1];
+        }
+    }
+
     private void addListeners() {
         ColorManager.addListener(this);
         addMouseWheelListener(e -> {
-            int mod = e.getPreciseWheelRotation() < 0 ? 1 : -1;
-            zoom += mod;
+            int mod = e.getPreciseWheelRotation() < 0 ? -1 : 1;
+            // Up = -1, Down = 1
+            if (mod == -1) zoomOut();
+            else zoomIn();
+            zoom -= mod;
             zoom = ZUtil.clamp(zoom, -1, MAX_ZOOM);
             markForRepaint = true;
             alertListeners();
