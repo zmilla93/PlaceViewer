@@ -3,6 +3,7 @@ package com.zrmiller.gui.downloader;
 import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.DataWrangler2017;
 import com.zrmiller.core.datawrangler.DownloadManager;
+import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.windows.DatasetManagerFrame;
 
 import javax.swing.*;
@@ -86,7 +87,7 @@ public class DownloaderPanel2017 extends CardDownloaderPanel {
         if (fileSize > 0) {
             deleteButton.setEnabled(true);
             downloadButton.setEnabled(false);
-            fileSizeLabel.setText("File Size: " + fileSize / 1000000 + " MB");
+            fileSizeLabel.setText("File Size: " + ZUtil.byteCountToString(fileSize));
             cardLayout.show(cardPanel, Panel.INSTALLED.toString());
         } else {
             deleteButton.setEnabled(false);

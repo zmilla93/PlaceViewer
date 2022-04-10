@@ -8,14 +8,11 @@ import com.zrmiller.modules.styles.IThemeListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 
 public class DatasetManagerFrame extends JDialog implements IThemeListener {
 
     private final JButton browseButton = new JButton("Select Folder");
-    private final JButton openFolderButton = new JButton("Open Folder");
     private final JFileChooser fileChooser = new JFileChooser();
 
     private final JLabel directoryLabel = new JLabel();
@@ -31,9 +28,8 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
     private final DownloadProgressPanel downloadProgressPanel2022 = new DownloaderProgressPanel2022(this);
 
     public DatasetManagerFrame() {
-//        super("Dataset Manager");
         setTitle("Dataset Manager");
-        //FIXME:
+        //FIXME: modality
         setModalityType(ModalityType.APPLICATION_MODAL);
         setModal(true);
         container.setLayout(new BorderLayout());
@@ -129,6 +125,10 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
 
     public void validate2017() {
         downloaderPanel2017.validateData();
+    }
+
+    public void validate2022() {
+        downloaderPanel2022.validateData();
     }
 
     @Override

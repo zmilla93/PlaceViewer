@@ -2,10 +2,8 @@ package com.zrmiller.core.utility;
 
 import com.zrmiller.core.FileName;
 import com.zrmiller.core.TileEdit;
-import com.zrmiller.core.parser.PlaceParser2022;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;

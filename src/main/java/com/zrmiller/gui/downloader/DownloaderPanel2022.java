@@ -4,6 +4,7 @@ import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.DataWrangler2022;
 import com.zrmiller.core.datawrangler.DownloadManager;
 import com.zrmiller.core.utility.PlaceInfo;
+import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.windows.DatasetManagerFrame;
 
 import javax.swing.*;
@@ -15,8 +16,8 @@ public class DownloaderPanel2022 extends CardDownloaderPanel {
     private final JButton deleteButton = new JButton("Delete 2022");
     private final JButton downloadButton = new JButton("Download 2022");
 
-    private JLabel partialFileCountLabel = new JLabel();
-    private JLabel fileSizeLabel = new JLabel();
+    private final JLabel partialFileCountLabel = new JLabel();
+    private final JLabel fileSizeLabel = new JLabel();
 
     public enum Panel {UNINSTALLED, PARTIALLY_INSTALLED, FULLY_INSTALLED}
 
@@ -36,8 +37,8 @@ public class DownloaderPanel2022 extends CardDownloaderPanel {
 
         DownloaderInfoPanel fullyInstalledPanel = new DownloaderInfoPanel();
         fullyInstalledPanel.addText("Dataset Installed");
-        fullyInstalledPanel.addComponent(fileSizeLabel);
         fullyInstalledPanel.addText("File Count: " + PlaceInfo.FILE_COUNT_2022);
+        fullyInstalledPanel.addComponent(fileSizeLabel);
 
         cardPanel.add(uninstalledPanel, Panel.UNINSTALLED.toString());
         cardPanel.add(partiallyInstalledPanel, Panel.PARTIALLY_INSTALLED.toString());
@@ -71,6 +72,7 @@ public class DownloaderPanel2022 extends CardDownloaderPanel {
         int fileCount = DataValidator.validateFileCount2022();
         if (fileCount == PlaceInfo.FILE_COUNT_2022) {
             cardLayout.show(cardPanel, Panel.FULLY_INSTALLED.toString());
+            fileSizeLabel.setText("Total File Size: " + ZUtil.byteCountToString(DataValidator.validateFileSize2022()));
             downloadButton.setEnabled(false);
             deleteButton.setEnabled(true);
         } else if (fileCount < PlaceInfo.FILE_COUNT_2022 && fileCount > 0) {

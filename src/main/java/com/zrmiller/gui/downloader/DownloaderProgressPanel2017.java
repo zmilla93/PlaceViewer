@@ -6,6 +6,7 @@ import com.zrmiller.core.datawrangler.DownloadDisplay2017;
 import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2017;
 import com.zrmiller.core.enums.DownloadStage2017;
 import com.zrmiller.core.utility.PlaceInfo;
+import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.windows.DatasetManagerFrame;
 
 import javax.swing.*;
@@ -61,7 +62,7 @@ public class DownloaderProgressPanel2017 extends DownloadProgressPanel {
                 if (wrangler.getFileSizeInBytes() == 0)
                     setInfoLower("Loading...");
                 else
-                    setInfoLower(wrangler.getBytesDownloaded() / 1000000 + " MB / " + wrangler.getFileSizeInBytes() / 1000000 + " MB");
+                    setInfoLower(ZUtil.byteCountToString(wrangler.getBytesDownloaded()) + " / " + ZUtil.byteCountToString(wrangler.getFileSizeInBytes()));
             }
 
             @Override
@@ -70,7 +71,7 @@ public class DownloaderProgressPanel2017 extends DownloadProgressPanel {
                 if (wrangler.getFileSizeInBytes() == 0)
                     setInfoLower("Loading...");
                 else
-                    setInfoLower(wrangler.getBytesDownloaded() / 1000000 + " MB / " + wrangler.getFileSizeInBytes() / 1000000 + " MB");
+                    setInfoLower(ZUtil.byteCountToString(wrangler.getBytesDownloaded()) + " / " + ZUtil.byteCountToString(wrangler.getFileSizeInBytes()));
             }
 
             @Override
@@ -148,7 +149,7 @@ public class DownloaderProgressPanel2017 extends DownloadProgressPanel {
                 if (wrangler.getFileSizeInBytes() == 0)
                     setInfoLower("Loading...");
                 else
-                    setInfoLower(wrangler.getBytesDownloaded() / 1000000 + " MB / " + wrangler.getFileSizeInBytes() / 1000000 + " MB");
+                    setInfoLower(ZUtil.byteCountToString(wrangler.getBytesDownloaded()) + " / " + ZUtil.byteCountToString(wrangler.getFileSizeInBytes()));
             }
 
             @Override
@@ -157,7 +158,7 @@ public class DownloaderProgressPanel2017 extends DownloadProgressPanel {
                 if (wrangler.getFileSizeInBytes() == 0)
                     setInfoLower("Loading...");
                 else
-                    setInfoLower(wrangler.getBytesDownloaded() / 1000000 + " MB / " + wrangler.getFileSizeInBytes() / 1000000 + " MB");
+                    setInfoLower(ZUtil.byteCountToString(wrangler.getBytesDownloaded()) + " / " + ZUtil.byteCountToString(wrangler.getFileSizeInBytes()));
             }
 
             @Override

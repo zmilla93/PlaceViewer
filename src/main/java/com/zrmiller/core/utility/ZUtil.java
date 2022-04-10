@@ -5,8 +5,25 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.DecimalFormat;
 
 public class ZUtil {
+
+    private static final int BYTE_TO_MB = 1000000;
+    private static final int BYTE_TO_GB = 1000000000;
+
+    //    private static final DecimalFormat mbFormat = new DecimalFormat("#.");
+    private static final DecimalFormat gbFormat = new DecimalFormat("#.##");
+
+    public static String byteCountToString(long byteCount) {
+        String text = null;
+        if (byteCount > BYTE_TO_GB) {
+            text = gbFormat.format(byteCount / (float) BYTE_TO_GB) + " GB";
+        } else {
+            text = ((int) Math.ceil(byteCount / (float) BYTE_TO_MB) + " MB");
+        }
+        return text;
+    }
 
     public static int clamp(int value, int min, int max) {
         if (value < min) return min;

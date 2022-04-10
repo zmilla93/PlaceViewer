@@ -30,7 +30,6 @@ public class DataWrangler2022 extends DataWrangler {
             if (file.exists())
                 continue;
             downloadUnzipAndCompress(i);
-            filesDownloaded++;
         }
     }
 
@@ -42,11 +41,12 @@ public class DataWrangler2022 extends DataWrangler {
         for (IStatusTracker2022 tracker : statusTrackers)
             tracker.onFileDownloadComplete();
 //        System.out.println("Unzipping file #" + fileCount + "...");
-        unzip(FileName.ZIPPED_2022.getIndexedName(index), FileName.ORIGINAL_2022.getIndexedName(index), false);
+        unzip(FileName.ZIPPED_2022.getIndexedName(index), FileName.ORIGINAL_2022.getIndexedName(index));
         for (IStatusTracker2022 tracker : statusTrackers)
             tracker.onUnZipComplete();
 //        System.out.println("Compressing file #" + fileCount + "...");
         compressFile(FileName.ORIGINAL_2022.getIndexedName(index), FileName.BINARY_2022.getIndexedName(index));
+        filesDownloaded++;
         for (IStatusTracker2022 tracker : statusTrackers)
             tracker.onCompressComplete();
     }
