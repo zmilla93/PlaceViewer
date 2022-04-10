@@ -6,7 +6,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public abstract class PlaceParser {
+public abstract class AbstractPlaceParser {
 
     // FIXME : Move this to somewhere more logical
     private static final int META_BYTE_COUNT = 6;

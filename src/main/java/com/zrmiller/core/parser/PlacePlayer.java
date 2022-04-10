@@ -13,7 +13,7 @@ import java.util.TimerTask;
 public class PlacePlayer implements IDatasetListener {
 
     // General
-    private PlaceParser parser;
+    private AbstractPlaceParser parser;
     private int tileUpdatesPerSecond = 1000000;
     private final int LOGIC_UPDATES_PER_SECOND = 60;
     private int frameCount = 0;

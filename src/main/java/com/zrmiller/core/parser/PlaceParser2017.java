@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public class PlaceParser2017 extends PlaceParser {
+public class PlaceParser2017 extends AbstractPlaceParser {
 
     private BufferedInputStream reader;
     //    private final String directory;

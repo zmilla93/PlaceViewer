@@ -4,6 +4,11 @@ import com.zrmiller.core.enums.Dataset;
 
 import java.util.ArrayList;
 
+/**
+ * Controls which dataset is loaded.
+ * If something needs to change when the dataset changes,
+ * implement IDatasetListener
+ */
 public class DatasetManager {
 
     private static Dataset dataset = Dataset.PLACE_2017;

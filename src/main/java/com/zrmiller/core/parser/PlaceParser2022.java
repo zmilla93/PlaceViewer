@@ -9,7 +9,7 @@ import com.zrmiller.core.utility.PlaceInfo;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 
-public class PlaceParser2022 extends PlaceParser {
+public class PlaceParser2022 extends AbstractPlaceParser {
 
     private BufferedInputStream currentStream;
     private BufferedInputStream nextStream;

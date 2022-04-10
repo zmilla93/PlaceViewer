@@ -1,6 +1,6 @@
 package com.zrmiller.core.managers;
 
-import com.zrmiller.core.saving.savefiles.SettingsSaveFile;
+import com.zrmiller.core.savefiles.SettingsSaveFile;
 import com.zrmiller.modules.saving.SaveFile;
 
 import java.io.File;

@@ -40,12 +40,7 @@ public class DownloadManager {
 
     public static DataWrangler2022 runDownload2022() {
         DataWrangler2022 wrangler = new DataWrangler2022();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                wrangler.downloadAndProcessFullDataset();
-            }
-        });
+        executor.execute(wrangler::downloadAndProcessFullDataset);
         return wrangler;
     }
 
