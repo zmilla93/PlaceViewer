@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.text.NumberFormat;
 
-public class MainAppPanel extends JPanel implements ICanvasListener, IDatasetListener {
+public class MainPanel extends JPanel implements ICanvasListener, IDatasetListener {
 
     private final IntroPanel introPanel = new IntroPanel();
     private final CanvasPanel canvasPanel = new CanvasPanel();
@@ -24,7 +24,7 @@ public class MainAppPanel extends JPanel implements ICanvasListener, IDatasetLis
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel cardPanel = new JPanel(cardLayout);
 
-    public MainAppPanel() {
+    public MainPanel() {
         setLayout(new BorderLayout());
 
         // North Panel
@@ -43,8 +43,8 @@ public class MainAppPanel extends JPanel implements ICanvasListener, IDatasetLis
         southPanel.add(new SeparatorPanel(), BorderLayout.NORTH);
 
         // Card Panel
-        cardPanel.add(introPanel, Cards.INTRO.toString());
-        cardPanel.add(canvasPanel, Cards.CANVAS.toString());
+        cardPanel.add(introPanel, Card.INTRO.toString());
+        cardPanel.add(canvasPanel, Card.CANVAS.toString());
 
         JPanel p = new JPanel();
         p.add(new JLabel("W"));
@@ -54,14 +54,18 @@ public class MainAppPanel extends JPanel implements ICanvasListener, IDatasetLis
         add(cardPanel, BorderLayout.CENTER);
         add(southPanel, BorderLayout.SOUTH);
 
-        cardLayout.show(cardPanel, Cards.INTRO.toString());
+        cardLayout.show(cardPanel, Card.INTRO.toString());
 
         onPan(new Point(0, 0));
         addListeners();
         DatasetManager.addListener(this);
     }
 
-    private enum Cards {INTRO, CANVAS}
+    public void showCard(Card card) {
+        cardLayout.show(cardPanel, card.toString());
+    }
+
+    public enum Card {INTRO, CANVAS}
 
     private void addListeners() {
         canvasPanel.addListener(this);
@@ -85,9 +89,9 @@ public class MainAppPanel extends JPanel implements ICanvasListener, IDatasetLis
     @Override
     public void onDatasetChanged(Dataset dataset) {
         if (dataset != null) {
-            cardLayout.show(cardPanel, Cards.CANVAS.toString());
+            cardLayout.show(cardPanel, Card.CANVAS.toString());
         } else {
-            cardLayout.show(cardPanel, Cards.INTRO.toString());
+            cardLayout.show(cardPanel, Card.INTRO.toString());
         }
     }
 

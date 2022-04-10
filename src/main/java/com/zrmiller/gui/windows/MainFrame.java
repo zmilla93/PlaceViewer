@@ -1,7 +1,7 @@
 package com.zrmiller.gui.windows;
 
 import com.zrmiller.App;
-import com.zrmiller.gui.MainAppPanel;
+import com.zrmiller.gui.MainPanel;
 import com.zrmiller.gui.MainMenuBar;
 
 import javax.swing.*;
@@ -12,6 +12,8 @@ import java.awt.event.KeyEvent;
 public class MainFrame extends JFrame {
 
     private final Container container = getContentPane();
+    private final MainMenuBar mainMenuBar = new MainMenuBar();
+    private final MainPanel mainPanel = new MainPanel();
 
     public MainFrame() {
         super("PlaceViewer");
@@ -21,10 +23,9 @@ public class MainFrame extends JFrame {
         setSize(1200, 1000);
         container.setLayout(new BorderLayout());
 
-        MainMenuBar mainMenuBar = new MainMenuBar();
-        MainAppPanel mainAppPanel = new MainAppPanel();
+
         container.add(mainMenuBar, BorderLayout.NORTH);
-        container.add(mainAppPanel, BorderLayout.CENTER);
+        container.add(mainPanel, BorderLayout.CENTER);
 
         container.addKeyListener(new KeyAdapter() {
             @Override
@@ -33,6 +34,10 @@ public class MainFrame extends JFrame {
             }
         });
         setLocationRelativeTo(null);
+    }
+
+    public void showCard(MainPanel.Card card) {
+        mainPanel.showCard(card);
     }
 
 }
