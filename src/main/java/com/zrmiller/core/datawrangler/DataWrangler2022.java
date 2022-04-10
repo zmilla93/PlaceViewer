@@ -9,6 +9,8 @@ import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.PlaceInfo;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.zip.GZIPInputStream;
 
@@ -23,7 +25,7 @@ public class DataWrangler2022 extends DataWrangler {
 
     public void downloadAndProcessFullDataset() {
         expectedFiles = PlaceInfo.FILE_COUNT_2022 - DataValidator.validateFileCount2022();
-        for (int i = 0; i < 78; i++) {
+        for (int i = 0; i < PlaceInfo.FILE_COUNT_2022; i++) {
             File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i));
             if (file.exists())
                 continue;
@@ -33,17 +35,17 @@ public class DataWrangler2022 extends DataWrangler {
     }
 
     public void downloadUnzipAndCompress(int index) {
-        int fileCount = index + 1;
-        System.out.println("Downloading file #" + fileCount + "...");
+//        int fileCount = index + 1;
+//        System.out.println("Downloading file #" + fileCount + "...");
         // NOTE : File order is fixed right here
-        downloadFile(FileName.ZIPPED_2022.getIndexedName(index), Dataset.PLACE_2022.YEAR_STRING, getUrlString(PlaceInfo.fileOrder[index]));
+        downloadFile(FileName.ZIPPED_2022.getIndexedName(index), Dataset.PLACE_2022.YEAR_STRING, getUrlString(index));
         for (IStatusTracker2022 tracker : statusTrackers)
             tracker.onFileDownloadComplete();
-        System.out.println("Unzipping file #" + fileCount + "...");
-        unzip(FileName.ZIPPED_2022.getIndexedName(index), FileName.ORIGINAL_2022.getIndexedName(index));
+//        System.out.println("Unzipping file #" + fileCount + "...");
+        unzip(FileName.ZIPPED_2022.getIndexedName(index), FileName.ORIGINAL_2022.getIndexedName(index), false);
         for (IStatusTracker2022 tracker : statusTrackers)
             tracker.onUnZipComplete();
-        System.out.println("Compressing file #" + fileCount + "...");
+//        System.out.println("Compressing file #" + fileCount + "...");
         compressFile(FileName.ORIGINAL_2022.getIndexedName(index), FileName.BINARY_2022.getIndexedName(index));
         for (IStatusTracker2022 tracker : statusTrackers)
             tracker.onCompressComplete();
@@ -64,20 +66,27 @@ public class DataWrangler2022 extends DataWrangler {
         try {
             GZIPInputStream inputStream = new GZIPInputStream(new FileInputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source));
             OutputStream outputStream = new FileOutputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + dest);
-            byte[] buffer = new byte[1024];
+            final int BUFFER_SIZE = 1024;
+            byte[] buffer = new byte[BUFFER_SIZE];
             int length;
+            File zippedFile = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source);
+            bytesDownloaded = 0;
+//            fileSize = (int) zippedFile.length();
+            fileSize = (int) Files.size(Paths.get(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source));
             while ((length = inputStream.read(buffer)) > 0) {
                 outputStream.write(buffer, 0, length);
+                bytesDownloaded += BUFFER_SIZE / 2;
             }
             inputStream.close();
             outputStream.close();
             if (deleteSource) {
-                File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source);
-                boolean success = file.delete();
+                File sourceFile = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source);
+                boolean success = sourceFile.delete();
                 if (!success) {
                     System.out.println("Failed to delete:" + SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source);
                 }
             }
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,6 +102,8 @@ public class DataWrangler2022 extends DataWrangler {
             BufferedReader reader = new BufferedReader(new FileReader(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source));
             BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + dest));
             ColorConverter colorConverter = new ColorConverter();
+            writeYear(outputStream, Dataset.PLACE_2022.YEAR);
+            writeMetaInt(outputStream);
             while (reader.ready()) {
                 String line = reader.readLine();
                 String[] tokens = tokenizeLine(line, 5);

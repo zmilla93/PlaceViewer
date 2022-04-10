@@ -2,6 +2,8 @@ package com.zrmiller.core.parser;
 
 import com.zrmiller.core.FileName;
 import com.zrmiller.core.TileEdit;
+import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.PlaceInfo;
 
 import java.io.BufferedInputStream;
@@ -9,9 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class PlaceParser2022 implements IPlaceParser {
-
-    private String directory;
+public class PlaceParser2022 extends PlaceParser {
 
     private BufferedInputStream currentStream;
     private BufferedInputStream nextStream;
@@ -20,18 +20,14 @@ public class PlaceParser2022 implements IPlaceParser {
     private int fileLineCount;
     private TileEdit currentLine;
 
-    public PlaceParser2022(String directory) {
-        this.directory = directory;
-    }
-
     @Override
     public boolean openStream() {
         try {
-            currentStream = new BufferedInputStream(new FileInputStream(directory + getIndexedName(FileName.BINARY_2022.toString(), PlaceInfo.fileOrder[0])));
-            nextStream = new BufferedInputStream(new FileInputStream(directory + getIndexedName(FileName.BINARY_2022.toString(), PlaceInfo.fileOrder[1])));
+            currentStream = openInputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(0));
+            nextStream = openInputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(1));
             fileIndex = 2;
             return true;
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
@@ -88,9 +84,9 @@ public class PlaceParser2022 implements IPlaceParser {
         currentStream = nextStream;
         if (fileIndex < PlaceInfo.fileOrder.length) {
             try {
-                nextStream = new BufferedInputStream(new FileInputStream(directory + getIndexedName(FileName.BINARY_2022.toString(), PlaceInfo.fileOrder[fileIndex])));
+                nextStream = openInputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(fileIndex));
                 fileIndex++;
-            } catch (FileNotFoundException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
                 return false;
             }

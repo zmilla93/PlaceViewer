@@ -39,6 +39,7 @@ public class DownloaderProgressPanel2022 extends DownloadProgressPanel {
             @Override
             public void onCompressComplete() {
                 if (dataWrangler2022.getFilesDownloaded() == dataWrangler2022.getExpectedFiles()) {
+                    //FIXME : gets stuck
                     // TODO : Validate 2022
                     datasetManagerFrame.swapToDownloader();
                     timer.stop();

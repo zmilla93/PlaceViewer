@@ -10,7 +10,7 @@ public class PlaceInfo {
 
     public static final String CLEAN_LINE_COUNT_FORMATTED = NumberFormat.getInstance().format(CLEAN_LINE_COUNT);
 
-    public static final int FILE_COUNT_2022 = 78;
+    public static final int FILE_COUNT_2022 = 79;
 
     // 2022 Stats
     public static final long INITIAL_TIME_2017 = 1490136935548L;

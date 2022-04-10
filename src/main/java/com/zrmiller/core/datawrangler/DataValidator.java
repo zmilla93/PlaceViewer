@@ -31,4 +31,14 @@ public class DataValidator {
         return fileCount;
     }
 
+    public static long validateFileSize2022() {
+        long fileSize = 0;
+        for (int i = 0; i < PlaceInfo.fileOrder.length; i++) {
+            File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i));
+            if (file.exists() && file.isFile())
+                fileSize += file.length();
+        }
+        return fileSize;
+    }
+
 }

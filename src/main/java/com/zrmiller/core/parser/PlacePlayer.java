@@ -4,9 +4,7 @@ import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.IDatasetListener;
 import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.enums.Dataset;
-import com.zrmiller.core.managers.SaveManager;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Timer;
@@ -15,7 +13,7 @@ import java.util.TimerTask;
 public class PlacePlayer implements IDatasetListener {
 
     // General
-    private IPlaceParser parser;
+    private PlaceParser parser;
     private int tileUpdatesPerSecond = 1000000;
     private final int LOGIC_UPDATES_PER_SECOND = 60;
     private int frameCount = 0;
@@ -38,7 +36,7 @@ public class PlacePlayer implements IDatasetListener {
      * Stores color and heatmap data in flat arrays.
      */
     public PlacePlayer() {
-        parser = new PlaceParser2022(SaveManager.settingsSaveFile.data.dataDirectory + DatasetManager.currentDataset().YEAR_STRING + File.separator);
+        parser = new PlaceParser2022();
         DatasetManager.addListener(this);
     }
 
@@ -171,8 +169,7 @@ public class PlacePlayer implements IDatasetListener {
                 parser = new PlaceParser2017();
                 break;
             case PLACE_2022:
-                // FIXME:
-                parser = new PlaceParser2022("D:/Place/");
+                parser = new PlaceParser2022();
                 break;
         }
     }

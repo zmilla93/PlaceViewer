@@ -8,6 +8,8 @@ import com.zrmiller.modules.styles.IThemeListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
 public class DatasetManagerFrame extends JDialog implements IThemeListener {
@@ -99,6 +101,8 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
                 SaveManager.settingsSaveFile.data.dataDirectory = path + File.separator;
                 SaveManager.settingsSaveFile.saveToDisk();
                 updateDirectoryLabel();
+                downloaderPanel2017.validateData();
+                downloaderPanel2022.validateData();
             }
         });
     }

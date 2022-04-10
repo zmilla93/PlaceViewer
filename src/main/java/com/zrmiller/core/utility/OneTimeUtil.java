@@ -12,6 +12,10 @@ public class OneTimeUtil {
     private static String sortFileName = "";
     private static String originalFileName = "";
 
+    public static long getDownloadSize2022() {
+        return 0;
+    }
+
     public void cleanTimestamps(String inputPath, String outputPath) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(directory + inputPath));
@@ -67,10 +71,6 @@ public class OneTimeUtil {
         tokens[tokenIndex] = builder.toString();
         return tokens;
     }
-
-    //
-    // UTILITY FUNCTIONS
-    //
 
     private String indexedName(String input, int index) {
         return input.replaceFirst("INDEX", Integer.toString(index));

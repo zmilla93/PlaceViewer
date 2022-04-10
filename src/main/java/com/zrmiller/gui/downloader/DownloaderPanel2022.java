@@ -24,9 +24,9 @@ public class DownloaderPanel2022 extends CardDownloaderPanel {
         super(datasetManagerFrame);
 
         DownloaderInfoPanel uninstalledPanel = new DownloaderInfoPanel();
-        uninstalledPanel.addText("Total Download Size: 20 GB");
+        uninstalledPanel.addText("Total Download Size: 11.4 GB");
         uninstalledPanel.addText("Total Compressed Size: 1.49 GB");
-        uninstalledPanel.addText("File Count: 78");
+        uninstalledPanel.addText("File Count: " + PlaceInfo.FILE_COUNT_2022);
         uninstalledPanel.addText("Files will be downloaded, unzipped, then compressed one at a time.");
         uninstalledPanel.addText("This process can be paused.");
 
