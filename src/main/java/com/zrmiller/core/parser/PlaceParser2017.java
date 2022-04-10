@@ -5,8 +5,10 @@ import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 
-import java.io.*;
-import java.nio.ByteBuffer;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class PlaceParser2017 implements IPlaceParser {
 

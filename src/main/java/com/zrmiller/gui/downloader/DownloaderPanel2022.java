@@ -1,10 +1,14 @@
 package com.zrmiller.gui.downloader;
 
 import com.zrmiller.core.datawrangler.DataValidator;
+import com.zrmiller.core.datawrangler.DataWrangler2022;
+import com.zrmiller.core.datawrangler.DownloadManager;
 import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.gui.windows.DatasetManagerFrame;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class DownloaderPanel2022 extends CardDownloaderPanel {
 
@@ -43,11 +47,24 @@ public class DownloaderPanel2022 extends CardDownloaderPanel {
         addEastButton(deleteButton);
         addEastButton(downloadButton);
 
+        addListeners();
+
         validateData();
     }
 
     public void showPanel(Panel panel) {
         cardLayout.show(cardPanel, panel.toString());
+    }
+
+    private void addListeners(){
+        downloadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DataWrangler2022 wrangler2022 = DownloadManager.runDownload2022();
+                datasetManagerFrame.getProgressPanel2022().setWrangler(wrangler2022);
+                datasetManagerFrame.swapToProgress2022();
+            }
+        });
     }
 
     public void validateData() {

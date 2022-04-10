@@ -25,7 +25,7 @@ public class DataWrangler2017 extends DataWrangler {
             tracker.onFileDownloadComplete();
     }
 
-    public boolean sortAndMinify(boolean deleteSource) {
+    public boolean sortAndCompress(boolean deleteSource) {
         try {
             System.out.flush();
             BufferedReader reader = new BufferedReader(new FileReader(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.ORIGINAL_2017));

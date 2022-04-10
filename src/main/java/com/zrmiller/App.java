@@ -50,12 +50,12 @@ public class App {
     private static void testNewDownload() {
         DataWrangler2022 d = new DataWrangler2022();
 //        d.downloadFile("CoolTest.gzip", "https://placedata.reddit.com/data/canvas-history/2022_place_canvas_history-000000000000.csv.gzip");
-        d.downloadUnzipAndMinify(23);
+        d.downloadUnzipAndCompress(23);
     }
 
     private static void tempDownloadDataset() {
         DataWrangler2022 dataDownloader = new DataWrangler2022();
-        dataDownloader.downloadUnzipAndMinify(23);
+        dataDownloader.downloadUnzipAndCompress(23);
     }
 
 

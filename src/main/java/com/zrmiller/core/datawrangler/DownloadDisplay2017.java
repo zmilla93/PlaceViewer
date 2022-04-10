@@ -16,8 +16,8 @@ public class DownloadDisplay2017 implements IDownloadDisplay2017 {
             case SORTING:
                 displaySorting();
                 break;
-            case MINIFYING:
-                displayMinifying();
+            case COMPRESSING:
+                displayCompressing();
                 break;
         }
     }
@@ -38,7 +38,7 @@ public class DownloadDisplay2017 implements IDownloadDisplay2017 {
     }
 
     @Override
-    public void displayMinifying() {
+    public void displayCompressing() {
 
     }
 }

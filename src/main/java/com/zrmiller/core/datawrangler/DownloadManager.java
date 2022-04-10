@@ -9,12 +9,13 @@ public class DownloadManager {
 
     private static final Executor executor = Executors.newSingleThreadExecutor();
 
-    public static DataWrangler2017 downloadAndMinify2017() {
+    public static DataWrangler2017 runDownload2017() {
         DataWrangler2017 wrangler = new DataWrangler2017();
+        // FIXME : this should be a made a direct call
         IStatusTracker2017 tracker = new IStatusTracker2017() {
             @Override
             public void onFileDownloadComplete() {
-                executor.execute(() -> wrangler.sortAndMinify(true));
+                executor.execute(() -> wrangler.sortAndCompress(true));
             }
 
             @Override
@@ -37,8 +38,15 @@ public class DownloadManager {
         return wrangler;
     }
 
-    public static void runDownload2022(){
-
+    public static DataWrangler2022 runDownload2022(){
+        DataWrangler2022 wrangler = new DataWrangler2022();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                wrangler.downloadAndProcessFullDataset();
+            }
+        });
+        return wrangler;
     }
 
 }

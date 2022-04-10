@@ -21,12 +21,8 @@ public class DownloaderProgressPanel2017 extends DownloadProgressPanel {
         addListeners();
     }
 
-    private void addListeners() {
-        // FIXME:
-        cancelButton.addActionListener(e -> datasetManagerFrame.swapToDatasetPanel());
-    }
-
-    public void displayDownload2017() {
+    @Override
+    public void bindWrangler() {
         downloadStage2017 = DownloadStage2017.DOWNLOADING;
         setInfoUpper("Downloading 2017 dataset...");
         setInfoLower("Loading...");
@@ -48,13 +44,14 @@ public class DownloaderProgressPanel2017 extends DownloadProgressPanel {
             public void onFileSortComplete() {
                 setInfoUpper("Saving dataset...");
                 setInfoLower("This should be quick...");
-                downloadStage2017 = DownloadStage2017.MINIFYING;
+                downloadStage2017 = DownloadStage2017.COMPRESSING;
             }
 
             @Override
             public void onCompressComplete() {
                 datasetManagerFrame.validate2017();
-                datasetManagerFrame.swapToDatasetPanel();
+                datasetManagerFrame.swapToDownloader();
+                timer.stop();
             }
         };
         DownloadDisplay2017 downloadDisplay2017 = new DownloadDisplay2017() {
@@ -86,7 +83,94 @@ public class DownloaderProgressPanel2017 extends DownloadProgressPanel {
             }
 
             @Override
-            public void displayMinifying() {
+            public void displayCompressing() {
+                progressBar.setValue(TileEdit.getSortProgress());
+                if (wrangler.getBytesWritten() < 1000)
+                    setInfoLower("This should be quick...");
+                else
+                    setInfoLower(wrangler.getBytesWritten() / 1000000 + " / " + PlaceInfo.CLEAN_LINE_COUNT * TileEdit.BYTE_COUNT);
+            }
+        };
+
+        timer = new Timer(1000 / FPS, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                downloadDisplay2017.proc(downloadStage2017);
+            }
+        });
+        System.out.println("WRANGLE:" + wrangler);
+        DataWrangler2017 wrangler2017 = (DataWrangler2017) (wrangler);
+        wrangler2017.addStatusTracker(tracker);
+        timer.start();
+    }
+
+    private void addListeners() {
+        // FIXME:
+        cancelButton.addActionListener(e -> datasetManagerFrame.swapToDownloader());
+    }
+
+    public void displayDownload2017() {
+        downloadStage2017 = DownloadStage2017.DOWNLOADING;
+        setInfoUpper("Downloading 2017 dataset...");
+        setInfoLower("Loading...");
+        IStatusTracker2017 tracker = new IStatusTracker2017() {
+            @Override
+            public void onFileDownloadComplete() {
+                setInfoUpper("Compressing dataset...");
+                downloadStage2017 = DownloadStage2017.READING;
+            }
+
+            @Override
+            public void onFileReadComplete() {
+                setInfoUpper("");
+                setInfoLower("Sorting dataset... 0%");
+                downloadStage2017 = DownloadStage2017.SORTING;
+            }
+
+            @Override
+            public void onFileSortComplete() {
+                setInfoUpper("Saving dataset...");
+                setInfoLower("This should be quick...");
+                downloadStage2017 = DownloadStage2017.COMPRESSING;
+            }
+
+            @Override
+            public void onCompressComplete() {
+                datasetManagerFrame.validate2017();
+                datasetManagerFrame.swapToDownloader();
+                timer.stop();
+            }
+        };
+        DownloadDisplay2017 downloadDisplay2017 = new DownloadDisplay2017() {
+            @Override
+            public void displayDownloading() {
+                progressBar.setValue(wrangler.getProgress());
+                if (wrangler.getFileSizeInBytes() == 0)
+                    setInfoLower("Loading...");
+                else
+                    setInfoLower(wrangler.getBytesDownloaded() / 1000000 + " MB / " + wrangler.getFileSizeInBytes() / 1000000 + " MB");
+            }
+
+            @Override
+            public void displayReading() {
+                progressBar.setValue(wrangler.getProgress());
+                if (wrangler.getFileSizeInBytes() == 0)
+                    setInfoLower("Loading...");
+                else
+                    setInfoLower(wrangler.getBytesDownloaded() / 1000000 + " MB / " + wrangler.getFileSizeInBytes() / 1000000 + " MB");
+            }
+
+            @Override
+            public void displaySorting() {
+                progressBar.setValue(TileEdit.getSortProgress());
+                if (TileEdit.sortCount == 0)
+                    setInfoLower("Sorting dataset... 0%");
+                else
+                    setInfoLower("Sorting dataset... " + TileEdit.getSortProgress() + "%");
+            }
+
+            @Override
+            public void displayCompressing() {
                 progressBar.setValue(TileEdit.getSortProgress());
                 if (wrangler.getBytesWritten() < 1000)
                     setInfoLower("This should be quick...");
@@ -101,7 +185,6 @@ public class DownloaderProgressPanel2017 extends DownloadProgressPanel {
                 downloadDisplay2017.proc(downloadStage2017);
             }
         });
-
         DataWrangler2017 wrangler2017 = (DataWrangler2017) (wrangler);
         wrangler2017.addStatusTracker(tracker);
         timer.start();

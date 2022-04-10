@@ -8,6 +8,6 @@ public interface IDownloadDisplay2017 {
 
     void displaySorting();
 
-    void displayMinifying();
+    void displayCompressing();
 
 }

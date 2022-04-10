@@ -1,59 +1,52 @@
 package com.zrmiller.core.datawrangler;
 
 import com.zrmiller.core.ColorConverter;
+import com.zrmiller.core.FileName;
 import com.zrmiller.core.TileEdit;
+import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2022;
 import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.PlaceInfo;
 
 import java.io.*;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.zip.GZIPInputStream;
-
-// Dataset Details - https://www.reddit.com/r/place/comments/txvk2d/rplace_datasets_april_fools_2022/
 
 public class DataWrangler2022 extends DataWrangler {
 
     private static final String downloadURLTemplate = "https://placedata.reddit.com/data/canvas-history/2022_place_canvas_history-INDEX.csv.gzip";
 
-    private String directory = "D:/Place/2022-Binary/";
+    private final ArrayList<IStatusTracker2022> statusTrackers = new ArrayList<>();
 
-    private String prefix = "Place_2022_INDEX";
-    private String binaryExtension = ".placetiles";
-
-    private String zipFileName = prefix + "_Archive.gzip";
-    private String originalFileName = prefix + "_Original.txt";
-    private String binaryFileName = prefix + binaryExtension;
-
-    private final HashSet<Integer> filesToIgnore = new HashSet<>();
-
-
-    public DataWrangler2022() {
-
-    }
+    private int expectedFiles;
+    private int filesDownloaded;
 
     public void downloadAndProcessFullDataset() {
+        expectedFiles = DataValidator.validateFileCount2022();
         for (int i = 0; i < 78; i++) {
-            downloadUnzipAndMinify(i);
+            File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i));
+            if (file.exists())
+                continue;
+            downloadUnzipAndCompress(i);
+            filesDownloaded++;
         }
     }
 
-    public void downloadUnzipAndMinify(int index) {
+    public void downloadUnzipAndCompress(int index) {
         int fileCount = index + 1;
         System.out.println("Downloading file #" + fileCount + "...");
-        downloadFile(getIndexedName(zipFileName, index), Dataset.PLACE_2017.YEAR_STRING, getUrlString(index));
+        // NOTE : File order is fixed right here
+        downloadFile(FileName.ZIPPED_2022.getIndexedName(index), Dataset.PLACE_2022.YEAR_STRING, getUrlString(PlaceInfo.fileOrder[index]));
+        for (IStatusTracker2022 tracker : statusTrackers)
+            tracker.onFileDownloadComplete();
         System.out.println("Unzipping file #" + fileCount + "...");
-        unzip(getIndexedName(zipFileName, index), getIndexedName(originalFileName, index));
-        System.out.println("Minifying file #" + fileCount + "...");
-        minifyFile(getIndexedName(originalFileName, index), getIndexedName(binaryFileName, index));
-    }
-
-    private String getIndexedName(String input, int index) {
-        return input.replaceFirst("INDEX", Integer.toString(index));
-    }
-
-    public void addFileToIgnore(int index) {
-        if (!filesToIgnore.contains(index))
-            filesToIgnore.add(index);
+        unzip(FileName.ZIPPED_2022.getIndexedName(index), FileName.ORIGINAL_2022.getIndexedName(index));
+        for (IStatusTracker2022 tracker : statusTrackers)
+            tracker.onUnZipComplete();
+        System.out.println("Compressing file #" + fileCount + "...");
+        compressFile(FileName.ORIGINAL_2022.getIndexedName(index), FileName.BINARY_2022.getIndexedName(index));
+        for (IStatusTracker2022 tracker : statusTrackers)
+            tracker.onCompressComplete();
     }
 
     private String getUrlString(int index) {
@@ -63,38 +56,14 @@ public class DataWrangler2022 extends DataWrangler {
         return downloadURLTemplate.replaceFirst("INDEX", builder.toString());
     }
 
-//    public boolean downloadFile(String fileName, String urlString) {
-//        try {
-//            HttpURLConnection httpConnection = (HttpURLConnection) (new URL(urlString).openConnection());
-//            long fileSize = httpConnection.getContentLength();
-//            BufferedInputStream inputStream = new BufferedInputStream(httpConnection.getInputStream());
-//            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(directory + fileName));
-//            byte[] data = new byte[BYTE_BUFFER_SIZE];
-//            int bytesDownloaded = 0;
-//            int numBytesRead;
-//            while ((numBytesRead = inputStream.read(data, 0, BYTE_BUFFER_SIZE)) >= 0) {
-//                bytesDownloaded += numBytesRead;
-//                float currentProgress = (bytesDownloaded / (float) fileSize);
-//                outputStream.write(data, 0, numBytesRead);
-////                System.out.println("CURP:" + currentProgress);
-//            }
-//            inputStream.close();
-//            outputStream.close();
-//            return true;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
-
     public boolean unzip(String source, String dest) {
         return unzip(source, dest, true);
     }
 
     public boolean unzip(String source, String dest, boolean deleteSource) {
         try {
-            GZIPInputStream inputStream = new GZIPInputStream(new FileInputStream(directory + source));
-            OutputStream outputStream = new FileOutputStream(directory + dest);
+            GZIPInputStream inputStream = new GZIPInputStream(new FileInputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source));
+            OutputStream outputStream = new FileOutputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + dest);
             byte[] buffer = new byte[1024];
             int length;
             while ((length = inputStream.read(buffer)) > 0) {
@@ -103,10 +72,10 @@ public class DataWrangler2022 extends DataWrangler {
             inputStream.close();
             outputStream.close();
             if (deleteSource) {
-                File file = new File(directory + source);
+                File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source);
                 boolean success = file.delete();
                 if (!success) {
-                    System.out.println("Failed to delete:" + directory + source);
+                    System.out.println("Failed to delete:" + SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source);
                 }
             }
         } catch (IOException e) {
@@ -115,14 +84,14 @@ public class DataWrangler2022 extends DataWrangler {
         return false;
     }
 
-    public boolean minifyFile(String source, String dest) {
-        return minifyFile(source, dest, true);
+    public boolean compressFile(String source, String dest) {
+        return compressFile(source, dest, true);
     }
 
-    public boolean minifyFile(String source, String dest, boolean deleteSource) {
+    public boolean compressFile(String source, String dest, boolean deleteSource) {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(directory + source));
-            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(directory + dest));
+            BufferedReader reader = new BufferedReader(new FileReader(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source));
+            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + dest));
             ColorConverter colorConverter = new ColorConverter();
             while (reader.ready()) {
                 String line = reader.readLine();
@@ -135,7 +104,7 @@ public class DataWrangler2022 extends DataWrangler {
             reader.close();
             outputStream.close();
             if (deleteSource) {
-                File file = new File(directory + source);
+                File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source);
                 return file.delete();
             }
             return true;
@@ -145,15 +114,24 @@ public class DataWrangler2022 extends DataWrangler {
         }
     }
 
-//    private boolean lineStartsWithNumber(String line) {
-//        int c = line.charAt(0);
-//        return c >= 48 && c <= 57;
-//    }
+    public int getExpectedFiles() {
+        return expectedFiles;
+    }
 
-//    private int getTimestamp(String timeToken) throws IllegalArgumentException {
-//        String timeString = timeToken.substring(0, timeToken.length() - 4);
-//        Timestamp timestamp = Timestamp.valueOf(timeString);
-//        return (int) (timestamp.getTime() - (long) PlaceInfo.TIME_CORRECTION_2022);
-//    }
+    public int getFilesDownloaded() {
+        return filesDownloaded;
+    }
+
+    public void addStatusTracker(IStatusTracker2022 tracker) {
+        statusTrackers.add(tracker);
+    }
+
+    public void removeStatusTracker(IStatusTracker2022 tracker) {
+        statusTrackers.remove(tracker);
+    }
+
+    public void removeAllStatusTrackers() {
+        statusTrackers.clear();
+    }
 
 }

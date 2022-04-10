@@ -20,6 +20,8 @@ public abstract class DataWrangler {
     private static final int BYTE_BUFFER_SIZE = 1024 * 4;
 
     protected boolean downloadFile(String fileName, String yearString, String urlString) {
+        if (!validateDirectory(yearString))
+            return false;
         try {
             HttpURLConnection httpConnection = (HttpURLConnection) (new URL(urlString).openConnection());
             fileSize = httpConnection.getContentLength();

@@ -2,10 +2,7 @@ package com.zrmiller.gui.windows;
 
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.ZUtil;
-import com.zrmiller.gui.downloader.DownloadProgressPanel;
-import com.zrmiller.gui.downloader.DownloaderPanel2017;
-import com.zrmiller.gui.downloader.DownloaderPanel2022;
-import com.zrmiller.gui.downloader.DownloaderProgressPanel2017;
+import com.zrmiller.gui.downloader.*;
 import com.zrmiller.modules.styles.ColorManager;
 import com.zrmiller.modules.styles.IThemeListener;
 
@@ -28,7 +25,8 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
 
     private final DownloaderPanel2017 downloaderPanel2017 = new DownloaderPanel2017(this);
     private final DownloaderPanel2022 downloaderPanel2022 = new DownloaderPanel2022(this);
-    private final DownloadProgressPanel downloadProgressPanel = new DownloaderProgressPanel2017(this);
+    private final DownloadProgressPanel downloadProgressPanel2017 = new DownloaderProgressPanel2017(this);
+    private final DownloadProgressPanel downloadProgressPanel2022 = new DownloaderProgressPanel2022(this);
 
     public DatasetManagerFrame() {
 //        super("Dataset Manager");
@@ -74,7 +72,8 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
         datasetPanel.add(tabbedPane, BorderLayout.CENTER);
 
         cardPanel.add(datasetPanel, "P1");
-        cardPanel.add(downloadProgressPanel, "P2");
+        cardPanel.add(downloadProgressPanel2017, "P2");
+        cardPanel.add(downloadProgressPanel2022, "P3");
         cardLayout.show(cardPanel, "P1");
 
         container.add(new JSeparator(), BorderLayout.NORTH);
@@ -104,17 +103,24 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
         });
     }
 
-    public void swapToDatasetPanel() {
+    public void swapToDownloader() {
         cardLayout.show(cardPanel, "P1");
     }
 
-    public void swapToDownloadPanel() {
+    public void swapToProgress2017() {
         cardLayout.show(cardPanel, "P2");
-//        downloadProgressPanel.startTimer();
     }
 
-    public DownloadProgressPanel getProgressPanel() {
-        return this.downloadProgressPanel;
+    public void swapToProgress2022() {
+        cardLayout.show(cardPanel, "P3");
+    }
+
+    public DownloadProgressPanel getProgressPanel2017() {
+        return downloadProgressPanel2017;
+    }
+
+    public DownloadProgressPanel getProgressPanel2022() {
+        return downloadProgressPanel2022;
     }
 
     public void validate2017() {

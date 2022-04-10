@@ -45,20 +45,19 @@ public class DownloaderPanel2017 extends CardDownloaderPanel {
             showTestScreen();
             return;
         }
-        DataWrangler2017 dataWrangler2017 = DownloadManager.downloadAndMinify2017();
-        datasetManagerFrame.getProgressPanel().setWrangler(dataWrangler2017);
-        ((DownloaderProgressPanel2017) datasetManagerFrame.getProgressPanel()).displayDownload2017();
-        datasetManagerFrame.swapToDownloadPanel();
+        DataWrangler2017 dataWrangler2017 = DownloadManager.runDownload2017();
+        datasetManagerFrame.getProgressPanel2017().setWrangler(dataWrangler2017);
+        datasetManagerFrame.swapToProgress2017();
     }
 
     private void showTestScreen() {
-        datasetManagerFrame.getProgressPanel().setInfoUpper("Downloading 2017 Dataset...");
+        datasetManagerFrame.getProgressPanel2017().setInfoUpper("Downloading 2017 Dataset...");
         int low = 1245, high = 5835;
-        datasetManagerFrame.getProgressPanel().setInfoLower(low + " MB / " + high + " MB");
-        datasetManagerFrame.getProgressPanel().getProgressBar().setMinimum(0);
-        datasetManagerFrame.getProgressPanel().getProgressBar().setMaximum(high);
-        datasetManagerFrame.getProgressPanel().getProgressBar().setValue(low);
-        datasetManagerFrame.swapToDownloadPanel();
+        datasetManagerFrame.getProgressPanel2017().setInfoLower(low + " MB / " + high + " MB");
+        datasetManagerFrame.getProgressPanel2017().getProgressBar().setMinimum(0);
+        datasetManagerFrame.getProgressPanel2017().getProgressBar().setMaximum(high);
+        datasetManagerFrame.getProgressPanel2017().getProgressBar().setValue(low);
+        datasetManagerFrame.swapToProgress2017();
     }
 
     private void addListeners() {
