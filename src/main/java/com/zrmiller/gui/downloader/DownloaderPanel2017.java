@@ -3,13 +3,11 @@ package com.zrmiller.gui.downloader;
 import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.DataWrangler2017;
 import com.zrmiller.core.datawrangler.DownloadManager;
-import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.windows.DatasetManagerFrame;
 
 import javax.swing.*;
-import java.awt.*;
 
-public class DownloaderPanel2017 extends BaseDownloaderPanel {
+public class DownloaderPanel2017 extends CardDownloaderPanel {
 
     private final JLabel fileSizeLabel = new JLabel();
     protected JButton deleteButton = new JButton("Delete");
@@ -23,10 +21,17 @@ public class DownloaderPanel2017 extends BaseDownloaderPanel {
         deleteButton.setText("Delete 2017");
         downloadButton.setText("Download 2017");
 
-        cardPanel.add(uninstalledPanel(), Panel.UNINSTALLED.toString());
-        cardPanel.add(installedPanel(), Panel.INSTALLED.toString());
+        DownloaderInfoPanel uninstalledPanel = new DownloaderInfoPanel();
+        uninstalledPanel.addText("Download Size: 1 GB");
+        uninstalledPanel.addText("Compressed Size: 162 MB");
+        uninstalledPanel.addText("Data will be downloaded into a single file, compressed, then sorted.");
 
-        centerPanel.add(cardPanel, BorderLayout.CENTER);
+        DownloaderInfoPanel installedPanel = new DownloaderInfoPanel();
+        installedPanel.addText("Dataset Installed");
+        installedPanel.addComponent(fileSizeLabel);
+
+        cardPanel.add(uninstalledPanel, Panel.UNINSTALLED.toString());
+        cardPanel.add(installedPanel, Panel.INSTALLED.toString());
 
         addEastButton(deleteButton);
         addEastButton(downloadButton);
@@ -35,38 +40,6 @@ public class DownloaderPanel2017 extends BaseDownloaderPanel {
         validateData();
     }
 
-    private JPanel installedPanel() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gc = ZUtil.getGC();
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        gc.weightx = 1;
-        panel.add(new JLabel("Dataset Installed"), gc);
-        gc.gridy++;
-        panel.add(fileSizeLabel, gc);
-        gc.gridy++;
-        return panel;
-    }
-
-    private JPanel uninstalledPanel() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gc = ZUtil.getGC();
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        gc.weightx = 1;
-        panel.add(new JLabel("Download Size: 1 GB"), gc);
-        gc.gridy++;
-        panel.add(new JLabel("Compressed Size: 162 MB"), gc);
-        gc.gridy++;
-        panel.add(new JLabel("Data will be downloaded into a single file, sorted, compressed, then the original file deleted."), gc);
-        gc.gridy++;
-        JPanel infoBufferPanel = new JPanel(new GridBagLayout());
-        gc = ZUtil.getGC();
-        gc.weightx = 1;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        infoBufferPanel.add(panel, gc);
-        return panel;
-    }
-
-
     private void runDownload() {
         if (SHOW_TEST_SCREEN) {
             showTestScreen();
@@ -74,7 +47,7 @@ public class DownloaderPanel2017 extends BaseDownloaderPanel {
         }
         DataWrangler2017 dataWrangler2017 = DownloadManager.downloadAndMinify2017();
         datasetManagerFrame.getProgressPanel().setWrangler(dataWrangler2017);
-        datasetManagerFrame.getProgressPanel().displayDownload2017();
+        ((DownloaderProgressPanel2017) datasetManagerFrame.getProgressPanel()).displayDownload2017();
         datasetManagerFrame.swapToDownloadPanel();
     }
 

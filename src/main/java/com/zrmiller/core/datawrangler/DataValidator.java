@@ -21,11 +21,14 @@ public class DataValidator {
         return -1;
     }
 
-    public static boolean validate2022() {
+    public static int validateFileCount2022() {
+        int fileCount = 0;
         for (int i = 0; i < PlaceInfo.fileOrder.length; i++) {
-//            File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileNames )
+            File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i));
+            if(file.exists() && file.isFile())
+                fileCount++;
         }
-        return false;
+        return fileCount;
     }
 
 }

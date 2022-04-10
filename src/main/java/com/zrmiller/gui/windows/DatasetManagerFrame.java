@@ -5,6 +5,7 @@ import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.downloader.DownloadProgressPanel;
 import com.zrmiller.gui.downloader.DownloaderPanel2017;
 import com.zrmiller.gui.downloader.DownloaderPanel2022;
+import com.zrmiller.gui.downloader.DownloaderProgressPanel2017;
 import com.zrmiller.modules.styles.ColorManager;
 import com.zrmiller.modules.styles.IThemeListener;
 
@@ -27,7 +28,7 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
 
     private final DownloaderPanel2017 downloaderPanel2017 = new DownloaderPanel2017(this);
     private final DownloaderPanel2022 downloaderPanel2022 = new DownloaderPanel2022(this);
-    private final DownloadProgressPanel downloadProgressPanel = new DownloadProgressPanel(this);
+    private final DownloadProgressPanel downloadProgressPanel = new DownloaderProgressPanel2017(this);
 
     public DatasetManagerFrame() {
 //        super("Dataset Manager");

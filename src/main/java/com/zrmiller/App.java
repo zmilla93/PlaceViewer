@@ -5,7 +5,6 @@ import com.zrmiller.core.TileEdit;
 import com.zrmiller.core.datawrangler.DataWrangler2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.parser.PlaceParser2022;
-import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.gui.FrameManager;
 
 import javax.swing.*;
@@ -19,8 +18,6 @@ public class App {
     public static ImageIcon APP_ICON = new ImageIcon(Objects.requireNonNull(App.class.getResource("/place.png")));
 
     public static void main(String[] args) {
-        System.out.println("File size : " + PlaceInfo.CLEAN_LINE_COUNT * TileEdit.BYTE_COUNT);
-        System.out.println("M:" + Dataset.PLACE_2017.ordinal());
         try {
             SwingUtilities.invokeAndWait(() -> {
                 FrameManager.init();

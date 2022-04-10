@@ -10,16 +10,7 @@ public class PlaceInfo {
 
     public static final String CLEAN_LINE_COUNT_FORMATTED = NumberFormat.getInstance().format(CLEAN_LINE_COUNT);
 
-    public static int CANVAS_2017_X = 1001;
-    public static int CANVAS_2017_Y = 1001;
-
-    public static int CANVAS_2022_X = 2000;
-    public static int CANVAS_2022_Y = 2000;
-
-//    public static int CANVAS_SIZE_X = 2000;
-//    public static int CANVAS_SIZE_Y = 2000;
-
-//    public static int CANVAS_SIZE_X = 1001;
+    public static final int FILE_COUNT_2022 = 78;
 
     // 2022 Stats
     public static final long INITIAL_TIME_2017 = 1490136935548L;
