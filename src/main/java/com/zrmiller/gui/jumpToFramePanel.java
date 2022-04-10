@@ -15,7 +15,7 @@ public class jumpToFramePanel extends JPanel {
     private final CanvasPanel canvasPanel;
 
     private final JButton jumpToFrameButton = new JButton("Jump to Frame");
-    private final JTextField frameInput = new JTextField("123");
+    private final JTextField frameInput = new JTextField("0");
 
     public jumpToFramePanel(CanvasPanel canvasPanel, PlacePlayer player) {
         this.canvasPanel = canvasPanel;

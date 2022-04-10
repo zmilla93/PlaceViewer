@@ -17,7 +17,7 @@ public class FrameManager {
         ColorManager.addFrame(dataDownloader);
         ColorManager.setTheme(ColorTheme.SOLARIZED_LIGHT);
         mainFrame.setVisible(true);
-        dataDownloader.setVisible(true);
+//        dataDownloader.setVisible(true);
     }
 
 }

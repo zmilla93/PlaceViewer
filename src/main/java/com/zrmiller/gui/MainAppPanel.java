@@ -8,6 +8,7 @@ import java.text.NumberFormat;
 
 public class MainAppPanel extends JPanel implements ICanvasListener {
 
+    private final IntroPanel introPanel = new IntroPanel();
     private final CanvasPanel canvasPanel = new CanvasPanel();
 
     private final JPanel southPanel = new JPanel(new BorderLayout());
@@ -16,6 +17,11 @@ public class MainAppPanel extends JPanel implements ICanvasListener {
     private final JLabel zoomLabel = new JLabel("100%");
 
     private final JPanel northPanel = new JPanel(new BorderLayout());
+
+    private final CardLayout cardLayout = new CardLayout();
+    private final JPanel cardPanel = new JPanel(cardLayout);
+
+    private enum Cards {INTRO, CANVAS}
 
     public MainAppPanel() {
         setLayout(new BorderLayout());
@@ -35,10 +41,19 @@ public class MainAppPanel extends JPanel implements ICanvasListener {
         southPanel.add(southRightPanel, BorderLayout.EAST);
         southPanel.add(new SeparatorPanel(), BorderLayout.NORTH);
 
+        // Card Panel
+        cardPanel.add(introPanel, Cards.INTRO.toString());
+        cardPanel.add(canvasPanel, Cards.CANVAS.toString());
+
+        JPanel p = new JPanel();
+        p.add(new JLabel("W"));
+
         // Main Panel
         add(northPanel, BorderLayout.NORTH);
+        add(cardPanel, BorderLayout.CENTER);
         add(southPanel, BorderLayout.SOUTH);
-        add(canvasPanel, BorderLayout.CENTER);
+
+        cardLayout.show(cardPanel, Cards.INTRO.toString());
 
         onPan(new Point(0, 0));
         addListeners();
