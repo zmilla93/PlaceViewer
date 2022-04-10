@@ -2,16 +2,14 @@ package com.zrmiller.modules.styles;
 
 import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.intellijthemes.*;
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMonokaiProIJTheme;
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatNightOwlContrastIJTheme;
 
 /**
  * References to all color themes.
+ * https://github.com/JFormDesigner/FlatLaf/tree/main/flatlaf-intellij-themes#themes
+ * <p>
+ * If you found this file, have fun trying out the extra themes!
  */
 public enum ColorTheme {
-
-    // https://github.com/JFormDesigner/FlatLaf/tree/main/flatlaf-intellij-themes#themes
-
     //    ARK(new FlatArcIJTheme()),
     ARK_ORANGE(new FlatArcOrangeIJTheme()),
     //    ARK_DARK(new FlatArcDarkIJTheme()),
@@ -21,8 +19,8 @@ public enum ColorTheme {
 //    CYAN_LIGHT(new FlatCyanLightIJTheme()),
 //    DARK_FLAT(new FlatDarkFlatIJTheme()),
     DARK_PURPLE(new FlatDarkPurpleIJTheme()),
-//    DRACULA(new FlatDraculaIJTheme()),
-    //    GRADIANTO_DARK_FUCHSIA(new FlatGradiantoDarkFuchsiaIJTheme()),
+    //    DRACULA(new FlatDraculaIJTheme()),
+//    GRADIANTO_DARK_FUCHSIA(new FlatGradiantoDarkFuchsiaIJTheme()),
 //    GRADIANTO_DEEP_OCEAN(new FlatGradiantoDeepOceanIJTheme()),
 //    GRADIANTO_MIDNIGHT_BLUE(new FlatGradiantoMidnightBlueIJTheme()),
 //    GRADIANTO_NATURE_GREEN(new FlatGradiantoNatureGreenIJTheme()),
@@ -49,18 +47,15 @@ public enum ColorTheme {
     ;
 
     public final IntelliJTheme.ThemeLaf lookAndFeel;
-    private String cleanName;
+    private final String cleanName;
 
     ColorTheme(IntelliJTheme.ThemeLaf lookAndFeel) {
         this.lookAndFeel = lookAndFeel;
+        this.cleanName = enumToString(name());
     }
-
 
     @Override
     public String toString() {
-        if (cleanName == null) {
-            cleanName = enumToString(name());
-        }
         return cleanName;
     }
 
@@ -77,4 +72,5 @@ public enum ColorTheme {
         }
         return builder.toString();
     }
+    
 }

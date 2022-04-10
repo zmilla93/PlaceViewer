@@ -14,16 +14,6 @@ public class ColorManager<T> {
     private static List<Component> frames = new ArrayList<>();
     private static ColorTheme currentTheme;
 
-    //    public static final Color CONFIRM_COLOR = new Color(58, 150, 47, 255);
-    public static final Color CONFIRM_COLOR = new Color(73, 156, 84);
-    //    public static final Color DENY_COLOR = new Color(154, 75, 75, 255);
-    public static final Color DENY_COLOR = new Color(199, 84, 80);
-    public static final Color GREEN_SALE = new Color(0, 130, 0);
-    public static final Color RED_SALE = new Color(130, 0, 0);
-
-    private static ArrayList<JComboBox> stickyCombos = new ArrayList<>();
-
-
     private static HashMap<String, ImageIcon> iconMap = new HashMap<>();
 
     private static ArrayList<IThemeListener> themeListeners = new ArrayList<>();
@@ -41,26 +31,12 @@ public class ColorManager<T> {
         return frames.remove(frame);
     }
 
-    // Sticky combos are JComboBoxes that contain colored icons.
-    // These combos need to be manually updated when switching themes.
-    public static void addStickyCombo(JComboBox combo) {
-        stickyCombos.add(combo);
-    }
-
-    public static void removeStickyCombo(JComboBox combo) {
-        stickyCombos.remove(combo);
-    }
-
     public static void setTheme(ColorTheme theme) {
         if (theme == null) theme = ColorTheme.SOLARIZED_LIGHT;
         setTheme(theme, false);
     }
 
     public static void setTheme(ColorTheme theme, boolean forceRefresh) {
-        int[] comboIcons = new int[stickyCombos.size()];
-        for (int i = 0; i < stickyCombos.size(); i++) {
-            comboIcons[i] = stickyCombos.get(i).getSelectedIndex();
-        }
         iconMap.clear();
         if (theme == currentTheme && !forceRefresh) return;
         currentTheme = theme;
@@ -78,9 +54,6 @@ public class ColorManager<T> {
                 SwingUtilities.updateComponentTreeUI(rootPane);
                 frame.revalidate();
             }
-        }
-        for (int i = 0; i < stickyCombos.size(); i++) {
-            stickyCombos.get(i).setSelectedIndex(comboIcons[i]);
         }
         for (IThemeListener listener : themeListeners) {
             listener.onThemeChange();
@@ -122,7 +95,6 @@ public class ColorManager<T> {
 
     private static void setUIFont(Font f) {
         Enumeration<Object> keys = UIManager.getDefaults().keys();
-//        f=f.deriveFont(f.getStyle(), 24);
         while (keys.hasMoreElements()) {
             Object key = keys.nextElement();
             Object value = UIManager.get(key);
