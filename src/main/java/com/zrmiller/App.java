@@ -2,10 +2,13 @@ package com.zrmiller;
 
 import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.TileEdit;
+import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.DataWrangler2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
+import com.zrmiller.core.parser.PlaceParser;
 import com.zrmiller.core.parser.PlaceParser2022;
+import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.gui.FrameManager;
 
 import javax.swing.*;
@@ -22,6 +25,13 @@ public class App {
 
         SaveManager.settings.loadFromDisk();
 
+        // Set default dataset
+        if (DataValidator.validate2017() > 0) {
+            DatasetManager.changeDataset(Dataset.PLACE_2017);
+        } else if (DataValidator.validateFileCount2022() == PlaceInfo.FILE_COUNT_2022) {
+            DatasetManager.changeDataset(Dataset.PLACE_2022);
+        }
+
         try {
             SwingUtilities.invokeAndWait(() -> {
                 FrameManager.init();
@@ -29,7 +39,7 @@ public class App {
         } catch (InterruptedException | InvocationTargetException e) {
             e.printStackTrace();
         }
-        DatasetManager.changeDataset(Dataset.PLACE_2017);
+//        DatasetManager.changeDataset(Dataset.PLACE_2017);
 //        OneTimeUtil.runDataScan("D:\\PlaceData\\2022\\");
     }
 

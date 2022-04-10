@@ -1,12 +1,15 @@
 package com.zrmiller.gui;
 
+import com.zrmiller.core.DatasetManager;
+import com.zrmiller.core.IDatasetListener;
+import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.utility.PlaceInfo;
 
 import javax.swing.*;
 import java.awt.*;
 import java.text.NumberFormat;
 
-public class MainAppPanel extends JPanel implements ICanvasListener {
+public class MainAppPanel extends JPanel implements ICanvasListener, IDatasetListener {
 
     private final IntroPanel introPanel = new IntroPanel();
     private final CanvasPanel canvasPanel = new CanvasPanel();
@@ -20,8 +23,6 @@ public class MainAppPanel extends JPanel implements ICanvasListener {
 
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel cardPanel = new JPanel(cardLayout);
-
-    private enum Cards {INTRO, CANVAS}
 
     public MainAppPanel() {
         setLayout(new BorderLayout());
@@ -57,7 +58,10 @@ public class MainAppPanel extends JPanel implements ICanvasListener {
 
         onPan(new Point(0, 0));
         addListeners();
+        DatasetManager.addListener(this);
     }
+
+    private enum Cards {INTRO, CANVAS}
 
     private void addListeners() {
         canvasPanel.addListener(this);
@@ -76,6 +80,15 @@ public class MainAppPanel extends JPanel implements ICanvasListener {
     @Override
     public void onDraw(int frameCount) {
         frameCountLabel.setText("Frame " + NumberFormat.getInstance().format(frameCount) + " / " + PlaceInfo.CLEAN_LINE_COUNT_FORMATTED);
+    }
+
+    @Override
+    public void onDatasetChanged(Dataset dataset) {
+        if (dataset != null) {
+            cardLayout.show(cardPanel, Cards.CANVAS.toString());
+        } else {
+            cardLayout.show(cardPanel, Cards.INTRO.toString());
+        }
     }
 
 }

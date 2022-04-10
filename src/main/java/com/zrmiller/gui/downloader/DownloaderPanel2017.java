@@ -68,7 +68,7 @@ public class DownloaderPanel2017 extends CardDownloaderPanel {
         });
         deleteButton.addActionListener(e -> {
             String confirm = JOptionPane.showInputDialog(self, "Are you sure you want to delete this dataset?\n" +
-                    "Type '2017' to confirm.", "Delete 2017 Dataset", JOptionPane.PLAIN_MESSAGE);
+                    "Type '2017' to delete.", "Delete 2017 Dataset", JOptionPane.PLAIN_MESSAGE);
             if (confirm != null && confirm.equals("2017")) {
                 DataWrangler2017 dataWrangler2017 = new DataWrangler2017();
                 if (!dataWrangler2017.deleteData()) {
