@@ -28,7 +28,7 @@ public class DataWrangler2017 extends DataWrangler {
     public boolean sortAndCompress(boolean deleteSource) {
         try {
             System.out.flush();
-            BufferedReader reader = new BufferedReader(new FileReader(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.ORIGINAL_2017));
+            BufferedReader reader = new BufferedReader(new FileReader(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.ORIGINAL_2017));
             TileEdit[] tileEdits = new TileEdit[PlaceInfo.CLEAN_LINE_COUNT];
             int lineCount = 0;
 
@@ -57,7 +57,7 @@ public class DataWrangler2017 extends DataWrangler {
             // Write Output
             tilesWritten = 0;
             bytesWritten = 0;
-            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017));
+            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017));
             writeYear(outputStream, Dataset.PLACE_2017.YEAR);
             writeMetaInt(outputStream);
             for (TileEdit tile : tileEdits) {
@@ -70,7 +70,7 @@ public class DataWrangler2017 extends DataWrangler {
             for (IStatusTracker2017 tracker : statusTrackers)
                 tracker.onCompressComplete();
             if (deleteSource) {
-                File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.ORIGINAL_2017);
+                File file = new File(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.ORIGINAL_2017);
                 return file.delete();
             }
         } catch (IOException e) {
@@ -84,7 +84,7 @@ public class DataWrangler2017 extends DataWrangler {
 
     // FIXME : deleting data will fail if PlacePlayer has an open stream
     public boolean deleteData() {
-        File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017);
+        File file = new File(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017);
         if (file.exists()) {
             if (!file.isFile())
                 return false;

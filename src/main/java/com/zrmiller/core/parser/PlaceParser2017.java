@@ -23,7 +23,7 @@ public class PlaceParser2017 extends PlaceParser {
     @Override
     public boolean openStream() {
         try {
-            reader = new BufferedInputStream(new FileInputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017));
+            reader = new BufferedInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017));
             byte[] meta = new byte[6];
             int numBytesRead = reader.read(meta);
             if (numBytesRead != 6)

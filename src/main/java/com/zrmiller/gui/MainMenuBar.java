@@ -2,6 +2,7 @@ package com.zrmiller.gui;
 
 import com.zrmiller.core.DatasetManager;
 import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.modules.styles.ColorManager;
 import com.zrmiller.modules.styles.ColorTheme;
@@ -35,10 +36,12 @@ public class MainMenuBar extends JMenuBar {
 
     public MainMenuBar() {
         // Create theme list
-        for (ColorTheme theme : themeList) {
+        for (ColorTheme theme : ColorTheme.values()) {
             JMenuItem item = new JMenuItem(theme.toString());
             item.addActionListener(e -> {
                 ColorManager.setTheme(theme);
+                SaveManager.settings.data.colorTheme = theme;
+                SaveManager.settings.saveToDisk();
             });
             themeMenu.add(item);
         }

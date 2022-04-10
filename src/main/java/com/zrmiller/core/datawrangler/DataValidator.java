@@ -15,7 +15,7 @@ public class DataValidator {
      * @return File size when valid, -1 if not.
      */
     public static long validate2017() {
-        File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2017 + File.separator + FileName.BINARY_2017);
+        File file = new File(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017 + File.separator + FileName.BINARY_2017);
         if (file.exists() && file.isFile())
             return file.length();
         return -1;
@@ -24,7 +24,7 @@ public class DataValidator {
     public static int validateFileCount2022() {
         int fileCount = 0;
         for (int i = 0; i < PlaceInfo.fileOrder.length; i++) {
-            File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i));
+            File file = new File(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i));
             if (file.exists() && file.isFile())
                 fileCount++;
         }
@@ -34,7 +34,7 @@ public class DataValidator {
     public static long validateFileSize2022() {
         long fileSize = 0;
         for (int i = 0; i < PlaceInfo.fileOrder.length; i++) {
-            File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i));
+            File file = new File(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i));
             if (file.exists() && file.isFile())
                 fileSize += file.length();
         }

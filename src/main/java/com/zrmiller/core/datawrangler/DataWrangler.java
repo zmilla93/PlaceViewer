@@ -26,7 +26,7 @@ public abstract class DataWrangler {
             HttpURLConnection httpConnection = (HttpURLConnection) (new URL(urlString).openConnection());
             fileSize = httpConnection.getContentLength();
             BufferedInputStream inputStream = new BufferedInputStream(httpConnection.getInputStream());
-            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settingsSaveFile.data.dataDirectory + yearString + File.separator + fileName));
+            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settings.data.dataDirectory + yearString + File.separator + fileName));
             byte[] data = new byte[BYTE_BUFFER_SIZE];
             bytesDownloaded = 0;
             int numBytesRead;
@@ -64,7 +64,7 @@ public abstract class DataWrangler {
     }
 
     public boolean validateDirectory(String yearString) {
-        File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + yearString);
+        File file = new File(SaveManager.settings.data.dataDirectory + yearString);
         if (file.exists())
             return file.isDirectory();
         return file.mkdirs();

@@ -8,7 +8,7 @@ import java.io.File;
 public class SaveManager {
 
     // Save Files
-    public static SaveFile<SettingsSaveFile> settingsSaveFile = new SaveFile<>(getSaveDirectory() + "settings.json", SettingsSaveFile.class);
+    public static SaveFile<SettingsSaveFile> settings = new SaveFile<>(getSaveDirectory() + "settings.json", SettingsSaveFile.class);
 
     // Save Directory
     private static String saveDirectory;

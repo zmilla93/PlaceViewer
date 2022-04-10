@@ -39,7 +39,7 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
         tabbedPane.addTab("2017 Data", downloaderPanel2017);
         tabbedPane.addTab("2022 Data", downloaderPanel2022);
 
-        directoryLabel.setText(SaveManager.settingsSaveFile.data.dataDirectory);
+        directoryLabel.setText(SaveManager.settings.data.dataDirectory);
 
         JPanel topPanel = new JPanel(new BorderLayout());
 
@@ -84,7 +84,7 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
     }
 
     private void updateDirectoryLabel() {
-        String text = SaveManager.settingsSaveFile.data.dataDirectory == null ? "No Folder Selected" : SaveManager.settingsSaveFile.data.dataDirectory;
+        String text = SaveManager.settings.data.dataDirectory == null ? "No Folder Selected" : SaveManager.settings.data.dataDirectory;
         directoryLabel.setText(text);
     }
 
@@ -94,8 +94,8 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
             if (fileChooser.showOpenDialog(self) == JFileChooser.APPROVE_OPTION) {
                 String path = String.valueOf(fileChooser.getSelectedFile());
                 directoryLabel.setText(path);
-                SaveManager.settingsSaveFile.data.dataDirectory = path + File.separator;
-                SaveManager.settingsSaveFile.saveToDisk();
+                SaveManager.settings.data.dataDirectory = path + File.separator;
+                SaveManager.settings.saveToDisk();
                 updateDirectoryLabel();
                 downloaderPanel2017.validateData();
                 downloaderPanel2022.validateData();

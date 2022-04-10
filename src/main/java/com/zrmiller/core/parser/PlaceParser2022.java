@@ -21,8 +21,8 @@ public class PlaceParser2022 extends PlaceParser {
     @Override
     public boolean openStream() {
         try {
-            currentStream = openInputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(PlaceInfo.fileOrder[0]));
-            nextStream = openInputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(PlaceInfo.fileOrder[1]));
+            currentStream = openInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(PlaceInfo.fileOrder[0]));
+            nextStream = openInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(PlaceInfo.fileOrder[1]));
             fileIndex = 2;
             return true;
         } catch (IOException e) {
@@ -82,7 +82,7 @@ public class PlaceParser2022 extends PlaceParser {
         currentStream = nextStream;
         if (fileIndex < PlaceInfo.fileOrder.length) {
             try {
-                nextStream = openInputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(PlaceInfo.fileOrder[fileIndex]));
+                nextStream = openInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(PlaceInfo.fileOrder[fileIndex]));
                 fileIndex++;
             } catch (IOException e) {
                 e.printStackTrace();

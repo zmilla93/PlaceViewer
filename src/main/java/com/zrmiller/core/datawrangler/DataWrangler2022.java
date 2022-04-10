@@ -26,7 +26,7 @@ public class DataWrangler2022 extends DataWrangler {
     public void downloadAndProcessFullDataset() {
         expectedFiles = PlaceInfo.FILE_COUNT_2022 - DataValidator.validateFileCount2022();
         for (int i = 0; i < PlaceInfo.FILE_COUNT_2022; i++) {
-            File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i));
+            File file = new File(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i));
             if (file.exists())
                 continue;
             downloadUnzipAndCompress(i);
@@ -64,13 +64,13 @@ public class DataWrangler2022 extends DataWrangler {
 
     public boolean unzip(String source, String dest, boolean deleteSource) {
         try {
-            GZIPInputStream inputStream = new GZIPInputStream(new FileInputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source));
-            OutputStream outputStream = new FileOutputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + dest);
+            GZIPInputStream inputStream = new GZIPInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source));
+            OutputStream outputStream = new FileOutputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + dest);
             final int BUFFER_SIZE = 1024;
             byte[] buffer = new byte[BUFFER_SIZE];
             int length;
             bytesDownloaded = 0;
-            fileSize = (int) Files.size(Paths.get(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source));
+            fileSize = (int) Files.size(Paths.get(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source));
             while ((length = inputStream.read(buffer)) > 0) {
                 outputStream.write(buffer, 0, length);
                 bytesDownloaded += 512;
@@ -78,10 +78,10 @@ public class DataWrangler2022 extends DataWrangler {
             inputStream.close();
             outputStream.close();
             if (deleteSource) {
-                File sourceFile = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source);
+                File sourceFile = new File(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source);
                 boolean success = sourceFile.delete();
                 if (!success) {
-                    System.out.println("Failed to delete:" + SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source);
+                    System.out.println("Failed to delete:" + SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source);
                 }
             }
             return true;
@@ -97,8 +97,8 @@ public class DataWrangler2022 extends DataWrangler {
 
     public boolean compressFile(String source, String dest, boolean deleteSource) {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source));
-            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + dest));
+            BufferedReader reader = new BufferedReader(new FileReader(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source));
+            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + dest));
             ColorConverter colorConverter = new ColorConverter();
             writeYear(outputStream, Dataset.PLACE_2022.YEAR);
             writeMetaInt(outputStream);
@@ -113,7 +113,7 @@ public class DataWrangler2022 extends DataWrangler {
             reader.close();
             outputStream.close();
             if (deleteSource) {
-                File file = new File(SaveManager.settingsSaveFile.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source);
+                File file = new File(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source);
                 return file.delete();
             }
             return true;
