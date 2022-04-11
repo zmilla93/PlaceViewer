@@ -43,6 +43,7 @@ public class MainPanel extends JPanel implements ICanvasListener, IDatasetListen
         southRightPanel.add(zoomLabel);
         southPanel.add(frameCountLabel, BorderLayout.WEST);
         southPanel.add(southRightPanel, BorderLayout.EAST);
+        southPanel.add(positionLabel, BorderLayout.CENTER);
         southPanel.add(new SeparatorPanel(), BorderLayout.NORTH);
 
         // Card Panel

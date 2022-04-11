@@ -41,7 +41,9 @@ public class JumpToFramePanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 int targetFrame = getTargetFrame();
                 if (targetFrame == -1) return;
-                player.jumpToFrame(targetFrame);
+                // FIXME:
+//                player.jumpToFrame(targetFrame);
+                canvasPanel.panToPixel(1000, 1000);
                 canvasPanel.tryRepaint(true);
             }
         });

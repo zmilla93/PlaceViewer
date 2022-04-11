@@ -27,9 +27,9 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     public int viewportHeight = 1400;
     private int viewportPanX = 0;
     private int viewportPanY = 0;
-    private int zoom = 1;
-    private final int MAX_ZOOM = 20;
-    //    private int cachedZoom = zoom;
+
+    private static final int PAN_OOB_SIZE = 10;
+
     private final int targetFPS = 60;
 
     private ZoomLevel zoomLevel = ZoomLevel.Zoom_100;
@@ -86,9 +86,37 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
 
     private Point getCenterPixel() {
         Point point = new Point();
-        point.x = (viewportWidth / 2 - viewportPanX) / zoom;
-        point.y = (viewportHeight / 2 - viewportPanY) / zoom;
+        if (zoomLevel.zoomOut) {
+            point.x = (viewportWidth / 2 - viewportPanX) * zoomLevel.modifier;
+            point.y = (viewportHeight / 2 - viewportPanY) * zoomLevel.modifier;
+        } else {
+            point.x = (viewportWidth / 2 - viewportPanX) / zoomLevel.modifier;
+            point.y = (viewportHeight / 2 - viewportPanY) / zoomLevel.modifier;
+        }
         return point;
+    }
+
+    public void panToPixel(Point point) {
+        panToPixel(point.x, point.y);
+    }
+
+    public void panToPixel(int x, int y) {
+        if (zoomLevel.zoomOut) {
+            viewportPanX = -x / zoomLevel.modifier + (viewportWidth / 2);
+            viewportPanY = -y / zoomLevel.modifier + (viewportHeight / 2);
+        } else {
+            viewportPanX = -x * zoomLevel.modifier + (viewportWidth / 2);
+            viewportPanY = -y * zoomLevel.modifier + (viewportHeight / 2);
+        }
+        tryRepaint(true);
+    }
+
+    private void restrictPan(){
+        int minX = 0, maxX = 0;
+        int minY = 0, maxY = 0;
+//        if(zoomLevel.zoomOut){
+//
+//        }
     }
 
     private void resizeCanvas() {
@@ -125,7 +153,6 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
             canvasIndex = x / zoomLevel.modifier + y / zoomLevel.modifier * LOCAL_CANVAS_SIZE_X;
         }
 
-
         int colorBufferIndex = pixelX * 3 + pixelY * viewportWidth * 3;   // index of top left colorBuffer element being drawn
         if (canvasIndex < 0 || canvasIndex >= player.getColorBuffer().length) {
             rgbColorBuffer[colorBufferIndex] = backgroundColor.getRed();
@@ -157,17 +184,21 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     }
 
     private void zoomIn() {
+        Point looking = getCenterPixel();
         int zoom = zoomLevel.ordinal();
         if (zoom >= 1) {
             zoomLevel = ZoomLevel.values()[zoom - 1];
         }
+        panToPixel(looking);
     }
 
     private void zoomOut() {
+        Point looking = getCenterPixel();
         int zoom = zoomLevel.ordinal();
         if ((zoom < ZoomLevel.values().length - 1)) {
             zoomLevel = ZoomLevel.values()[zoom + 1];
         }
+        panToPixel(looking);
     }
 
     private void addListeners() {
@@ -177,8 +208,6 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
             // Up = -1, Down = 1
             if (mod == -1) zoomOut();
             else zoomIn();
-            zoom -= mod;
-            zoom = ZUtil.clamp(zoom, -1, MAX_ZOOM);
             markForRepaint = true;
             alertListeners();
         });
@@ -201,7 +230,8 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
                 viewportPanX = initialPanX + dragX;
                 viewportPanY = initialPanY + dragY;
                 markForRepaint = true;
-                alertListeners();
+                for (ICanvasListener listener : listeners)
+                    listener.onPan(getCenterPixel());
             }
         });
         addComponentListener(new ComponentAdapter() {
@@ -213,8 +243,10 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     }
 
     private void alertListeners() {
-        for (ICanvasListener listener : listeners)
+        for (ICanvasListener listener : listeners) {
             listener.onZoom(zoomLevel);
+        }
+
     }
 
     public PlacePlayer getPlayer() {
