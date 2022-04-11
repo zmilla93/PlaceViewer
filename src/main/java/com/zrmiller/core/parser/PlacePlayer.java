@@ -21,8 +21,8 @@ public class PlacePlayer implements IDatasetListener {
     private Timer timer = new Timer();
 
     // Data Arrays
-    private int[] colorBuffer = new int[App.dataset().CANVAS_SIZE_X * App.dataset().CANVAS_SIZE_Y];
-    private int[] heatmapBuffer = new int[App.dataset().CANVAS_SIZE_X * App.dataset().CANVAS_SIZE_Y];
+    private int[] colorBuffer;
+    private int[] heatmapBuffer;
 
     // Heatmap
     public static int heatmapWeight = 10000;
@@ -47,6 +47,8 @@ public class PlacePlayer implements IDatasetListener {
     //
 
     public void play() {
+        if (App.dataset() == null)
+            return;
         if (state == State.PLAYING || state == State.SEEKING) return;
         if (!streamIsOpen) {
             streamIsOpen = parser.openStream();
@@ -79,12 +81,18 @@ public class PlacePlayer implements IDatasetListener {
     }
 
     public void stop() {
+        if (state == State.STOPPED) return;
         pause();
-        parser.closeStream();
+        streamIsOpen = false;
+        if (parser != null)
+            parser.closeStream();
+        if (App.dataset() == null) {
+            state = State.STOPPED;
+            return;
+        }
         frameCount = 0;
         Arrays.fill(colorBuffer, App.dataset().WHITE_INDEX);
         Arrays.fill(heatmapBuffer, 0);
-        streamIsOpen = false;
         state = State.STOPPED;
     }
 
@@ -93,6 +101,8 @@ public class PlacePlayer implements IDatasetListener {
     }
 
     public boolean jumpToFrame(int frame) {
+        if (App.dataset() == null)
+            return false;
         boolean wasPlaying = state == State.PLAYING;
         state = State.SEEKING;
         stop();
@@ -104,7 +114,7 @@ public class PlacePlayer implements IDatasetListener {
                     break;
             }
             state = State.PAUSED;
-            if(wasPlaying)
+            if (wasPlaying)
                 play();
             return true;
         } catch (IOException e) {
@@ -154,8 +164,11 @@ public class PlacePlayer implements IDatasetListener {
     }
 
     private void resizeCanvas() {
-        pause();
-        parser.closeStream();
+        if (App.dataset() == null) {
+            colorBuffer = null;
+            heatmapBuffer = null;
+            return;
+        }
         colorBuffer = new int[App.dataset().CANVAS_SIZE_X * App.dataset().CANVAS_SIZE_Y];
         heatmapBuffer = new int[App.dataset().CANVAS_SIZE_X * App.dataset().CANVAS_SIZE_Y];
         Arrays.fill(colorBuffer, App.dataset().WHITE_INDEX);
@@ -167,6 +180,8 @@ public class PlacePlayer implements IDatasetListener {
         parser.closeStream();
         resizeCanvas();
         frameCount = 0;
+        if (dataset == null)
+            return;
         switch (dataset) {
             case PLACE_2017:
                 parser = new PlaceParser2017();

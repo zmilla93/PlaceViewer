@@ -9,7 +9,7 @@ import com.zrmiller.modules.listening.ListenManager;
  */
 public class DatasetManager extends ListenManager<IDatasetListener> {
 
-    private Dataset dataset = Dataset.PLACE_2017;
+    private Dataset dataset = null;
 
     public void changeDataset(Dataset dataset) {
         this.dataset = dataset;

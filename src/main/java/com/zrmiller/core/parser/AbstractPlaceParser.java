@@ -13,6 +13,7 @@ public abstract class AbstractPlaceParser {
 
     /**
      * Opens a file and reads the first 6 bytes.
+     *
      * @param fullPath
      * @return
      * @throws IOException

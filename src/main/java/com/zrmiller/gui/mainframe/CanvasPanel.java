@@ -18,8 +18,8 @@ import java.awt.image.BufferedImage;
 public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements IThemeListener, IDatasetListener {
 
     // FIXME : update canvas to dataset size
-    private static int LOCAL_CANVAS_SIZE_X = App.dataset().CANVAS_SIZE_X;
-    private static int LOCAL_CANVAS_SIZE_Y = App.dataset().CANVAS_SIZE_Y;
+//    private static int LOCAL_CANVAS_SIZE_X = App.dataset().CANVAS_SIZE_X;
+//    private static int LOCAL_CANVAS_SIZE_Y = App.dataset().CANVAS_SIZE_Y;
 
     // Viewport
     public int viewportWidth = 1400;
@@ -108,6 +108,8 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     }
 
     private void restrictPan() {
+        if (App.dataset() == null)
+            return;
         int minX, maxX, minY, maxY;
         if (zoomLevel.zoomOut) {
             minX = -PAN_OOB_SIZE / zoomLevel.modifier - viewportWidth / 2;
@@ -136,6 +138,8 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     }
 
     private void updateColorBuffer() {
+        if (App.dataset() == null)
+            return;
         for (int y = 0; y < viewportHeight; y++) {
             for (int x = 0; x < viewportWidth; x++) {
                 resolvePixel(x, y);
@@ -148,9 +152,9 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
         int y = pixelY + viewportPanY;
         int canvasIndex;
         if (zoomLevel.zoomOut) {
-            canvasIndex = x * zoomLevel.modifier + y * zoomLevel.modifier * LOCAL_CANVAS_SIZE_X;
+            canvasIndex = x * zoomLevel.modifier + y * zoomLevel.modifier * App.dataset().CANVAS_SIZE_X;
         } else {
-            canvasIndex = x / zoomLevel.modifier + y / zoomLevel.modifier * LOCAL_CANVAS_SIZE_X;
+            canvasIndex = x / zoomLevel.modifier + y / zoomLevel.modifier * App.dataset().CANVAS_SIZE_X;
         }
         int colorBufferIndex = pixelX * 3 + pixelY * viewportWidth * 3;   // index of top left colorBuffer element being drawn
         if (canvasIndex < 0 || canvasIndex >= player.getColorBuffer().length) {
@@ -165,8 +169,8 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
 //        Color c = new Color(f, f, f);
         int colorIndex = player.getColorBuffer()[canvasIndex];
         Color color = App.dataset().COLOR_ARRAY[colorIndex];
-        int checkX = zoomLevel.zoomOut ? LOCAL_CANVAS_SIZE_X / zoomLevel.modifier : LOCAL_CANVAS_SIZE_X * zoomLevel.modifier;
-        int checkY = zoomLevel.zoomOut ? LOCAL_CANVAS_SIZE_Y / zoomLevel.modifier : LOCAL_CANVAS_SIZE_Y * zoomLevel.modifier;
+        int checkX = zoomLevel.zoomOut ? App.dataset().CANVAS_SIZE_X / zoomLevel.modifier : App.dataset().CANVAS_SIZE_X * zoomLevel.modifier;
+        int checkY = zoomLevel.zoomOut ? App.dataset().CANVAS_SIZE_Y / zoomLevel.modifier : App.dataset().CANVAS_SIZE_Y * zoomLevel.modifier;
         if (x < 0 || x >= checkX || y < 0 || y >= checkY * zoomLevel.modifier) {
             // Paint Out of Bounds Pixel
             rgbColorBuffer[colorBufferIndex] = backgroundColor.getRed();
@@ -267,8 +271,8 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
 
     @Override
     public void onDatasetChanged(Dataset dataset) {
-        LOCAL_CANVAS_SIZE_X = App.dataset().CANVAS_SIZE_X;
-        LOCAL_CANVAS_SIZE_Y = App.dataset().CANVAS_SIZE_Y;
+//        LOCAL_CANVAS_SIZE_X = App.dataset().CANVAS_SIZE_X;
+//        LOCAL_CANVAS_SIZE_Y = App.dataset().CANVAS_SIZE_Y;
         tryRepaint(true);
     }
 }

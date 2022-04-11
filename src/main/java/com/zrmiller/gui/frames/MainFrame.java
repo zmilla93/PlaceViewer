@@ -38,6 +38,7 @@ public class MainFrame extends JFrame implements IDatasetListener {
 
     @Override
     public void onDatasetChanged(Dataset dataset) {
-        setTitle(References.APP_NAME + " - " + dataset);
+        String title = dataset == null ? References.APP_NAME : References.APP_NAME + " - " + dataset;
+        setTitle(title);
     }
 }

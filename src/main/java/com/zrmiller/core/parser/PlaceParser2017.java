@@ -7,7 +7,6 @@ import com.zrmiller.core.utility.TileEdit;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 public class PlaceParser2017 extends AbstractPlaceParser {

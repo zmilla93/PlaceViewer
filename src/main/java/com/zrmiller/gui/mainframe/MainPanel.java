@@ -4,7 +4,6 @@ import com.zrmiller.App;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.enums.ZoomLevel;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
-import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.gui.mainframe.listeners.ICanvasListener;
 import com.zrmiller.modules.colortheme.components.SeparatorPanel;
 
@@ -87,7 +86,10 @@ public class MainPanel extends JPanel implements ICanvasListener, IDatasetListen
 
     @Override
     public void onDraw(int frameCount) {
-        frameCountLabel.setText("Frame " + NumberFormat.getInstance().format(frameCount) + " / " + App.dataset().FRAME_COUNT);
+        if (App.dataset() == null)
+            frameCountLabel.setText("");
+        else
+            frameCountLabel.setText("Frame " + NumberFormat.getInstance().format(frameCount) + " / " + App.dataset().FRAME_COUNT);
     }
 
     @Override
