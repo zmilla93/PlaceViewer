@@ -176,8 +176,9 @@ public class PlacePlayer implements IDatasetListener {
 
     @Override
     public void onDatasetChanged(Dataset dataset) {
-        pause();
+        stop();
         parser.closeStream();
+        streamIsOpen = false;
         resizeCanvas();
         frameCount = 0;
         if (dataset == null)

@@ -4,6 +4,7 @@ import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.DataWrangler2017;
 import com.zrmiller.core.datawrangler.DownloadManager;
 import com.zrmiller.core.utility.ZUtil;
+import com.zrmiller.gui.FrameManager;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
 
 import javax.swing.*;
@@ -77,6 +78,7 @@ public class DownloaderPanel2017 extends CardDownloaderPanel {
                                     "If this problem persists, close this app and manually delete the files.",
                             "Delete Failed", JOptionPane.PLAIN_MESSAGE);
                 }
+                FrameManager.mainFrame.validateDatasetMenu();
                 validateData();
             }
         });

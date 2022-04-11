@@ -1,6 +1,7 @@
 package com.zrmiller.core.datawrangler;
 
 import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2017;
+import com.zrmiller.gui.FrameManager;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -30,7 +31,7 @@ public class DownloadManager {
 
             @Override
             public void onCompressComplete() {
-
+                FrameManager.mainFrame.validateDatasetMenu();
             }
         };
         wrangler.addStatusTracker(tracker);

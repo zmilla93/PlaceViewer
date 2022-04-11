@@ -36,9 +36,13 @@ public class MainFrame extends JFrame implements IDatasetListener {
         mainPanel.showCard(card);
     }
 
+    public void validateDatasetMenu() {
+        mainMenuBar.validateDatasetMenu();
+    }
+
     @Override
     public void onDatasetChanged(Dataset dataset) {
-        String title = dataset == null ? References.APP_NAME : References.APP_NAME + " - " + dataset;
+        String title = dataset == null ? References.APP_NAME : References.APP_NAME + " | " + dataset;
         setTitle(title);
     }
 }

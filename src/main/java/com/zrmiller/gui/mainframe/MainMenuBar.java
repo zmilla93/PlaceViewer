@@ -3,6 +3,7 @@ package com.zrmiller.gui.mainframe;
 import com.zrmiller.App;
 import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.utility.ZUtil;
@@ -11,6 +12,7 @@ import com.zrmiller.modules.colortheme.ColorManager;
 import com.zrmiller.modules.colortheme.ColorTheme;
 
 import javax.swing.*;
+import javax.xml.crypto.Data;
 
 public class MainMenuBar extends JMenuBar implements IDatasetListener {
 
@@ -75,6 +77,7 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
 
         validateDatasetMenu();
         addListeners();
+        App.datasetManager.addListener(this);
     }
 
     private void addListeners() {
@@ -95,12 +98,12 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
         boolean showMissing = !show2017 && !show2022;
         dataset2017Button.setEnabled(show2017);
         dataset2022Button.setEnabled(show2022);
-        dataset2022Button.setVisible(App.dataset() != null);
+        closeDatasetButton.setVisible(App.dataset() != null);
     }
 
 
     @Override
-    public void onDatasetChanged(Dataset dataset) {
+    public void onDatasetChanged(Dataset datasets) {
         validateDatasetMenu();
     }
 }
