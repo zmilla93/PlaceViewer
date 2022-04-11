@@ -87,7 +87,7 @@ public class MainPanel extends JPanel implements ICanvasListener, IDatasetListen
 
     @Override
     public void onDraw(int frameCount) {
-        frameCountLabel.setText("Frame " + NumberFormat.getInstance().format(frameCount) + " / " + PlaceInfo.CLEAN_LINE_COUNT_FORMATTED);
+        frameCountLabel.setText("Frame " + NumberFormat.getInstance().format(frameCount) + " / " + App.dataset().FRAME_COUNT);
     }
 
     @Override
