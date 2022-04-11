@@ -170,7 +170,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
         Color color = App.dataset().COLOR_ARRAY[colorIndex];
         int checkX = zoomLevel.zoomOut ? LOCAL_CANVAS_SIZE_X / zoomLevel.modifier : LOCAL_CANVAS_SIZE_X * zoomLevel.modifier;
         int checkY = zoomLevel.zoomOut ? LOCAL_CANVAS_SIZE_Y / zoomLevel.modifier : LOCAL_CANVAS_SIZE_Y * zoomLevel.modifier;
-        if (x < 0 || x > checkX || y < 0 || y > checkY * zoomLevel.modifier) {
+        if (x < 0 || x >= checkX || y < 0 || y >= checkY * zoomLevel.modifier) {
             // Paint Out of Bounds Pixel
             rgbColorBuffer[colorBufferIndex] = backgroundColor.getRed();
             rgbColorBuffer[colorBufferIndex + 1] = backgroundColor.getGreen();
