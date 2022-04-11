@@ -111,13 +111,21 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     private void resolvePixel(int pixelX, int pixelY) {
         int x = pixelX - viewportPanX;
         int y = pixelY - viewportPanY;
-        int z = zoom <= 0 ? 2 - zoom : zoom;
+//        int z = zoom <= 0 ? 2 - zoom : zoom;
         int canvasIndex;
-        if (zoom >= 1) {
-            canvasIndex = x / z + y / z * LOCAL_CANVAS_SIZE_X;
+//        if (zoom >= 1) {
+//            canvasIndex = x / z + y / z * LOCAL_CANVAS_SIZE_X;
+//        } else {
+//            canvasIndex = x * z + y * z * LOCAL_CANVAS_SIZE_X;
+//        }
+//        canvasIndex = x * 1 + y * 1 * LOCAL_CANVAS_SIZE_X;
+        if (zoomLevel.zoomOut) {
+            canvasIndex = x * zoomLevel.modifier + y * zoomLevel.modifier * LOCAL_CANVAS_SIZE_X;
         } else {
-            canvasIndex = x * z + y * z * LOCAL_CANVAS_SIZE_X;
+            canvasIndex = x / zoomLevel.modifier + y / zoomLevel.modifier * LOCAL_CANVAS_SIZE_X;
         }
+
+
         int colorBufferIndex = pixelX * 3 + pixelY * viewportWidth * 3;   // index of top left colorBuffer element being drawn
         if (canvasIndex < 0 || canvasIndex >= player.getColorBuffer().length) {
             rgbColorBuffer[colorBufferIndex] = backgroundColor.getRed();
@@ -131,9 +139,11 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
 //        Color c = new Color(f, f, f);
         int colorIndex = player.getColorBuffer()[canvasIndex];
         Color color = App.dataset().COLOR_ARRAY[colorIndex];
-        int checkX = zoom < 1 ? LOCAL_CANVAS_SIZE_X / z : LOCAL_CANVAS_SIZE_X * z;
-        int checkY = zoom < 1 ? LOCAL_CANVAS_SIZE_Y / z : LOCAL_CANVAS_SIZE_Y * z;
-        if (x < 0 || x > checkX || y < 0 || y > checkY * z) {
+//        int checkX = zoom < 1 ? LOCAL_CANVAS_SIZE_X / z : LOCAL_CANVAS_SIZE_X * z;
+//        int checkY = zoom < 1 ? LOCAL_CANVAS_SIZE_Y / z : LOCAL_CANVAS_SIZE_Y * z;
+        int checkX = zoomLevel.zoomOut ? LOCAL_CANVAS_SIZE_X / zoomLevel.modifier : LOCAL_CANVAS_SIZE_X * zoomLevel.modifier;
+        int checkY = zoomLevel.zoomOut ? LOCAL_CANVAS_SIZE_Y / zoomLevel.modifier : LOCAL_CANVAS_SIZE_Y * zoomLevel.modifier;
+        if (x < 0 || x > checkX || y < 0 || y > checkY * zoomLevel.modifier) {
             // Paint Out of Bounds Pixel
             rgbColorBuffer[colorBufferIndex] = backgroundColor.getRed();
             rgbColorBuffer[colorBufferIndex + 1] = backgroundColor.getGreen();

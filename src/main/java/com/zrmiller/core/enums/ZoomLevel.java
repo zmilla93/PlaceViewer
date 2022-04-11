@@ -6,8 +6,8 @@ public enum ZoomLevel {
     Zoom_50("50%", 2, true),
     Zoom_100("100%", 1),
     Zoom_200("200%", 2),
-    Zoom_400("400%", 4),
-    Zoom_800("800%", 8),
+    Zoom_400("300%", 3),
+    Zoom_800("400%", 4),
     ;
 
     public final String name;
