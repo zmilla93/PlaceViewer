@@ -27,7 +27,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     private int viewportPanX = 0;
     private int viewportPanY = 0;
 
-    private static final int PAN_OOB_SIZE = 10;
+    private static final int PAN_OOB_SIZE = 100;
 
     private final int targetFPS = 60;
 
@@ -86,11 +86,11 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     private Point getCenterPixel() {
         Point point = new Point();
         if (zoomLevel.zoomOut) {
-            point.x = (viewportWidth / 2 - viewportPanX) * zoomLevel.modifier;
-            point.y = (viewportHeight / 2 - viewportPanY) * zoomLevel.modifier;
+            point.x = (viewportWidth / 2 + viewportPanX) * zoomLevel.modifier;
+            point.y = (viewportHeight / 2 + viewportPanY) * zoomLevel.modifier;
         } else {
-            point.x = (viewportWidth / 2 - viewportPanX) / zoomLevel.modifier;
-            point.y = (viewportHeight / 2 - viewportPanY) / zoomLevel.modifier;
+            point.x = (viewportWidth / 2 + viewportPanX) / zoomLevel.modifier;
+            point.y = (viewportHeight / 2 + viewportPanY) / zoomLevel.modifier;
         }
         return point;
     }
@@ -101,28 +101,32 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
 
     public void panToPixel(int x, int y) {
         if (zoomLevel.zoomOut) {
-            viewportPanX = -x / zoomLevel.modifier + (viewportWidth / 2);
-            viewportPanY = -y / zoomLevel.modifier + (viewportHeight / 2);
+            viewportPanX = x / zoomLevel.modifier - (viewportWidth / 2);
+            viewportPanY = y / zoomLevel.modifier - (viewportHeight / 2);
         } else {
-            viewportPanX = -x * zoomLevel.modifier + (viewportWidth / 2);
-            viewportPanY = -y * zoomLevel.modifier + (viewportHeight / 2);
+            viewportPanX = x * zoomLevel.modifier - (viewportWidth / 2);
+            viewportPanY = y * zoomLevel.modifier - (viewportHeight / 2);
         }
         tryRepaint(true);
     }
 
     private void restrictPan() {
-        int minX = 0, maxX = 0;
-        int minY = 0, maxY = 0;
+        int minX, maxX, minY, maxY;
         if (zoomLevel.zoomOut) {
-
+            minX = -PAN_OOB_SIZE / zoomLevel.modifier - viewportWidth / 2;
+            maxX = App.dataset().CANVAS_SIZE_X / zoomLevel.modifier - viewportWidth / 2 + PAN_OOB_SIZE / zoomLevel.modifier;
+            minY = -PAN_OOB_SIZE / zoomLevel.modifier - viewportHeight / 2;
+            maxY = App.dataset().CANVAS_SIZE_X / zoomLevel.modifier - viewportHeight / 2 + PAN_OOB_SIZE / zoomLevel.modifier;
         } else {
             minX = -PAN_OOB_SIZE * zoomLevel.modifier - viewportWidth / 2;
             maxX = App.dataset().CANVAS_SIZE_X * zoomLevel.modifier - viewportWidth / 2 + PAN_OOB_SIZE * zoomLevel.modifier;
-
-            if (viewportPanX > -minX) viewportPanX = -minX;
-            if (viewportPanX < -maxX) viewportPanX = -maxX;
+            minY = -PAN_OOB_SIZE * zoomLevel.modifier - viewportHeight / 2;
+            maxY = App.dataset().CANVAS_SIZE_Y * zoomLevel.modifier - viewportHeight / 2 + PAN_OOB_SIZE * zoomLevel.modifier;
         }
-
+        if (viewportPanX < minX) viewportPanX = minX;
+        if (viewportPanX > maxX) viewportPanX = maxX;
+        if (viewportPanY < minY) viewportPanY = minY;
+        if (viewportPanY > maxY) viewportPanY = maxY;
     }
 
     private void resizeCanvas() {
@@ -143,22 +147,14 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     }
 
     private void resolvePixel(int pixelX, int pixelY) {
-        int x = pixelX - viewportPanX;
-        int y = pixelY - viewportPanY;
-//        int z = zoom <= 0 ? 2 - zoom : zoom;
+        int x = pixelX + viewportPanX;
+        int y = pixelY + viewportPanY;
         int canvasIndex;
-//        if (zoom >= 1) {
-//            canvasIndex = x / z + y / z * LOCAL_CANVAS_SIZE_X;
-//        } else {
-//            canvasIndex = x * z + y * z * LOCAL_CANVAS_SIZE_X;
-//        }
-//        canvasIndex = x * 1 + y * 1 * LOCAL_CANVAS_SIZE_X;
         if (zoomLevel.zoomOut) {
             canvasIndex = x * zoomLevel.modifier + y * zoomLevel.modifier * LOCAL_CANVAS_SIZE_X;
         } else {
             canvasIndex = x / zoomLevel.modifier + y / zoomLevel.modifier * LOCAL_CANVAS_SIZE_X;
         }
-
         int colorBufferIndex = pixelX * 3 + pixelY * viewportWidth * 3;   // index of top left colorBuffer element being drawn
         if (canvasIndex < 0 || canvasIndex >= player.getColorBuffer().length) {
             rgbColorBuffer[colorBufferIndex] = backgroundColor.getRed();
@@ -172,8 +168,6 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
 //        Color c = new Color(f, f, f);
         int colorIndex = player.getColorBuffer()[canvasIndex];
         Color color = App.dataset().COLOR_ARRAY[colorIndex];
-//        int checkX = zoom < 1 ? LOCAL_CANVAS_SIZE_X / z : LOCAL_CANVAS_SIZE_X * z;
-//        int checkY = zoom < 1 ? LOCAL_CANVAS_SIZE_Y / z : LOCAL_CANVAS_SIZE_Y * z;
         int checkX = zoomLevel.zoomOut ? LOCAL_CANVAS_SIZE_X / zoomLevel.modifier : LOCAL_CANVAS_SIZE_X * zoomLevel.modifier;
         int checkY = zoomLevel.zoomOut ? LOCAL_CANVAS_SIZE_Y / zoomLevel.modifier : LOCAL_CANVAS_SIZE_Y * zoomLevel.modifier;
         if (x < 0 || x > checkX || y < 0 || y > checkY * zoomLevel.modifier) {
@@ -196,6 +190,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
             zoomLevel = ZoomLevel.values()[zoom - 1];
         }
         panToPixel(looking);
+        restrictPan();
     }
 
     private void zoomOut() {
@@ -205,6 +200,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
             zoomLevel = ZoomLevel.values()[zoom + 1];
         }
         panToPixel(looking);
+        restrictPan();
     }
 
     private void addListeners() {
@@ -233,8 +229,8 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
                 super.mouseDragged(e);
                 int dragX = e.getX() - initialX;
                 int dragY = e.getY() - initialY;
-                viewportPanX = initialPanX + dragX;
-                viewportPanY = initialPanY + dragY;
+                viewportPanX = initialPanX - dragX;
+                viewportPanY = initialPanY - dragY;
 //                System.out.println("panx:" + viewportPanX);.
                 restrictPan();
                 markForRepaint = true;
