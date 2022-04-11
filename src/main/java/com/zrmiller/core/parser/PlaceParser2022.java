@@ -13,8 +13,7 @@ public class PlaceParser2022 extends AbstractPlaceParser {
 
     private BufferedInputStream currentStream;
     private BufferedInputStream nextStream;
-    private boolean moreFiles;
-    int fileIndex;
+    private int fileIndex;
     private int fileLineCount;
     private TileEdit currentLine;
 
@@ -26,8 +25,6 @@ public class PlaceParser2022 extends AbstractPlaceParser {
             fileIndex = 2;
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("BAD");
             return false;
         }
     }
