@@ -1,5 +1,6 @@
 # PlaceViewer
-An app to rewatch the reddit /r/Place datasets.
+An app to rewatch the reddit /r/Place datasets.<br>
+If you enjoy my work, please consider [donating](https://www.paypal.com/paypalme/zmilla93) to support!
 
 ## Features
 - Automatically download and compress the entire r/Place datasets from 2017 & 2022.
@@ -7,9 +8,9 @@ An app to rewatch the reddit /r/Place datasets.
 - Freely zoom and pan around the canvas.
 - Quickly jump to any frame.
 - App will automatically update when new versions are released.
-- Only tested on windows, but should be cross platform.
+- Only tested on Windows, but should be cross-platform.
 
 ## Important Notes
 - Data from 2017 is a 1 GB download, 166 MB compressed.
 - Data from 2022 is a 10.6 GB download, 1.6 GB compressed. This is broken into 88 files, so you only need space for the compressed size.
-- Userhash is discarded while compressing. All other information is preserved.
+- User hash is discarded while compressing. All other information is preserved.
