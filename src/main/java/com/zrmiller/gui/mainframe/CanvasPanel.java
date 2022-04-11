@@ -28,7 +28,6 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     private int viewportPanY = 0;
 
     private static final int PAN_OOB_SIZE = 100;
-
     private final int targetFPS = 60;
 
     private ZoomLevel zoomLevel = ZoomLevel.Zoom_100;
@@ -47,9 +46,6 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     private Color backgroundColor = Color.RED;
     int lastPaintedFrame = 0;
     private final Timer timer;
-
-    // Other
-    private Dataset dataset = Dataset.PLACE_2022;
 
     public CanvasPanel() {
         int delay = targetFPS == -1 ? 0 : 1000 / targetFPS;
@@ -70,6 +66,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     }
 
     public void tryRepaint(boolean force) {
+        // TODO : Double check is this lastPaintedFrame check is needed
 //        if (lastPaintedFrame != player.getFrameCount()) {
 //            markForRepaint = true;
 //            lastPaintedFrame = player.getFrameCount();
@@ -231,7 +228,6 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
                 int dragY = e.getY() - initialY;
                 viewportPanX = initialPanX - dragX;
                 viewportPanY = initialPanY - dragY;
-//                System.out.println("panx:" + viewportPanX);.
                 restrictPan();
                 markForRepaint = true;
                 for (ICanvasListener listener : listeners)
