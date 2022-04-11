@@ -1,7 +1,10 @@
 package com.zrmiller.gui.frames;
 
+import com.zrmiller.App;
+import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.ZUtil;
+import com.zrmiller.gui.FrameManager;
 import com.zrmiller.gui.downloader.DownloaderPanel2017;
 import com.zrmiller.gui.downloader.DownloaderPanel2022;
 import com.zrmiller.gui.downloader.progress.AbstractDownloadProgressPanel;
@@ -103,6 +106,7 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
                 updateDirectoryLabel();
                 downloaderPanel2017.validateData();
                 downloaderPanel2022.validateData();
+//                App.datasetManager.changeDataset(null);
             }
         });
     }

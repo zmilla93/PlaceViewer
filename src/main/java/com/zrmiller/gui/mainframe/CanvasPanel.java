@@ -30,7 +30,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     private static final int PAN_OOB_SIZE = 100;
     private final int targetFPS = 60;
 
-    private ZoomLevel zoomLevel = ZoomLevel.Zoom_100;
+    private ZoomLevel zoomLevel = ZoomLevel.Zoom_1;
 
     // Mouse Movement
     private int initialX;
