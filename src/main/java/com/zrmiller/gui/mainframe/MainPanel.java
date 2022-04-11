@@ -2,6 +2,7 @@ package com.zrmiller.gui.mainframe;
 
 import com.zrmiller.App;
 import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.enums.ZoomLevel;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.gui.mainframe.listeners.ICanvasListener;
@@ -74,8 +75,8 @@ public class MainPanel extends JPanel implements ICanvasListener, IDatasetListen
     }
 
     @Override
-    public void onZoom(int zoomLevel) {
-        zoomLabel.setText(100 * zoomLevel + "%");
+    public void onZoom(ZoomLevel zoomLevel) {
+        zoomLabel.setText(zoomLevel.toString());
     }
 
     @Override

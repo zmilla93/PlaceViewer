@@ -158,7 +158,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
 
     private void zoomIn() {
         int zoom = zoomLevel.ordinal();
-        if (zoom >= 0) {
+        if (zoom >= 1) {
             zoomLevel = ZoomLevel.values()[zoom - 1];
         }
     }
@@ -214,9 +214,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
 
     private void alertListeners() {
         for (ICanvasListener listener : listeners)
-            listener.onZoom(zoom);
-//        for (ICanvasListener listener : canvasListeners)
-//            listener.onPan(getCenterPixel());
+            listener.onZoom(zoomLevel);
     }
 
     public PlacePlayer getPlayer() {

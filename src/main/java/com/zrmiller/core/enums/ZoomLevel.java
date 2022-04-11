@@ -24,4 +24,9 @@ public enum ZoomLevel {
         this.zoomOut = zoomOut;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
 }
