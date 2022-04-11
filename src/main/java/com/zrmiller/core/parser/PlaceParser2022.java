@@ -25,6 +25,8 @@ public class PlaceParser2022 extends AbstractPlaceParser {
             fileIndex = 2;
             return true;
         } catch (IOException e) {
+            // FIXME:
+            e.printStackTrace();
             return false;
         }
     }
