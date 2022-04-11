@@ -5,7 +5,6 @@ import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.enums.ZoomLevel;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.parser.PlacePlayer;
-import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.mainframe.listeners.ICanvasListener;
 import com.zrmiller.modules.colortheme.ColorManager;
 import com.zrmiller.modules.colortheme.IThemeListener;
@@ -111,12 +110,19 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
         tryRepaint(true);
     }
 
-    private void restrictPan(){
+    private void restrictPan() {
         int minX = 0, maxX = 0;
         int minY = 0, maxY = 0;
-//        if(zoomLevel.zoomOut){
-//
-//        }
+        if (zoomLevel.zoomOut) {
+
+        } else {
+            minX = -PAN_OOB_SIZE * zoomLevel.modifier - viewportWidth / 2;
+            maxX = App.dataset().CANVAS_SIZE_X * zoomLevel.modifier - viewportWidth / 2 + PAN_OOB_SIZE * zoomLevel.modifier;
+
+            if (viewportPanX > -minX) viewportPanX = -minX;
+            if (viewportPanX < -maxX) viewportPanX = -maxX;
+        }
+
     }
 
     private void resizeCanvas() {
@@ -229,6 +235,8 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
                 int dragY = e.getY() - initialY;
                 viewportPanX = initialPanX + dragX;
                 viewportPanY = initialPanY + dragY;
+//                System.out.println("panx:" + viewportPanX);.
+                restrictPan();
                 markForRepaint = true;
                 for (ICanvasListener listener : listeners)
                     listener.onPan(getCenterPixel());
