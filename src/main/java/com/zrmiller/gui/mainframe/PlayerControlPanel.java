@@ -14,7 +14,7 @@ public class PlayerControlPanel extends JPanel {
 
     private PlacePlayer player;
 
-    private JButton resetButton = new FlatColorIconButton("/icons/refresh.png");
+    private JButton resetButton = new FlatColorIconButton("/icons/media-stop.png");
     private JButton playButton = new FlatColorIconButton("icons/media-play.png");
     private JButton pauseButton = new FlatColorIconButton("icons/media-pause.png");
     private JSlider speedSlider = new JSlider();

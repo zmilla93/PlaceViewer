@@ -47,7 +47,7 @@ public class PlacePlayer implements IDatasetListener {
     //
 
     public void play() {
-        if (state == State.PLAYING) return;
+        if (state == State.PLAYING || state == State.SEEKING) return;
         if (!streamIsOpen) {
             streamIsOpen = parser.openStream();
             if (!streamIsOpen) return;
@@ -93,6 +93,7 @@ public class PlacePlayer implements IDatasetListener {
     }
 
     public boolean jumpToFrame(int frame) {
+        boolean wasPlaying = state == State.PLAYING;
         state = State.SEEKING;
         stop();
         parser.openStream();
@@ -103,6 +104,8 @@ public class PlacePlayer implements IDatasetListener {
                     break;
             }
             state = State.PAUSED;
+            if(wasPlaying)
+                play();
             return true;
         } catch (IOException e) {
             e.printStackTrace();

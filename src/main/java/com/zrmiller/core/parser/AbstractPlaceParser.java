@@ -11,6 +11,12 @@ public abstract class AbstractPlaceParser {
     // FIXME : Move this to somewhere more logical
     private static final int META_BYTE_COUNT = 6;
 
+    /**
+     * Opens a file and reads the first 6 bytes.
+     * @param fullPath
+     * @return
+     * @throws IOException
+     */
     protected BufferedInputStream openInputStream(String fullPath) throws IOException {
         BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(fullPath));
         byte[] meta = new byte[META_BYTE_COUNT];

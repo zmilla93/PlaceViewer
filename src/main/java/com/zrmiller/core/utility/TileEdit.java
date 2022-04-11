@@ -12,7 +12,7 @@ public class TileEdit implements Comparable<TileEdit> {
     public static final int BYTE_COUNT = 10;
 
     // Number of times compareTo is called when sorting 2017 dataset. Used for progress reporting
-    public static final int MAX_SORT_COUNT = 349769937;
+    private static final int MAX_SORT_COUNT = 349769937;
     public static int sortCount = 0;
 
     public TileEdit(int timestamp, short color, short x, short y) {

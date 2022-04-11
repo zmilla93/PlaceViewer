@@ -23,17 +23,7 @@ public class PlaceParser2017 extends AbstractPlaceParser {
     @Override
     public boolean openStream() {
         try {
-            reader = new BufferedInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017));
-            byte[] meta = new byte[6];
-            int numBytesRead = reader.read(meta);
-            if (numBytesRead != 6)
-                return false;
-            // TODO : Validate file
-//            ByteBuffer buffer = ByteBuffer.wrap(meta);
-//            short year = buffer.getShort();
-//            int m = buffer.getInt();
-//            System.out.println("YEAR : " + year);
-//            System.out.println("META : " + m);
+            reader = openInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
