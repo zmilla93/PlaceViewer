@@ -60,6 +60,32 @@ public class OneShotUtil {
         return null;
     }
 
+    public static int getLineCount(String directory) {
+        TileEdit[] tiles = new TileEdit[PlaceInfo.FILE_COUNT_2022];
+        int lineCount = 0;
+        try {
+            for (int i = 0; i < PlaceInfo.FILE_COUNT_2022; i++) {
+                BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(directory + FileName.BINARY_2022.getIndexedName(i)));
+                byte[] meta = new byte[6];
+                inputStream.read(meta);
+                // Read All Tiles
+                byte[] tileBytes = new byte[TileEdit.BYTE_COUNT];
+                int bytesRead = 0;
+                int time = 0;
+                while ((bytesRead = inputStream.read(tileBytes)) > 0) {
+                    TileEdit tile = new TileEdit(tileBytes);
+                    tiles[i] = tile;
+                    lineCount++;
+                }
+                inputStream.close();
+            }
+            System.out.println("Line count:");
+        } catch (IOException e) {
+
+        }
+        return lineCount;
+    }
+
     public static long getDownloadSize2022() {
         return 0;
     }

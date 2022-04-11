@@ -5,10 +5,11 @@ import java.text.NumberFormat;
 
 public class PlaceInfo {
 
-    public static final int ORIGINAL_LINE_COUNT = 16567568;
-    public static final int CLEAN_LINE_COUNT = 16567564;
+    public static final int ORIGINAL_LINE_COUNT_2017 = 16567568;
+    public static final int CLEAN_LINE_COUNT_2017 = 16567564;
+    public static final int CLEAN_LINE_COUNT_2022 = 160353085;
 
-    public static final String CLEAN_LINE_COUNT_FORMATTED = NumberFormat.getInstance().format(CLEAN_LINE_COUNT);
+    public static final String CLEAN_LINE_COUNT_2017_FORMATTED = NumberFormat.getInstance().format(CLEAN_LINE_COUNT_2017);
 
     public static final int FILE_COUNT_2022 = 79;
 

@@ -29,7 +29,7 @@ public class DataWrangler2017 extends DataWrangler {
         try {
             System.out.flush();
             BufferedReader reader = new BufferedReader(new FileReader(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.ORIGINAL_2017));
-            TileEdit[] tileEdits = new TileEdit[PlaceInfo.CLEAN_LINE_COUNT];
+            TileEdit[] tileEdits = new TileEdit[PlaceInfo.CLEAN_LINE_COUNT_2017];
             int lineCount = 0;
 
             bytesProcessed = 0;
