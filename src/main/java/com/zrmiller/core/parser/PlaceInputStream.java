@@ -20,6 +20,7 @@ public class PlaceInputStream extends BufferedInputStream {
 
     /**
      * Reads the first 6 bytes of the file, which are metadata.
+     *
      * @return
      */
     public boolean openStream() {
@@ -50,6 +51,7 @@ public class PlaceInputStream extends BufferedInputStream {
     /**
      * Reads the next 10 bytes.
      * If color is -1, the entry is a rect and 6 more bytes are read.
+     *
      * @return
      * @throws IOException
      */

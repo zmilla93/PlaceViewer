@@ -11,13 +11,13 @@ import java.io.IOException;
 
 public class PlaceParser2017 extends AbstractPlaceParser {
 
-    private PlaceInputStream reader;
+    private PlaceInputStream inputStream;
 
     @Override
     public boolean openStream() {
         try {
-            reader = new PlaceInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017));
-            return reader.openStream();
+            inputStream = new PlaceInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017));
+            return inputStream.openStream();
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -26,9 +26,9 @@ public class PlaceParser2017 extends AbstractPlaceParser {
 
     @Override
     public boolean closeStream() {
-        if (reader != null) {
+        if (inputStream != null) {
             try {
-                reader.close();
+                inputStream.close();
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -40,12 +40,12 @@ public class PlaceParser2017 extends AbstractPlaceParser {
 
     @Override
     public boolean ready() throws IOException {
-        return reader.ready();
+        return inputStream.ready();
     }
 
     @Override
     public TileEdit readNextLine() {
-        return reader.getNextTile();
+        return inputStream.getNextTile();
     }
 
 }
