@@ -7,12 +7,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
+/**
+ * Provides easy reading of a .placetiles binary file.
+ */
 public class PlaceInputStream extends BufferedInputStream {
+
+    private TileEdit nextTile;
 
     public PlaceInputStream(InputStream inputStream) {
         super(inputStream);
     }
 
+    /**
+     * Reads the first 6 bytes of the file, which are metadata.
+     * @return
+     */
     public boolean openStream() {
         byte[] meta = new byte[TileEdit.META_COUNT];
         try {
@@ -20,11 +29,9 @@ public class PlaceInputStream extends BufferedInputStream {
             if (numByteRead != TileEdit.META_COUNT) {
                 return false;
             }
-            ByteBuffer buffer = ByteBuffer.wrap(meta);
-            int year = buffer.getShort();
-            int format = buffer.getInt();
-            System.out.println("Year : " + year);
-            System.out.println("Format : " + format);
+//            ByteBuffer buffer = ByteBuffer.wrap(meta);
+//            int year = buffer.getShort();
+//            int format = buffer.getInt();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -32,29 +39,44 @@ public class PlaceInputStream extends BufferedInputStream {
         }
     }
 
-    public TileEdit getNextTile() throws IOException {
+    public boolean ready() throws IOException {
+        return tryGetNextTile();
+    }
+
+    public TileEdit getNextTile() {
+        return nextTile;
+    }
+
+    /**
+     * Reads the next 10 bytes.
+     * If color is -1, the entry is a rect and 6 more bytes are read.
+     * @return
+     * @throws IOException
+     */
+    private boolean tryGetNextTile() throws IOException {
         byte[] data = new byte[TileEdit.BYTE_COUNT];
         int numBytesRead = read(data);
-        assert numBytesRead == TileEdit.BYTE_COUNT;
+        if (numBytesRead != TileEdit.BYTE_COUNT)
+            return false;
         ByteBuffer buffer = ByteBuffer.wrap(data);
         int timeStamp = buffer.getInt();
         short color = buffer.getShort();
         short x = buffer.getShort();
         short y = buffer.getShort();
-        boolean isRect = false;
-        byte[] rectData;
         if (color == -1) {
-            rectData = new byte[TileEdit.BYTE_INCREASE];
+            byte[] rectData = new byte[TileEdit.BYTE_INCREASE];
             numBytesRead = read(rectData);
-            assert numBytesRead == TileEdit.BYTE_COUNT_INCREASED;
+            if (numBytesRead != TileEdit.BYTE_COUNT_INCREASED)
+                return false;
             buffer = ByteBuffer.wrap(rectData);
             short x2 = buffer.getShort();
             short y2 = buffer.getShort();
             color = buffer.getShort();
-            return new TileEdit(timeStamp, color, x, y, x2, y2);
+            nextTile = new TileEdit(timeStamp, color, x, y, x2, y2);
         } else {
-            return new TileEdit(timeStamp, color, x, y);
+            nextTile = new TileEdit(timeStamp, color, x, y);
         }
+        return true;
     }
 
 }

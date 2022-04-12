@@ -5,25 +5,19 @@ import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.strings.FileName;
 import com.zrmiller.core.utility.TileEdit;
 
-import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 public class PlaceParser2017 extends AbstractPlaceParser {
 
-    private BufferedInputStream reader;
-    //    private final String directory;
-    private TileEdit currentTile;
-
-    public PlaceParser2017() {
-//        this.directory = directory;
-    }
+    private PlaceInputStream reader;
 
     @Override
     public boolean openStream() {
         try {
-            reader = openInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017);
-            return true;
+            reader = new PlaceInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017));
+            return reader.openStream();
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -46,22 +40,12 @@ public class PlaceParser2017 extends AbstractPlaceParser {
 
     @Override
     public boolean ready() throws IOException {
-        return tryReadLine();
+        return reader.ready();
     }
 
     @Override
     public TileEdit readNextLine() {
-        return currentTile;
-    }
-
-    private boolean tryReadLine() throws IOException {
-        // FIXME : This can throw a null pointer exception when switching datasets
-        byte[] line = new byte[TileEdit.BYTE_COUNT];
-        int numBytesRead = reader.read(line);
-        if (numBytesRead == -1)
-            return false;
-        currentTile = new TileEdit(line);
-        return true;
+        return reader.getNextTile();
     }
 
 }
