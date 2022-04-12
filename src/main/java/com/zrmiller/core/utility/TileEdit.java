@@ -65,8 +65,9 @@ public class TileEdit implements Comparable<TileEdit> {
     }
 
     public byte[] toByteArray() {
-        ByteBuffer buffer = ByteBuffer.allocate(10);
+        ByteBuffer buffer;
         if (isRect) {
+            buffer = ByteBuffer.allocate(TileEdit.BYTE_COUNT_INCREASED);
             buffer.putInt(timestamp);
             buffer.putShort((short) -1);
             buffer.putShort(x);
@@ -76,6 +77,7 @@ public class TileEdit implements Comparable<TileEdit> {
             buffer.putShort(color);
             buffer = ByteBuffer.allocate(BYTE_COUNT_INCREASED);
         } else {
+            buffer = ByteBuffer.allocate(TileEdit.BYTE_COUNT);
             buffer.putInt(timestamp);
             buffer.putShort(color);
             buffer.putShort(x);
@@ -91,7 +93,11 @@ public class TileEdit implements Comparable<TileEdit> {
 
     @Override
     public String toString() {
-        return timestamp + "," + color + "," + x + "," + y;
+        if (isRect) {
+            return timestamp + "," + color + "," + x + "," + y + "," + x2 + ", " + y2 + ", ";
+        } else {
+            return timestamp + "," + color + "," + x + "," + y;
+        }
     }
 
     @Override

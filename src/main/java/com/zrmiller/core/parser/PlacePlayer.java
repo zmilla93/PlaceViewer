@@ -143,6 +143,8 @@ public class PlacePlayer implements IDatasetListener {
     private boolean applyNextFrame() throws IOException {
         if (parser.ready()) {
             TileEdit tile = parser.readNextLine();
+            if(tile.color == -1)
+                return false;
             int index = tile.x + tile.y * App.dataset().CANVAS_SIZE_X;
             colorBuffer[index] = tile.color;
             heatmapBuffer[index] += heatmapWeight;
