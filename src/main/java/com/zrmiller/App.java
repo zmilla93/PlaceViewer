@@ -1,5 +1,6 @@
 package com.zrmiller;
 
+import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.DataWrangler2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.DatasetManager;
@@ -11,6 +12,7 @@ import com.zrmiller.gui.FrameManager;
 import javax.swing.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.Objects;
 
 
@@ -33,6 +35,10 @@ public class App {
         } catch (InterruptedException | InvocationTargetException e) {
             e.printStackTrace();
         }
+
+//        int[] order = DataValidator.getFileOrder();
+//        System.out.println("FILE ORDER:" + Arrays.toString(order));
+
     }
 
     private static void testParse() {

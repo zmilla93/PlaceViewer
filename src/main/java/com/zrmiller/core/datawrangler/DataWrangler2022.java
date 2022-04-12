@@ -104,10 +104,18 @@ public class DataWrangler2022 extends DataWrangler {
             writeMetaInt(outputStream);
             while (reader.ready()) {
                 String line = reader.readLine();
-                String[] tokens = tokenizeLine(line, 5);
+                ArrayList<String> tokens = tokenizeLine(line);
                 if (tokens == null) continue; // Skip Empty Lines
-                if (!lineStartsWithNumber(tokens[0])) continue; // Skip lines that don't start with a timestamp
-                TileEdit edit = new TileEdit(getTimestamp(tokens[0], PlaceInfo.INITIAL_TIME_2022), colorConverter.colorToInt(tokens[2]), Short.parseShort(tokens[3].substring(1)), Short.parseShort(tokens[4].substring(0, tokens[4].length() - 1)));
+                if (!lineStartsWithNumber(tokens.get(0))) continue; // Skip lines that don't start with a timestamp
+                TileEdit edit;
+                if (tokens.size() == 7) {
+                    edit = new TileEdit(getTimestamp(tokens.get(0), PlaceInfo.INITIAL_TIME_2022), colorConverter.colorToInt(tokens.get(2)),
+                            Short.parseShort(tokens.get(3).substring(1)), Short.parseShort(tokens.get(4).substring(0, tokens.get(4).length() - 1)),
+                            Short.parseShort(tokens.get(5)), Short.parseShort(tokens.get(6).substring(0, tokens.get(6).length() - 1)));
+                } else {
+                    edit = new TileEdit(getTimestamp(tokens.get(0), PlaceInfo.INITIAL_TIME_2022), colorConverter.colorToInt(tokens.get(2)),
+                            Short.parseShort(tokens.get(3).substring(1)), Short.parseShort(tokens.get(4).substring(0, tokens.get(4).length() - 1)));
+                }
                 outputStream.write(edit.toByteArray());
             }
             reader.close();

@@ -100,7 +100,7 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
         boolean show2022 = DataValidator.checkFileCount2022();
         boolean showMissing = !show2017 && !show2022;
         dataset2017Button.setEnabled(show2017);
-        dataset2022Button.setEnabled(show2022);
+        dataset2022Button.setEnabled(true);
         closeDatasetButton.setVisible(App.dataset() != null);
     }
 

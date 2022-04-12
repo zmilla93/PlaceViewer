@@ -75,14 +75,12 @@ public class TileEdit implements Comparable<TileEdit> {
             buffer.putShort(x2);
             buffer.putShort(y2);
             buffer.putShort(color);
-            buffer = ByteBuffer.allocate(BYTE_COUNT_INCREASED);
         } else {
             buffer = ByteBuffer.allocate(TileEdit.BYTE_COUNT);
             buffer.putInt(timestamp);
             buffer.putShort(color);
             buffer.putShort(x);
             buffer.putShort(y);
-            buffer = ByteBuffer.allocate(BYTE_COUNT);
         }
         return buffer.array();
     }

@@ -20,8 +20,8 @@ public class PlaceParser2022 extends AbstractPlaceParser {
     @Override
     public boolean openStream() {
         try {
-            currentStream = new PlaceInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(PlaceInfo.fileOrder[0])));
-            nextStream = new PlaceInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(PlaceInfo.fileOrder[1])));
+            currentStream = new PlaceInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(0)));
+            nextStream = new PlaceInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(1)));
             currentStream.openStream();
             nextStream.openStream();
             fileIndex = 2;

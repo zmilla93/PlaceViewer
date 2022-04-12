@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 /**
  * IMPORTANT : When writing binary files, first make a call to writeYear, then writeMetaInt.
@@ -60,6 +61,29 @@ public abstract class DataWrangler {
         tokens[tokenIndex] = builder.toString();
         return tokens;
     }
+
+    protected ArrayList<String> tokenizeLine(String input) {
+        ArrayList<String> tokens = new ArrayList<>(5);
+//        String[] tokens = new String[tokenCount];
+        StringBuilder builder = new StringBuilder(200);
+//        int tokenIndex = 0;
+        for (int i = 0; i < input.length(); i++) {
+//            if (tokenIndex >= tokenCount) {
+//                return null;
+//            }
+            if (input.charAt(i) == ',') {
+                tokens.add(builder.toString());
+                builder.setLength(0);
+//                tokenIndex++;
+            } else {
+                builder.append(input.charAt(i));
+            }
+        }
+        tokens.add(builder.toString());
+//        tokens[tokenIndex] = builder.toString();
+        return tokens;
+    }
+
 
     public boolean validateDirectory(String yearString) {
         File file = new File(SaveManager.settings.data.dataDirectory + yearString);
