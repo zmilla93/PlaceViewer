@@ -3,7 +3,6 @@ package com.zrmiller.gui.mainframe;
 import com.zrmiller.App;
 import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.enums.Dataset;
-import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.utility.ZUtil;
@@ -12,7 +11,6 @@ import com.zrmiller.modules.colortheme.ColorManager;
 import com.zrmiller.modules.colortheme.ColorTheme;
 
 import javax.swing.*;
-import javax.xml.crypto.Data;
 
 public class MainMenuBar extends JMenuBar implements IDatasetListener {
 
@@ -20,6 +18,7 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
     private final JMenu optionsMenu = new JMenu("Options");
     private final JMenu displayMenu = new JMenu("Display Mode");
     private final JMenu datasetMenu = new JMenu("Dataset");
+    private final JMenu exportMenu = new JMenu("Export");
 
     // Options
     private final JMenu themeMenu = new JMenu("Color Theme");
@@ -37,9 +36,8 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
     private final JMenuItem missingDatasetsLabel = new JMenuItem("No Data Installed");
     private final JMenuItem datasetManagerButton = new JMenuItem("Dataset Manager...");
 
-    private final ColorTheme[] themeList = new ColorTheme[]{ColorTheme.SOLARIZED_LIGHT, ColorTheme.CARBON};
+    // Export Menubar
 
-    private static final int iconSize = 20;
 
     public MainMenuBar() {
         // Create theme list
@@ -70,10 +68,15 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
         datasetMenu.add(new JSeparator());
         datasetMenu.add(datasetManagerButton);
 
-        // Build Menubar
+        // Export
+        exportMenu.add(new JMenuItem("Copy Canvas"));
+        exportMenu.add(new JMenuItem("Copy Viewport"));
+
+        // Build Menu Bar
         add(optionsMenu);
         add(datasetMenu);
         add(displayMenu);
+        add(exportMenu);
 
         validateDatasetMenu();
         addListeners();

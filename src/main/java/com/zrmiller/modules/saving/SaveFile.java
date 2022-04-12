@@ -14,8 +14,6 @@ import java.util.TimerTask;
 
 /**
  * Allows easy linking of a data class, a json save file, and a list of ISavable components.
- *
- * @param <T> {@link com.zrmiller.core.saving.ISavable}
  */
 public class SaveFile<T> {
 
