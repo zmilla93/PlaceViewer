@@ -102,8 +102,12 @@ public class DataWrangler2022 extends DataWrangler {
             ColorConverter2022 colorConverter = new ColorConverter2022();
             writeYear(outputStream, Dataset.PLACE_2022.YEAR);
             writeMetaInt(outputStream);
+            File file = new File(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source);
+            fileSize = (int)file.length();
+            bytesProcessed = 0;
             while (reader.ready()) {
                 String line = reader.readLine();
+                bytesProcessed += line.length();
                 ArrayList<String> tokens = tokenizeLine(line);
                 if (tokens == null) continue; // Skip Empty Lines
                 if (!lineStartsWithNumber(tokens.get(0))) continue; // Skip lines that don't start with a timestamp
@@ -121,7 +125,7 @@ public class DataWrangler2022 extends DataWrangler {
             reader.close();
             outputStream.close();
             if (deleteSource) {
-                File file = new File(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source);
+                file = new File(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source);
                 return file.delete();
             }
             return true;
