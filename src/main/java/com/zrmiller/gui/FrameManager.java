@@ -6,6 +6,7 @@ import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
 import com.zrmiller.gui.frames.MainFrame;
+import com.zrmiller.gui.mainframe.CanvasPanel;
 import com.zrmiller.gui.mainframe.MainPanel;
 import com.zrmiller.modules.colortheme.ColorManager;
 import com.zrmiller.modules.colortheme.ColorTheme;
@@ -14,6 +15,7 @@ public class FrameManager {
 
     public static MainFrame mainFrame;
     public static DatasetManagerFrame dataDownloader;
+    public static CanvasPanel canvasPanel;
 
     /**
      * Handles all GUI Creation.

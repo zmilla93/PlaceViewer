@@ -15,8 +15,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements IThemeListener, IDatasetListener {
 
@@ -54,10 +52,6 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
         int delay = targetFPS == -1 ? 0 : 1000 / targetFPS;
         Stopwatch.start();
         timer = new Timer(delay, e -> {
-            if (lastPaintedFrame != player.getFrameCount()) {
-                markForRepaint = true;
-                lastPaintedFrame = player.getFrameCount();
-            }
             tryRepaint();
         });
         timer.start();
@@ -71,10 +65,10 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
 
     public void tryRepaint(boolean force) {
         // TODO : Double check is this lastPaintedFrame check is needed
-//        if (lastPaintedFrame != player.getFrameCount()) {
-//            markForRepaint = true;
-//            lastPaintedFrame = player.getFrameCount();
-//        }
+        if (lastPaintedFrame != player.getFrameCount()) {
+            markForRepaint = true;
+            lastPaintedFrame = player.getFrameCount();
+        }
         if (markForRepaint || force) {
             updateColorBuffer();
             repaint();
@@ -96,17 +90,28 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
         return point;
     }
 
-    public void panToPixel(Point point) {
-        panToPixel(point.x, point.y);
+    public void jumpToPixel(Point point) {
+        jumpToPixel(point.x, point.y);
     }
 
-    public void panToPixel(int x, int y) {
+    public void jumpToPixel(int x, int y) {
         if (zoomLevel.zoomOut) {
             viewportPanX = x / zoomLevel.modifier - (viewportWidth / 2);
             viewportPanY = y / zoomLevel.modifier - (viewportHeight / 2);
         } else {
             viewportPanX = x * zoomLevel.modifier - (viewportWidth / 2);
             viewportPanY = y * zoomLevel.modifier - (viewportHeight / 2);
+        }
+        tryRepaint(true);
+    }
+
+    public void jumpToPixelTopLeft(int x, int y) {
+        if (zoomLevel.zoomOut) {
+            viewportPanX = x / zoomLevel.modifier;
+            viewportPanY = y / zoomLevel.modifier;
+        } else {
+            viewportPanX = x * zoomLevel.modifier;
+            viewportPanY = y * zoomLevel.modifier;
         }
         tryRepaint(true);
     }
@@ -194,7 +199,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
         if (zoom >= 1) {
             zoomLevel = ZoomLevel.values()[zoom - 1];
         }
-        panToPixel(looking);
+        jumpToPixel(looking);
         restrictPan();
     }
 
@@ -204,7 +209,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
         if ((zoom < ZoomLevel.values().length - 1)) {
             zoomLevel = ZoomLevel.values()[zoom + 1];
         }
-        panToPixel(looking);
+        jumpToPixel(looking);
         restrictPan();
     }
 

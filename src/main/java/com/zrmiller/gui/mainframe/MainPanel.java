@@ -4,6 +4,7 @@ import com.zrmiller.App;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.enums.ZoomLevel;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
+import com.zrmiller.gui.FrameManager;
 import com.zrmiller.gui.mainframe.listeners.ICanvasListener;
 import com.zrmiller.modules.colortheme.components.SeparatorPanel;
 
@@ -28,6 +29,7 @@ public class MainPanel extends JPanel implements ICanvasListener, IDatasetListen
 
     public MainPanel() {
         setLayout(new BorderLayout());
+        FrameManager.canvasPanel = canvasPanel;
 
         // North Panel
         JPanel northBuffer = new JPanel(new BorderLayout());
