@@ -17,21 +17,32 @@ public class DataWrangler2017 extends DataWrangler {
     private String downloadURL = "https://storage.googleapis.com/place_data_share/place_tiles.csv";
     private final ArrayList<IStatusTracker2017> statusTrackers = new ArrayList<>();
 
-    public void downloadDataset() {
-        if (!validateDirectory(Dataset.PLACE_2017.YEAR_STRING))
+    public void downloadAndProcessDataset() {
+        if (!downloadDataset())
             return;
-        downloadFile(FileName.ORIGINAL_2017.toString(), Dataset.PLACE_2017.YEAR_STRING, downloadURL);
-        for (IStatusTracker2017 tracker : statusTrackers)
-            tracker.onFileDownloadComplete();
+        sortAndCompress();
     }
 
-    public boolean sortAndCompress(boolean deleteSource) {
+    private boolean downloadDataset() {
+        if (!validateDirectory(Dataset.PLACE_2017.YEAR_STRING))
+            return false;
+        boolean success = downloadFile(FileName.ORIGINAL_2017.toString(), Dataset.PLACE_2017.YEAR_STRING, downloadURL);
+        if (success)
+            for (IStatusTracker2017 tracker : statusTrackers)
+                tracker.onFileDownloadComplete();
+        return success;
+    }
+
+    private boolean sortAndCompress() {
+        return sortAndCompress(true);
+    }
+
+    private boolean sortAndCompress(boolean deleteSource) {
         try {
             System.out.flush();
             BufferedReader reader = new BufferedReader(new FileReader(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.ORIGINAL_2017));
             TileEdit[] tileEdits = new TileEdit[PlaceInfo.CLEAN_LINE_COUNT_2017];
             int lineCount = 0;
-
             bytesProcessed = 0;
             while (reader.ready()) {
                 String line = reader.readLine();
@@ -46,7 +57,13 @@ public class DataWrangler2017 extends DataWrangler {
                 tileEdits[lineCount] = tile;
                 bytesProcessed += line.length();
                 lineCount++;
+                if(Thread.currentThread().isInterrupted()){
+                    reader.close();
+                    cancelDownload();
+                    return false;
+                }
             }
+            reader.close();
             for (IStatusTracker2017 tracker : statusTrackers)
                 tracker.onFileReadComplete();
             // Sort
@@ -63,9 +80,13 @@ public class DataWrangler2017 extends DataWrangler {
             for (TileEdit tile : tileEdits) {
                 outputStream.write(tile.toByteArray());
                 bytesProcessed += TileEdit.BYTE_COUNT;
+                if(Thread.currentThread().isInterrupted()){
+                    outputStream.close();
+                    cancelDownload();
+                    return false;
+                }
             }
             outputStream.close();
-            reader.close();
             for (IStatusTracker2017 tracker : statusTrackers)
                 tracker.onCompressComplete();
             if (deleteSource) {
@@ -93,6 +114,7 @@ public class DataWrangler2017 extends DataWrangler {
         return true;
     }
 
+
     public void addStatusTracker(IStatusTracker2017 tracker) {
         statusTrackers.add(tracker);
     }
@@ -105,4 +127,16 @@ public class DataWrangler2017 extends DataWrangler {
         statusTrackers.clear();
     }
 
+    @Override
+    protected void cancelDownload() {
+        File original = new File(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017.getYearPath() + FileName.ORIGINAL_2017);
+        File compressed = new File(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017.getYearPath() + FileName.ORIGINAL_2017);
+        if (original.exists() && original.isFile())
+            original.delete();
+        if (compressed.exists() && compressed.isFile())
+            compressed.delete();
+        for(IStatusTracker2017 tracker : statusTrackers){
+            tracker.onCancel();
+        }
+    }
 }

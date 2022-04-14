@@ -10,4 +10,6 @@ public interface IStatusTracker2017 {
 
     void onCompressComplete();
 
+    void onCancel();
+
 }

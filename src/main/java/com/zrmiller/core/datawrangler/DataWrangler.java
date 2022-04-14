@@ -32,6 +32,12 @@ public abstract class DataWrangler {
             while ((numBytesRead = inputStream.read(data, 0, BYTE_BUFFER_SIZE)) >= 0) {
                 bytesProcessed += numBytesRead;
                 outputStream.write(data, 0, numBytesRead);
+                if(Thread.currentThread().isInterrupted()){
+                    inputStream.close();
+                    outputStream.close();
+                    cancelDownload();
+                    return false;
+                }
             }
             inputStream.close();
             outputStream.close();
@@ -132,6 +138,8 @@ public abstract class DataWrangler {
         buffer.putInt(value);
         outputStream.write(buffer.array());
     }
+
+    abstract protected void cancelDownload();
 
     /**
      * Returns 0-100

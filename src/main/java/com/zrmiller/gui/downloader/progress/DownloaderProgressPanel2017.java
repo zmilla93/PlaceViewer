@@ -1,12 +1,15 @@
 package com.zrmiller.gui.downloader.progress;
 
 import com.zrmiller.core.datawrangler.DataWrangler2017;
+import com.zrmiller.core.datawrangler.DownloadManager;
 import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2017;
 import com.zrmiller.core.utility.TileEdit;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
 
@@ -51,6 +54,11 @@ public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
                 datasetManagerFrame.swapToDownloader();
                 timer.stop();
             }
+
+            @Override
+            public void onCancel() {
+                datasetManagerFrame.swapToDownloader();
+            }
         };
         // FIXME: Timer Cleanup
         timer = new Timer(1000 / DOWNLOADER_PROGRESS_FPS, e -> proc(state));
@@ -61,6 +69,12 @@ public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
 
     private void addListeners() {
         // FIXME:
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DownloadManager.cancel();
+            }
+        });
 //        cancelButton.addActionListener(e -> datasetManagerFrame.swapToDownloader());
     }
 

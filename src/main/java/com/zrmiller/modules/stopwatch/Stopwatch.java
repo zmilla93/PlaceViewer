@@ -17,4 +17,10 @@ public class Stopwatch {
         return elapsed / 1000f;
     }
 
+    public static float getElapsedMilliSeconds() {
+        long elapsed = System.nanoTime() - startTime;
+        elapsed /= 1000000;
+        return elapsed;
+    }
+
 }

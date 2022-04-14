@@ -9,11 +9,14 @@ import com.zrmiller.gui.mainframe.listeners.ICanvasListener;
 import com.zrmiller.modules.colortheme.ColorManager;
 import com.zrmiller.modules.colortheme.IThemeListener;
 import com.zrmiller.modules.listening.ListenManagerPanel;
+import com.zrmiller.modules.stopwatch.Stopwatch;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements IThemeListener, IDatasetListener {
 
@@ -49,6 +52,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
 
     public CanvasPanel() {
         int delay = targetFPS == -1 ? 0 : 1000 / targetFPS;
+        Stopwatch.start();
         timer = new Timer(delay, e -> {
             if (lastPaintedFrame != player.getFrameCount()) {
                 markForRepaint = true;

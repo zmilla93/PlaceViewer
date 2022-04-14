@@ -155,4 +155,8 @@ public class DataWrangler2022 extends DataWrangler {
         statusTrackers.clear();
     }
 
+    @Override
+    protected void cancelDownload() {
+        // FIXME:
+    }
 }
