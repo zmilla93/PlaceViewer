@@ -2,7 +2,6 @@ package com.zrmiller.gui.mainframe;
 
 import com.zrmiller.App;
 import com.zrmiller.core.enums.Dataset;
-import com.zrmiller.core.enums.ZoomLevel;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.parser.PlacePlayer;
 import com.zrmiller.core.utility.PlaceCanvas;
@@ -21,19 +20,13 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
 
     private final int targetFPS = 60;
 
-    private ZoomLevel zoomLevel = ZoomLevel.Zoom_1;
-
     // Mouse Movement
     private int initialX;
     private int initialY;
     private int initialPanX;
     private int initialPanY;
-
-    // Selection Box
-    private int selectionX;
-    private int selectionY;
-    private int selectionWidth;
-    private int selectionHeight;
+    private boolean leftMouseDown;
+    private boolean rightMouseDown;
 
     // Painting
     private final PlacePlayer player = new PlacePlayer();
@@ -42,9 +35,6 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     private boolean markForRepaint;
     int lastPaintedFrame = 0;
     private final Timer timer;
-
-    enum MouseState{NONE, LMB, RMB}
-    private MouseState mouseState = MouseState.NONE;
 
     public CanvasPanel() {
         int delay = targetFPS == -1 ? 0 : 1000 / targetFPS;
@@ -98,20 +88,30 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                if(e.getButton() == MouseEvent.BUTTON1){
-                    mouseState = MouseState.LMB;
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    leftMouseDown = true;
                     initialX = e.getX();
                     initialY = e.getY();
                     initialPanX = canvas.viewportPanX;
                     initialPanY = canvas.viewportPanY;
+                } else if (e.getButton() == MouseEvent.BUTTON3) {
+                    rightMouseDown = true;
+                    Point tile = screenPointToPixel(e.getX(), e.getY());
+                    canvas.selectionX1 = tile.x;
+                    canvas.selectionY1 = tile.y;
+                    canvas.selectionX2 = tile.x;
+                    canvas.selectionY2 = tile.y;
+                    markForRepaint = true;
                 }
-                else if(e.getButton() == MouseEvent.BUTTON3){
-                    mouseState = MouseState.RMB;
-                    selectionX = e.getX();
-                    selectionY = e.getY();
-                }
-                else{
-                    mouseState = MouseState.NONE;
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    leftMouseDown = false;
+                } else if (e.getButton() == MouseEvent.BUTTON3) {
+                    rightMouseDown = false;
                 }
             }
         });
@@ -119,7 +119,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
             @Override
             public void mouseDragged(MouseEvent e) {
                 super.mouseDragged(e);
-                if(mouseState == MouseState.LMB){
+                if (leftMouseDown) {
                     int dragX = e.getX() - initialX;
                     int dragY = e.getY() - initialY;
                     canvas.viewportPanX = initialPanX - dragX;
@@ -127,9 +127,10 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
                     canvas.restrictPan();
                     markForRepaint = true;
                 }
-                else if(mouseState == MouseState.RMB){
-                    selectionWidth = e.getX() - selectionX;
-                    selectionHeight = e.getY() - selectionY;
+                if (rightMouseDown) {
+                    Point tile = screenPointToPixel(e.getX(), e.getY());
+                    canvas.selectionX2 = tile.x;
+                    canvas.selectionY2 = tile.y;
                     markForRepaint = true;
                 }
             }
@@ -151,19 +152,19 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
 
     private Point screenPointToPixel(int x, int y) {
         Point point = new Point();
-        if (zoomLevel.zoomOut) {
-            point.x = (x + canvas.viewportPanX) * zoomLevel.modifier;
-            point.y = (y + canvas.viewportPanY) * zoomLevel.modifier;
+        if (canvas.zoomLevel.zoomOut) {
+            point.x = (x + canvas.viewportPanX) * canvas.zoomLevel.modifier;
+            point.y = (y + canvas.viewportPanY) * canvas.zoomLevel.modifier;
         } else {
-            point.x = (x + canvas.viewportPanX) / zoomLevel.modifier;
-            point.y = (y + canvas.viewportPanY) / zoomLevel.modifier;
+            point.x = (x + canvas.viewportPanX) / canvas.zoomLevel.modifier;
+            point.y = (y + canvas.viewportPanY) / canvas.zoomLevel.modifier;
         }
         return point;
     }
 
     private void alertListeners() {
         for (ICanvasListener listener : listeners) {
-            listener.onZoom(zoomLevel);
+            listener.onZoom(canvas.zoomLevel);
         }
     }
 
@@ -175,10 +176,6 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     protected void paintComponent(Graphics g) {
         bufferedImage.getRaster().setPixels(0, 0, canvas.viewportWidth, canvas.viewportHeight, canvas.getColorBuffer());
         g.drawImage(bufferedImage, 0, 0, Color.white, null);
-        if(selectionWidth != 0 &&selectionHeight != 0 ){
-            BufferedImage image = new BufferedImage(Math.abs(selectionWidth), Math.abs(selectionHeight), BufferedImage.TYPE_INT_ARGB);
-            g.drawImage(image, selectionX, selectionY, new Color(0,0,0,0.5f), null);
-        }
     }
 
     @Override

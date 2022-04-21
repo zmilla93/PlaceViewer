@@ -21,12 +21,23 @@ public class PlaceCanvas {
     public int viewportPanX = 0;
     public int viewportPanY = 0;
 
+    public int selectionX1;
+    public int selectionY1;
+    public int selectionX2;
+    public int selectionY2;
+
+    private boolean selection = false;
+    private int selectionXLower;
+    private int selectionXUpper;
+    private int selectionYLower;
+    private int selectionYUpper;
+
     private Color backgroundColor = Color.WHITE;
 
     int[] rgbColorBuffer = new int[viewportWidth * viewportHeight * 3]; // 3 entries per pixel
 
-    private ZoomLevel zoomLevel = ZoomLevel.Zoom_1;
-    private PlacePlayer player;
+    public ZoomLevel zoomLevel = ZoomLevel.Zoom_1;
+    private final PlacePlayer player;
 
     public PlaceCanvas(PlacePlayer player) {
         this.player = player;
@@ -35,6 +46,7 @@ public class PlaceCanvas {
     public void updateColorBuffer() {
         if (App.dataset() == null)
             return;
+        calculateSelectionBounds();
         for (int y = 0; y < viewportHeight; y++) {
             for (int x = 0; x < viewportWidth; x++) {
                 resolvePixel(x, y);
@@ -64,10 +76,14 @@ public class PlaceCanvas {
         }
         // FIXME : Heatmap : IllegalArgumentException: Color parameter outside of expected range: Red Green Blue
         int heat = player.getHeatmapBuffer()[canvasIndex];
-//        float f = heat / (float) PlacePlayer.heatmapMax;
-//        Color c = new Color(f, f, f);
         int colorIndex = player.getColorBuffer()[canvasIndex];
         Color color = App.dataset().COLOR_ARRAY[colorIndex];
+        if (selection) {
+            if (pixelX < selectionXLower || pixelX >= selectionXUpper ||
+                    pixelY < selectionYLower || pixelY >= selectionYUpper) {
+                color = new Color((int) (color.getRed() * 0.5f), (int) (color.getGreen() * 0.5f), (int) (color.getBlue() * 0.5f));
+            }
+        }
         int checkX = zoomLevel.zoomOut ? App.dataset().CANVAS_SIZE_X / zoomLevel.modifier : App.dataset().CANVAS_SIZE_X * zoomLevel.modifier;
         int checkY = zoomLevel.zoomOut ? App.dataset().CANVAS_SIZE_Y / zoomLevel.modifier : App.dataset().CANVAS_SIZE_Y * zoomLevel.modifier;
         if (x < 0 || x >= checkX || y < 0 || y >= checkY * zoomLevel.modifier) {
@@ -81,6 +97,43 @@ public class PlaceCanvas {
             rgbColorBuffer[colorBufferIndex + 1] = color.getGreen();
             rgbColorBuffer[colorBufferIndex + 2] = color.getBlue();
         }
+    }
+
+    private void calculateSelectionBounds() {
+        if (selectionX1 == selectionX2 && selectionY1 == selectionY2) {
+            selection = false;
+            return;
+        }
+        if (selectionX1 < selectionX2) {
+            selectionXLower = selectionX1;
+            selectionXUpper = selectionX2;
+        } else {
+            selectionXLower = selectionX2;
+            selectionXUpper = selectionX1;
+        }
+        if (selectionY1 < selectionY2) {
+            selectionYLower = selectionY1;
+            selectionYUpper = selectionY2;
+        } else {
+            selectionYLower = selectionY2;
+            selectionYUpper = selectionY1;
+        }
+        if (zoomLevel.zoomOut) {
+            selectionXLower /= zoomLevel.modifier;
+            selectionXUpper /= zoomLevel.modifier;
+            selectionYLower /= zoomLevel.modifier;
+            selectionYUpper /= zoomLevel.modifier;
+        } else {
+            selectionXLower *= zoomLevel.modifier;
+            selectionXUpper *= zoomLevel.modifier;
+            selectionYLower *= zoomLevel.modifier;
+            selectionYUpper *= zoomLevel.modifier;
+        }
+        selectionXLower -= viewportPanX;
+        selectionXUpper -= viewportPanX;
+        selectionYLower -= viewportPanY;
+        selectionYUpper -= viewportPanY;
+        selection = true;
     }
 
     public void jumpToPixel(Point point) {
@@ -107,7 +160,7 @@ public class PlaceCanvas {
         }
     }
 
-        public Point getCenterPixel() {
+    public Point getCenterPixel() {
         Point point = new Point();
         if (zoomLevel.zoomOut) {
             point.x = (viewportWidth / 2 + viewportPanX) * zoomLevel.modifier;
@@ -160,7 +213,7 @@ public class PlaceCanvas {
         restrictPan();
     }
 
-    public void setBackgroundColor(Color color){
+    public void setBackgroundColor(Color color) {
         backgroundColor = color;
     }
 
