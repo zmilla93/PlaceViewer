@@ -34,7 +34,8 @@ public class PlaceCanvas {
 
     private Color backgroundColor = Color.WHITE;
 
-    int[] rgbColorBuffer = new int[viewportWidth * viewportHeight * 3]; // 3 entries per pixel
+    private static final int COLOR_CHANNEL_COUNT = 3;
+    int[] rgbColorBuffer = new int[viewportWidth * viewportHeight * COLOR_CHANNEL_COUNT];
 
     public ZoomLevel zoomLevel = ZoomLevel.Zoom_1;
     private final PlacePlayer player;
@@ -67,7 +68,8 @@ public class PlaceCanvas {
         } else {
             canvasIndex = x / zoomLevel.modifier + y / zoomLevel.modifier * App.dataset().CANVAS_SIZE_X;
         }
-        int colorBufferIndex = pixelX * 3 + pixelY * viewportWidth * 3;   // index of top left colorBuffer element being drawn
+        // index of top left colorBuffer element being drawn
+        int colorBufferIndex = pixelX * COLOR_CHANNEL_COUNT + pixelY * viewportWidth * COLOR_CHANNEL_COUNT;
         if (canvasIndex < 0 || canvasIndex >= player.getColorBuffer().length) {
             rgbColorBuffer[colorBufferIndex] = backgroundColor.getRed();
             rgbColorBuffer[colorBufferIndex + 1] = backgroundColor.getGreen();
@@ -223,7 +225,7 @@ public class PlaceCanvas {
         if (zoomLevel.zoomOut) return;
         viewportWidth = width * zoomLevel.modifier;
         viewportHeight = height * zoomLevel.modifier;
-        rgbColorBuffer = new int[viewportWidth * viewportHeight * 3]; // 3 entries per pixel
+        rgbColorBuffer = new int[viewportWidth * viewportHeight * COLOR_CHANNEL_COUNT];
         this.zoomLevel = zoomLevel;
         jumpToPixelTopLeft(posX, posY);
         updateColorBuffer();

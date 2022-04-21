@@ -101,13 +101,17 @@ public class PlacePlayer implements IDatasetListener {
     }
 
     public boolean jumpToFrame(int frame) {
-        if (App.dataset() == null)
+        if (App.dataset() == null || frame == frameCount)
             return false;
         boolean wasPlaying = state == State.PLAYING;
         state = State.SEEKING;
-        stop();
-        parser.openStream();
-        streamIsOpen = true;
+        if(frame < frameCount){
+            stop();
+        }
+        if(!streamIsOpen){
+            parser.openStream();
+            streamIsOpen = true;
+        }
         try {
             while (frameCount < frame) {
                 if (!applyNextFrame())
