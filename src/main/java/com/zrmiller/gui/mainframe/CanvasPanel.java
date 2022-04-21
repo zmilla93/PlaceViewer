@@ -243,8 +243,15 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
                 viewportPanY = initialPanY - dragY;
                 restrictPan();
                 markForRepaint = true;
+//                for (ICanvasListener listener : listeners)
+//                    listener.onPan(getCenterPixel());
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                super.mouseMoved(e);
                 for (ICanvasListener listener : listeners)
-                    listener.onPan(getCenterPixel());
+                    listener.onPan(screenPointToPixel(e.getX(), e.getY()));
             }
         });
         addComponentListener(new ComponentAdapter() {
@@ -253,6 +260,18 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
                 resizeCanvas();
             }
         });
+    }
+
+    private Point screenPointToPixel(int x, int y) {
+        Point point = new Point();
+        if (zoomLevel.zoomOut) {
+            point.x = (x + viewportPanX) * zoomLevel.modifier;
+            point.y = (y + viewportPanY) * zoomLevel.modifier;
+        } else {
+            point.x = (x + viewportPanX) / zoomLevel.modifier;
+            point.y = (y + viewportPanY) / zoomLevel.modifier;
+        }
+        return point;
     }
 
     private void alertListeners() {

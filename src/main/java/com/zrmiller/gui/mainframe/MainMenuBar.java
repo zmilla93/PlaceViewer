@@ -105,26 +105,7 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
 
     private void testExport() {
         Canvas canvas = new Canvas(FrameManager.canvasPanel.getPlayer());
-        canvas.export(300,300, 100, 100, ZoomLevel.Zoom_8);
-//        int width = 100;
-//        int height = 100;
-//        int posX = 10;
-//        int posY = 10;
-//        canvas.viewportWidth = width;
-//        canvas.viewportHeight = height;
-//        canvas.jumpToPixelTopLeft(posX, posY);
-//        canvas.updateColorBuffer();
-//        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-//        image.getRaster().setPixels(0, 0, width, height, canvas.getColorBuffer());
-//        File outDir = new File(SaveManager.settings.data.dataDirectory + "exports/");
-//        File outFile = new File(SaveManager.settings.data.dataDirectory + "exports/" + "test.png");
-//        if (!outDir.exists())
-//            outDir.mkdirs();
-//        try {
-//            ImageIO.write(image, "png", outFile);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        canvas.export(0,0, 1000, 1000, ZoomLevel.Zoom_1);
     }
 
     public void validateDatasetMenu() {
@@ -141,7 +122,6 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
         });
         closeDatasetButton.setVisible(App.dataset() != null);
     }
-
 
     @Override
     public void onDatasetChanged(Dataset datasets) {
