@@ -3,6 +3,7 @@ package com.zrmiller.gui.exporting;
 import com.zrmiller.core.enums.ExportSelection;
 import com.zrmiller.core.enums.ZoomLevel;
 import com.zrmiller.core.strings.References;
+import com.zrmiller.core.utility.PlaceCanvas;
 import com.zrmiller.core.utility.ZUtil;
 
 import javax.swing.*;
@@ -14,7 +15,7 @@ public class ExportImageWindow extends JFrame {
         setTitle(References.APP_NAME + " - Export PNG");
         setLayout(new BorderLayout());
 
-        JTextField fileNameInput = new JTextField();
+        JTextField fileNameInput = new JTextField(20);
         JComboBox<ExportSelection> selectionCombo = new JComboBox<>();
         JComboBox<ZoomLevel> zoomCombo = new JComboBox<>();
         for(ExportSelection selection : ExportSelection.values()) selectionCombo.addItem(selection);
@@ -68,9 +69,16 @@ public class ExportImageWindow extends JFrame {
         gc.gridy++;
 
         add(panel, BorderLayout.CENTER);
+        setMinimumSize(new Dimension(400,300));
         pack();
 //        revalidate();
 //        repaint();
+    }
+
+    public void applyCanvasValues(PlaceCanvas canvas){
+        if(canvas.selection){
+
+        }
     }
 
 }

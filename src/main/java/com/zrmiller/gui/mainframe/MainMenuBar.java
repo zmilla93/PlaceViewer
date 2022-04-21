@@ -111,6 +111,7 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
 
             }
         });
+        exportImageButton.addActionListener(e -> FrameManager.exportImageWindow.setVisible(true));
         openExportsButton.addActionListener(e -> ZUtil.openExplorer(SaveManager.settings.data.dataDirectory + "exports"));
         exportCanvasButton.addActionListener(new ActionListener() {
             @Override

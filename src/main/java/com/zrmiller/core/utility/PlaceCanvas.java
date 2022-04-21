@@ -26,7 +26,7 @@ public class PlaceCanvas {
     public int selectionX2;
     public int selectionY2;
 
-    private boolean selection = false;
+    public boolean selection = false;
     private int selectionXLower;
     private int selectionXUpper;
     private int selectionYLower;
@@ -108,17 +108,17 @@ public class PlaceCanvas {
         }
         if (selectionX1 < selectionX2) {
             selectionXLower = selectionX1;
-            selectionXUpper = selectionX2;
+            selectionXUpper = selectionX2 + 1;
         } else {
             selectionXLower = selectionX2;
-            selectionXUpper = selectionX1;
+            selectionXUpper = selectionX1 + 1;
         }
         if (selectionY1 < selectionY2) {
             selectionYLower = selectionY1;
-            selectionYUpper = selectionY2;
+            selectionYUpper = selectionY2 + 1;
         } else {
             selectionYLower = selectionY2;
-            selectionYUpper = selectionY1;
+            selectionYUpper = selectionY1 + 1;
         }
         if (zoomLevel.zoomOut) {
             selectionXLower /= zoomLevel.modifier;
