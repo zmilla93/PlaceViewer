@@ -3,10 +3,8 @@ package com.zrmiller.gui.mainframe;
 import com.zrmiller.App;
 import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.enums.Dataset;
-import com.zrmiller.core.enums.ZoomLevel;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
-import com.zrmiller.core.utility.PlaceCanvas;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.FrameManager;
 import com.zrmiller.modules.colortheme.ColorManager;
@@ -117,8 +115,8 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
     }
 
     private void testExport() {
-        PlaceCanvas placeCanvas = new PlaceCanvas(FrameManager.canvasPanel.getPlayer());
-        placeCanvas.export(0, 0, 1000, 1000, ZoomLevel.Zoom_1);
+//        PlaceCanvas placeCanvas = new PlaceCanvas(FrameManager.canvasPanel.getPlayer());
+//        placeCanvas.export(0, 0, 1000, 1000, ZoomLevel.Zoom_1);
     }
 
     public void validateDatasetMenu() {

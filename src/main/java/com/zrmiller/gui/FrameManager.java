@@ -10,7 +10,6 @@ import com.zrmiller.gui.frames.DatasetManagerFrame;
 import com.zrmiller.gui.frames.MainFrame;
 import com.zrmiller.gui.mainframe.CanvasPanel;
 import com.zrmiller.gui.mainframe.MainPanel;
-import com.zrmiller.gui.mainframe.PlayerControlPanel;
 import com.zrmiller.modules.colortheme.ColorManager;
 import com.zrmiller.modules.colortheme.ColorTheme;
 

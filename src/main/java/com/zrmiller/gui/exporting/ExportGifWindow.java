@@ -1,16 +1,20 @@
 package com.zrmiller.gui.exporting;
 
+import com.zrmiller.core.enums.ZoomLevel;
 import com.zrmiller.core.strings.References;
 import com.zrmiller.core.utility.PlaceCanvas;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.FrameManager;
+import com.zrmiller.gui.mainframe.listeners.ICanvasListener;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 
-public class ExportGifWindow extends JFrame {
+public class ExportGifWindow extends JDialog implements ICanvasListener {
 
     JLabel selectionLabel = new JLabel();
 
@@ -18,10 +22,13 @@ public class ExportGifWindow extends JFrame {
     JTextField tilesPerSecondInput = new JTextField("10000000");
     JTextField startFrameInput = new JTextField("10000000");
     JTextField endFrameInput = new JTextField("10000000");
+    JButton exportButton = new JButton("Export");
 
     private int startFrame;
     private int endFrame;
+    private int tilesPerSecond;
     private int fps;
+    private ZoomLevel zoomLevel = ZoomLevel.Zoom_1;
 
     protected Container container = getContentPane();
     private PlaceCanvas canvas;
@@ -31,6 +38,7 @@ public class ExportGifWindow extends JFrame {
         setTitle(References.APP_NAME + " - Export GIF");
         container.setLayout(new BorderLayout());
         setMinimumSize(new Dimension(300, 200));
+        setAlwaysOnTop(true);
 
         JLabel playbackLabel = new JLabel("Tiles per Second");
         JLabel fpsInfoLabel = new JLabel("GIF FPS");
@@ -38,7 +46,7 @@ public class ExportGifWindow extends JFrame {
         JLabel info1 = new JLabel("Click and drag right mouse to create a selection.");
         JLabel info2 = new JLabel("Tap right click to clear selection.");
 
-
+        startFrameInput.setText("0");
         fpsLabel.setPreferredSize(fpsLabel.getPreferredSize());
 
         fpsSlider.setValue(24);
@@ -70,7 +78,6 @@ public class ExportGifWindow extends JFrame {
         gc.gridx++;
         startEndPanel.add(endFrameInput, gc);
 
-
         gc = ZUtil.getGC();
         JPanel speedPanel = new JPanel(new GridBagLayout());
         speedPanel.add(playbackLabel, gc);
@@ -90,6 +97,8 @@ public class ExportGifWindow extends JFrame {
         gc = ZUtil.getGC();
 
         JPanel panel = new JPanel(new GridBagLayout());
+        gc.fill = GridBagConstraints.HORIZONTAL;
+        gc.weightx = 1;
         panel.add(startEndPanel, gc);
         gc.gridy++;
         panel.add(speedPanel, gc);
@@ -98,29 +107,90 @@ public class ExportGifWindow extends JFrame {
         gc.gridy++;
         panel.add(infoPanel, gc);
         gc.gridy++;
+        panel.add(estimatedTimeLabel, gc);
+        gc.gridy++;
+        panel.add(exportButton, gc);
+        gc.gridy++;
 
+        updateEstimatedTime();
+        container.add(new JSeparator(), BorderLayout.NORTH);
         container.add(panel, BorderLayout.CENTER);
+        addListeners();
         pack();
+    }
 
+    private void addListeners() {
+        addUpdateEstimatedTimeListener(startFrameInput);
+        addUpdateEstimatedTimeListener(endFrameInput);
+        addUpdateEstimatedTimeListener(tilesPerSecondInput);
+        exportButton.addActionListener(e -> {
+            readInputs();
+            PlaceCanvas placeCanvas = new PlaceCanvas(FrameManager.canvasPanel.getPlayer());
+            Rectangle rect;
+            if (FrameManager.canvasPanel.getCanvas().selection) {
+                rect = FrameManager.canvasPanel.getCanvas().getSelectionBounds();
+            } else {
+                // FIXME:
+                rect = new Rectangle(0, 0, 1000, 1000);
+            }
+            FrameManager.canvasPanel.getCanvas().getSelectionBounds();
+            placeCanvas.exportGIF(rect.x, rect.y, rect.width, rect.height, ZoomLevel.Zoom_1, startFrame, endFrame, tilesPerSecond, fps);
+        });
+    }
+
+    private void addUpdateEstimatedTimeListener(JTextField textField) {
+        textField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateEstimatedTime();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateEstimatedTime();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+
+            }
+        });
     }
 
     private void readInputs() {
         startFrame = Integer.parseInt(startFrameInput.getText());
         endFrame = Integer.parseInt(endFrameInput.getText());
+        tilesPerSecond = Integer.parseInt(tilesPerSecondInput.getText());
         fps = fpsSlider.getValue();
     }
 
     private void updateEstimatedTime() {
+        readInputs();
         int totalFrames = endFrame - startFrame;
         if (totalFrames < 1) {
             estimatedTimeLabel.setText("Invalid Range");
         }
-        float time = totalFrames / FrameManager.canvasPanel.getPlayer().getSpeed();
-//        estimatedTimeLabel.setText("Estimated Time: " + time + " seconds");
+        System.out.println("TOT:" + totalFrames);
+        float time = totalFrames / (float) tilesPerSecond;
+        estimatedTimeLabel.setText("Estimated Time: " + time + " seconds");
     }
 
     public void setCanvas(PlaceCanvas canvas) {
         this.canvas = canvas;
     }
 
+    @Override
+    public void onZoom(ZoomLevel zoomLevel) {
+        this.zoomLevel = zoomLevel;
+    }
+
+    @Override
+    public void onPan(Point center) {
+
+    }
+
+    @Override
+    public void onDraw(int frameCount) {
+
+    }
 }

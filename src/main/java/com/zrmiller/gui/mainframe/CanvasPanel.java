@@ -174,6 +174,10 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
         return player;
     }
 
+    public PlaceCanvas getCanvas() {
+        return canvas;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         bufferedImage.getRaster().setPixels(0, 0, canvas.viewportWidth, canvas.viewportHeight, canvas.getColorBuffer());

@@ -138,6 +138,12 @@ public class PlaceCanvas {
         selection = true;
     }
 
+    public Rectangle getSelectionBounds() {
+        if (!selection)
+            return null;
+        return new Rectangle(selectionXLower, selectionYLower, selectionXUpper - selectionXLower, selectionYUpper - selectionYLower);
+    }
+
     public void jumpToPixel(Point point) {
         jumpToPixel(point.x, point.y);
     }
@@ -219,7 +225,7 @@ public class PlaceCanvas {
         backgroundColor = color;
     }
 
-    public void export(int posX, int posY, int width, int height, ZoomLevel zoomLevel) {
+    public void exportImage(int posX, int posY, int width, int height, ZoomLevel zoomLevel) {
         if (App.dataset() == null)
             return;
         if (zoomLevel.zoomOut) return;
@@ -262,6 +268,67 @@ public class PlaceCanvas {
             updateColorBuffer();
             image.getRaster().setPixels(0, 0, width * zoomLevel.modifier, height * zoomLevel.modifier, getColorBuffer());
             writer.writeToSequence(image);
+
+            writer.close();
+            outputStream.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void exportGIF(int posX, int posY, int width, int height, ZoomLevel zoomLevel, int startFrame, int endFrame, int tilesPerSecond, int fps) {
+        if (App.dataset() == null)
+            return;
+        if (zoomLevel.zoomOut) return;
+        viewportWidth = width * zoomLevel.modifier;
+        viewportHeight = height * zoomLevel.modifier;
+        rgbColorBuffer = new int[viewportWidth * viewportHeight * COLOR_CHANNEL_COUNT];
+        this.zoomLevel = zoomLevel;
+        jumpToPixelTopLeft(posX, posY);
+        updateColorBuffer();
+        BufferedImage image = new BufferedImage(width * zoomLevel.modifier, height * zoomLevel.modifier, BufferedImage.TYPE_INT_RGB);
+        image.getRaster().setPixels(0, 0, width * zoomLevel.modifier, height * zoomLevel.modifier, getColorBuffer());
+        File outDir = new File(SaveManager.settings.data.dataDirectory + "exports/");
+        File outFile = new File(SaveManager.settings.data.dataDirectory + "exports/" + "test.gif");
+        if (outDir.exists()) {
+            if (!outDir.isDirectory())
+                return;
+        } else if (!outDir.mkdirs())
+            return;
+        try {
+            int frameIncrement = tilesPerSecond / fps;
+
+            ImageOutputStream outputStream = new FileImageOutputStream(outFile);
+            GifSequenceWriter writer = new GifSequenceWriter(outputStream, image.getType(), 1000 / fps, true);
+
+
+            for (int i = startFrame; i <= endFrame; i += frameIncrement) {
+                player.jumpToFrame(i);
+                updateColorBuffer();
+                image.getRaster().setPixels(0, 0, width * zoomLevel.modifier, height * zoomLevel.modifier, getColorBuffer());
+                writer.writeToSequence(image);
+            }
+
+//            player.jumpToFrame(10);
+//            updateColorBuffer();
+//            image.getRaster().setPixels(0, 0, width * zoomLevel.modifier, height * zoomLevel.modifier, getColorBuffer());
+//            writer.writeToSequence(image);
+//
+//            player.jumpToFrame(100);
+//            updateColorBuffer();
+//            image.getRaster().setPixels(0, 0, width * zoomLevel.modifier, height * zoomLevel.modifier, getColorBuffer());
+//            writer.writeToSequence(image);
+//
+//            player.jumpToFrame(1000);
+//            updateColorBuffer();
+//            image.getRaster().setPixels(0, 0, width * zoomLevel.modifier, height * zoomLevel.modifier, getColorBuffer());
+//            writer.writeToSequence(image);
+//
+//            player.jumpToFrame(10000);
+//            updateColorBuffer();
+//            image.getRaster().setPixels(0, 0, width * zoomLevel.modifier, height * zoomLevel.modifier, getColorBuffer());
+//            writer.writeToSequence(image);
 
             writer.close();
             outputStream.close();
