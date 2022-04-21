@@ -103,7 +103,7 @@ public class DataWrangler2022 extends DataWrangler {
             writeYear(outputStream, Dataset.PLACE_2022.YEAR);
             writeMetaInt(outputStream);
             File file = new File(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + source);
-            fileSize = (int)file.length();
+            fileSize = (int) file.length();
             bytesProcessed = 0;
             while (reader.ready()) {
                 String line = reader.readLine();

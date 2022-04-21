@@ -12,14 +12,9 @@ import com.zrmiller.gui.FrameManager;
 import com.zrmiller.modules.colortheme.ColorManager;
 import com.zrmiller.modules.colortheme.ColorTheme;
 
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class MainMenuBar extends JMenuBar implements IDatasetListener {
 
@@ -105,7 +100,7 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
 
     private void testExport() {
         Canvas canvas = new Canvas(FrameManager.canvasPanel.getPlayer());
-        canvas.export(0,0, 1000, 1000, ZoomLevel.Zoom_1);
+        canvas.export(0, 0, 1000, 1000, ZoomLevel.Zoom_1);
     }
 
     public void validateDatasetMenu() {

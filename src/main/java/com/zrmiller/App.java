@@ -1,6 +1,5 @@
 package com.zrmiller;
 
-import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.DataWrangler2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.DatasetManager;
@@ -12,7 +11,6 @@ import com.zrmiller.gui.FrameManager;
 import javax.swing.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.Objects;
 
 

@@ -10,9 +10,7 @@ import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 public class Canvas {
 
@@ -21,7 +19,7 @@ public class Canvas {
     private int viewportPanX = 0;
     private int viewportPanY = 0;
 
-    private Color backgroundColor = Color.black;
+    private final Color backgroundColor = Color.black;
 
     int[] rgbColorBuffer = new int[viewportWidth * viewportHeight * 3]; // 3 entries per pixel
 

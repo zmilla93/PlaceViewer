@@ -57,7 +57,7 @@ public class DataWrangler2017 extends DataWrangler {
                 tileEdits[lineCount] = tile;
                 bytesProcessed += line.length();
                 lineCount++;
-                if(Thread.currentThread().isInterrupted()){
+                if (Thread.currentThread().isInterrupted()) {
                     reader.close();
                     cancelDownload();
                     return false;
@@ -80,7 +80,7 @@ public class DataWrangler2017 extends DataWrangler {
             for (TileEdit tile : tileEdits) {
                 outputStream.write(tile.toByteArray());
                 bytesProcessed += TileEdit.BYTE_COUNT;
-                if(Thread.currentThread().isInterrupted()){
+                if (Thread.currentThread().isInterrupted()) {
                     outputStream.close();
                     cancelDownload();
                     return false;
@@ -135,7 +135,7 @@ public class DataWrangler2017 extends DataWrangler {
             original.delete();
         if (compressed.exists() && compressed.isFile())
             compressed.delete();
-        for(IStatusTracker2017 tracker : statusTrackers){
+        for (IStatusTracker2017 tracker : statusTrackers) {
             tracker.onCancel();
         }
     }
