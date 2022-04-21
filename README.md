@@ -14,3 +14,6 @@ If you enjoy my work, please consider [donating](https://www.paypal.com/paypalme
 - Data from 2017 is a 1 GB download, 166 MB compressed.
 - Data from 2022 is a 10.6 GB download, 1.6 GB compressed. This is broken into 88 files, so you only need space for the compressed size.
 - User hash is discarded while compressing. All other information is preserved.
+
+#### Credits
+GifSequenceWriter.java - Elliot Kroo (CC BY 3)
