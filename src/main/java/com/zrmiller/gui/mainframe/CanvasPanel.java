@@ -39,6 +39,12 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     private int initialPanX;
     private int initialPanY;
 
+    // Selection Box
+    private int selectionX;
+    private int selectionY;
+    private int selectionWidth;
+    private int selectionHeight;
+
     // Painting
     private final PlacePlayer player = new PlacePlayer();
     int[] rgbColorBuffer = new int[viewportWidth * viewportHeight * 3]; // 3 entries per pixel
@@ -47,6 +53,9 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     private Color backgroundColor = Color.RED;
     int lastPaintedFrame = 0;
     private final Timer timer;
+
+    enum MouseState{NONE, LMB, RMB}
+    private MouseState mouseState = MouseState.NONE;
 
     public CanvasPanel() {
         int delay = targetFPS == -1 ? 0 : 1000 / targetFPS;
@@ -227,22 +236,55 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                initialX = e.getX();
-                initialY = e.getY();
-                initialPanX = viewportPanX;
-                initialPanY = viewportPanY;
+                System.out.println("E:" + e.getButton());
+                System.out.println("B:" + MouseEvent.BUTTON1);
+                if(e.getButton() == MouseEvent.BUTTON1){
+                    mouseState = MouseState.LMB;
+                    initialX = e.getX();
+                    initialY = e.getY();
+                    initialPanX = viewportPanX;
+                    initialPanY = viewportPanY;
+
+                }
+                else if(e.getButton() == MouseEvent.BUTTON3){
+                    mouseState = MouseState.RMB;
+                    selectionX = e.getX();
+                    selectionY = e.getY();
+                }
+                else{
+                    mouseState = MouseState.NONE;
+                }
+
+
             }
         });
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
                 super.mouseDragged(e);
-                int dragX = e.getX() - initialX;
-                int dragY = e.getY() - initialY;
-                viewportPanX = initialPanX - dragX;
-                viewportPanY = initialPanY - dragY;
-                restrictPan();
-                markForRepaint = true;
+//                System.out.println("E:" + e.getButton());
+//                System.out.println("B:" + MouseEvent.BUTTON1);
+                System.out.println("STATE:" + mouseState);
+                if(mouseState == MouseState.LMB){
+                    int dragX = e.getX() - initialX;
+                    int dragY = e.getY() - initialY;
+                    viewportPanX = initialPanX - dragX;
+                    viewportPanY = initialPanY - dragY;
+                    restrictPan();
+                    markForRepaint = true;
+                }
+                else if(mouseState == MouseState.RMB){
+                    selectionWidth = e.getX() - selectionX;
+                    selectionHeight = e.getY() - selectionY;
+                    markForRepaint = true;
+                }
+//                if(e.getButton() == MouseEvent.BUTTON1){
+
+
+//                }
+//                else if(e.getButton() == MouseEvent.BUTTON2){
+//
+//                }
 //                for (ICanvasListener listener : listeners)
 //                    listener.onPan(getCenterPixel());
             }
@@ -289,6 +331,10 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     protected void paintComponent(Graphics g) {
         bufferedImage.getRaster().setPixels(0, 0, viewportWidth, viewportHeight, rgbColorBuffer);
         g.drawImage(bufferedImage, 0, 0, Color.white, null);
+        if(selectionWidth != 0 &&selectionHeight != 0 ){
+            BufferedImage image = new BufferedImage(Math.abs(selectionWidth), Math.abs(selectionHeight), BufferedImage.TYPE_INT_ARGB);
+            g.drawImage(image, selectionX, selectionY, new Color(0,0,0,0.5f), null);
+        }
     }
 
     @Override
