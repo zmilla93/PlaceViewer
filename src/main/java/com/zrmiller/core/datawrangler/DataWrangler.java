@@ -32,7 +32,7 @@ public abstract class DataWrangler {
             while ((numBytesRead = inputStream.read(data, 0, BYTE_BUFFER_SIZE)) >= 0) {
                 bytesProcessed += numBytesRead;
                 outputStream.write(data, 0, numBytesRead);
-                if(Thread.currentThread().isInterrupted()){
+                if (Thread.currentThread().isInterrupted()) {
                     inputStream.close();
                     outputStream.close();
                     cancelDownload();

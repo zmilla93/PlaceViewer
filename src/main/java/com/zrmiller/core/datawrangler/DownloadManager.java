@@ -3,8 +3,6 @@ package com.zrmiller.core.datawrangler;
 import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2017;
 import com.zrmiller.gui.FrameManager;
 
-import java.util.concurrent.Future;
-
 public class DownloadManager {
 
     private static Thread thread;
