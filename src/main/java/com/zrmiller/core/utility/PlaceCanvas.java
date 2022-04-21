@@ -12,21 +12,23 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class Canvas {
+public class PlaceCanvas {
+
+    private static final int PAN_OOB_SIZE = 100;
 
     public int viewportWidth = 1400;
     public int viewportHeight = 1400;
-    private int viewportPanX = 0;
-    private int viewportPanY = 0;
+    public int viewportPanX = 0;
+    public int viewportPanY = 0;
 
-    private final Color backgroundColor = Color.black;
+    private Color backgroundColor = Color.WHITE;
 
     int[] rgbColorBuffer = new int[viewportWidth * viewportHeight * 3]; // 3 entries per pixel
 
     private ZoomLevel zoomLevel = ZoomLevel.Zoom_1;
     private PlacePlayer player;
 
-    public Canvas(PlacePlayer player) {
+    public PlaceCanvas(PlacePlayer player) {
         this.player = player;
     }
 
@@ -81,6 +83,20 @@ public class Canvas {
         }
     }
 
+    public void jumpToPixel(Point point) {
+        jumpToPixel(point.x, point.y);
+    }
+
+    public void jumpToPixel(int x, int y) {
+        if (zoomLevel.zoomOut) {
+            viewportPanX = x / zoomLevel.modifier - (viewportWidth / 2);
+            viewportPanY = y / zoomLevel.modifier - (viewportHeight / 2);
+        } else {
+            viewportPanX = x * zoomLevel.modifier - (viewportWidth / 2);
+            viewportPanY = y * zoomLevel.modifier - (viewportHeight / 2);
+        }
+    }
+
     public void jumpToPixelTopLeft(int x, int y) {
         if (zoomLevel.zoomOut) {
             viewportPanX = x / zoomLevel.modifier;
@@ -89,6 +105,63 @@ public class Canvas {
             viewportPanX = x * zoomLevel.modifier;
             viewportPanY = y * zoomLevel.modifier;
         }
+    }
+
+        public Point getCenterPixel() {
+        Point point = new Point();
+        if (zoomLevel.zoomOut) {
+            point.x = (viewportWidth / 2 + viewportPanX) * zoomLevel.modifier;
+            point.y = (viewportHeight / 2 + viewportPanY) * zoomLevel.modifier;
+        } else {
+            point.x = (viewportWidth / 2 + viewportPanX) / zoomLevel.modifier;
+            point.y = (viewportHeight / 2 + viewportPanY) / zoomLevel.modifier;
+        }
+        return point;
+    }
+
+    public void restrictPan() {
+        if (App.dataset() == null)
+            return;
+        int minX, maxX, minY, maxY;
+        if (zoomLevel.zoomOut) {
+            minX = -PAN_OOB_SIZE / zoomLevel.modifier - viewportWidth / 2;
+            maxX = App.dataset().CANVAS_SIZE_X / zoomLevel.modifier - viewportWidth / 2 + PAN_OOB_SIZE / zoomLevel.modifier;
+            minY = -PAN_OOB_SIZE / zoomLevel.modifier - viewportHeight / 2;
+            maxY = App.dataset().CANVAS_SIZE_X / zoomLevel.modifier - viewportHeight / 2 + PAN_OOB_SIZE / zoomLevel.modifier;
+        } else {
+            minX = -PAN_OOB_SIZE * zoomLevel.modifier - viewportWidth / 2;
+            maxX = App.dataset().CANVAS_SIZE_X * zoomLevel.modifier - viewportWidth / 2 + PAN_OOB_SIZE * zoomLevel.modifier;
+            minY = -PAN_OOB_SIZE * zoomLevel.modifier - viewportHeight / 2;
+            maxY = App.dataset().CANVAS_SIZE_Y * zoomLevel.modifier - viewportHeight / 2 + PAN_OOB_SIZE * zoomLevel.modifier;
+        }
+        if (viewportPanX < minX) viewportPanX = minX;
+        if (viewportPanX > maxX) viewportPanX = maxX;
+        if (viewportPanY < minY) viewportPanY = minY;
+        if (viewportPanY > maxY) viewportPanY = maxY;
+    }
+
+    public void zoomOut() {
+        Point looking = getCenterPixel();
+        int zoom = zoomLevel.ordinal();
+        if (zoom >= 1) {
+            zoomLevel = ZoomLevel.values()[zoom - 1];
+        }
+        jumpToPixel(looking);
+        restrictPan();
+    }
+
+    public void zoomIn() {
+        Point looking = getCenterPixel();
+        int zoom = zoomLevel.ordinal();
+        if ((zoom < ZoomLevel.values().length - 1)) {
+            zoomLevel = ZoomLevel.values()[zoom + 1];
+        }
+        jumpToPixel(looking);
+        restrictPan();
+    }
+
+    public void setBackgroundColor(Color color){
+        backgroundColor = color;
     }
 
     public void export(int posX, int posY, int width, int height, ZoomLevel zoomLevel) {
