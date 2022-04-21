@@ -100,15 +100,19 @@ public class PlacePlayer implements IDatasetListener {
         tileUpdatesPerSecond = speed;
     }
 
+    public int getSpeed() {
+        return tileUpdatesPerSecond;
+    }
+
     public boolean jumpToFrame(int frame) {
         if (App.dataset() == null || frame == frameCount)
             return false;
         boolean wasPlaying = state == State.PLAYING;
         state = State.SEEKING;
-        if(frame < frameCount){
+        if (frame < frameCount) {
             stop();
         }
-        if(!streamIsOpen){
+        if (!streamIsOpen) {
             parser.openStream();
             streamIsOpen = true;
         }

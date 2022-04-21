@@ -6,6 +6,7 @@ import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.parser.PlacePlayer;
 import com.zrmiller.core.utility.PlaceCanvas;
 import com.zrmiller.gui.mainframe.listeners.ICanvasListener;
+import com.zrmiller.gui.mainframe.listeners.IPlayerControllerListener;
 import com.zrmiller.modules.colortheme.ColorManager;
 import com.zrmiller.modules.colortheme.IThemeListener;
 import com.zrmiller.modules.listening.ListenManagerPanel;
@@ -16,7 +17,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
-public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements IThemeListener, IDatasetListener {
+public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements IThemeListener, IDatasetListener, IPlayerControllerListener {
 
     private final int targetFPS = 60;
 
@@ -36,7 +37,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     int lastPaintedFrame = 0;
     private final Timer timer;
 
-    public CanvasPanel() {
+    public CanvasPanel(PlayerControlPanel playerControlPanel) {
         int delay = targetFPS == -1 ? 0 : 1000 / targetFPS;
         Stopwatch.start();
         timer = new Timer(delay, e -> {
@@ -45,6 +46,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
         timer.start();
         addListeners();
         App.datasetManager.addListener(this);
+        playerControlPanel.addListener(this);
     }
 
     private void tryRepaint() {
@@ -189,4 +191,25 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
         tryRepaint(true);
     }
 
+    // Player Controls
+
+    @Override
+    public void onReset() {
+        player.stop();
+    }
+
+    @Override
+    public void onPlay() {
+        player.play();
+    }
+
+    @Override
+    public void onPause() {
+        player.pause();
+    }
+
+    @Override
+    public void onSpeedChange(int tilesPerSecond) {
+        player.setSpeed(tilesPerSecond);
+    }
 }

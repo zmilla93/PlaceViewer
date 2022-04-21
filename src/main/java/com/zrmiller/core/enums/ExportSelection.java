@@ -7,7 +7,7 @@ public enum ExportSelection {
 
     private final String name;
 
-    ExportSelection(String name){
+    ExportSelection(String name) {
         this.name = name;
     }
 

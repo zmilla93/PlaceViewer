@@ -105,13 +105,8 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
         githubButton.addActionListener(e -> ZUtil.openLink("https://github.com/zmilla93/PlaceViewer"));
         paypalButton.addActionListener(e -> ZUtil.openLink("https://www.paypal.com/paypalme/zmilla93"));
         quitButton.addActionListener(e -> System.exit(0));
-        exportImageButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
         exportImageButton.addActionListener(e -> FrameManager.exportImageWindow.setVisible(true));
+        exportGifButton.addActionListener(e -> FrameManager.exportGifWindow.setVisible(true));
         openExportsButton.addActionListener(e -> ZUtil.openExplorer(SaveManager.settings.data.dataDirectory + "exports"));
         exportCanvasButton.addActionListener(new ActionListener() {
             @Override

@@ -15,7 +15,8 @@ import java.text.NumberFormat;
 public class MainPanel extends JPanel implements ICanvasListener, IDatasetListener {
 
     private final IntroPanel introPanel = new IntroPanel();
-    private final CanvasPanel canvasPanel = new CanvasPanel();
+    private PlayerControlPanel controlPanel = new PlayerControlPanel();
+    private final CanvasPanel canvasPanel = new CanvasPanel(controlPanel);
 
     private final JPanel southPanel = new JPanel(new BorderLayout());
     private final JLabel positionLabel = new JLabel("Pos -");
@@ -27,13 +28,14 @@ public class MainPanel extends JPanel implements ICanvasListener, IDatasetListen
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel cardPanel = new JPanel(cardLayout);
 
+
     public MainPanel() {
         setLayout(new BorderLayout());
         FrameManager.canvasPanel = canvasPanel;
 
         // North Panel
         JPanel northBuffer = new JPanel(new BorderLayout());
-        northBuffer.add(new PlayerControlPanel(canvasPanel.getPlayer()), BorderLayout.WEST);
+        northBuffer.add(controlPanel, BorderLayout.WEST);
         northBuffer.add(new JumpToFramePanel(canvasPanel, canvasPanel.getPlayer()), BorderLayout.EAST);
 
         northPanel.add(northBuffer, BorderLayout.CENTER);
@@ -64,6 +66,10 @@ public class MainPanel extends JPanel implements ICanvasListener, IDatasetListen
         onPan(new Point(0, 0));
         addListeners();
         App.datasetManager.addListener(this);
+    }
+
+    public PlayerControlPanel getControlPanel() {
+        return controlPanel;
     }
 
     public void showCard(Card card) {

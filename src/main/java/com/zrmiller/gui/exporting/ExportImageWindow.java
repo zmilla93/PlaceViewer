@@ -11,15 +11,15 @@ import java.awt.*;
 
 public class ExportImageWindow extends JFrame {
 
-    public ExportImageWindow(){
+    public ExportImageWindow() {
         setTitle(References.APP_NAME + " - Export PNG");
         setLayout(new BorderLayout());
 
         JTextField fileNameInput = new JTextField(20);
         JComboBox<ExportSelection> selectionCombo = new JComboBox<>();
         JComboBox<ZoomLevel> zoomCombo = new JComboBox<>();
-        for(ExportSelection selection : ExportSelection.values()) selectionCombo.addItem(selection);
-        for(ZoomLevel zoom : ZoomLevel.values()) zoomCombo.addItem(zoom);
+        for (ExportSelection selection : ExportSelection.values()) selectionCombo.addItem(selection);
+        for (ZoomLevel zoom : ZoomLevel.values()) zoomCombo.addItem(zoom);
         JLabel info1 = new JLabel("Click and drag right mouse to create a selection.");
         JLabel info2 = new JLabel("Tap right click to clear selection.");
         JButton exportButton = new JButton("Export");
@@ -31,21 +31,21 @@ public class ExportImageWindow extends JFrame {
         JPanel panel = new JPanel(new GridBagLayout());
 
 
-        GridBagConstraints gc= ZUtil.getGC();
+        GridBagConstraints gc = ZUtil.getGC();
 
         filePanel.add(new JLabel("File Name"), gc);
         gc.gridx++;
         filePanel.add(fileNameInput, gc);
         gc.gridx++;
 
-        gc= ZUtil.getGC();
+        gc = ZUtil.getGC();
 
         selectionPanel.add(new JLabel("Area"), gc);
         gc.gridx++;
         selectionPanel.add(selectionCombo, gc);
         gc.gridx++;
 
-        gc= ZUtil.getGC();
+        gc = ZUtil.getGC();
 
         zoomPanel.add(new JLabel("Zoom Level"), gc);
         gc.gridx++;
@@ -57,7 +57,7 @@ public class ExportImageWindow extends JFrame {
         infoPanel.add(info2, gc);
         gc.gridy++;
 
-        gc= ZUtil.getGC();
+        gc = ZUtil.getGC();
 
         panel.add(filePanel, gc);
         gc.gridy++;
@@ -69,14 +69,14 @@ public class ExportImageWindow extends JFrame {
         gc.gridy++;
 
         add(panel, BorderLayout.CENTER);
-        setMinimumSize(new Dimension(400,300));
+        setMinimumSize(new Dimension(400, 300));
         pack();
 //        revalidate();
 //        repaint();
     }
 
-    public void applyCanvasValues(PlaceCanvas canvas){
-        if(canvas.selection){
+    public void applyCanvasValues(PlaceCanvas canvas) {
+        if (canvas.selection) {
 
         }
     }
