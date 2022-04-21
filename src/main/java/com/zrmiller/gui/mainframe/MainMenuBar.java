@@ -42,6 +42,9 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
 
     // Export Menu Bar
     private final JMenuItem exportCanvasButton = new JMenuItem("Export Canvas");
+    private final JMenuItem exportImageButton = new JMenuItem("Export PNG...");
+    private final JMenuItem exportGifButton = new JMenuItem("Export GIF...");
+    private final JMenuItem openExportsButton = new JMenuItem("Open Exports Folder");
 
     public MainMenuBar() {
         // Create theme list
@@ -59,6 +62,8 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
         // Options
         optionsMenu.add(themeMenu);
         optionsMenu.add(new JSeparator());
+        optionsMenu.add(exportMenu);
+        optionsMenu.add(new JSeparator());
         optionsMenu.add(githubButton);
         optionsMenu.add(paypalButton);
         optionsMenu.add(new JSeparator());
@@ -73,13 +78,17 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
         datasetMenu.add(datasetManagerButton);
 
         // Export
-        exportMenu.add(exportCanvasButton);
+//        exportMenu.add(exportCanvasButton);
+        exportMenu.add(exportImageButton);
+        exportMenu.add(exportGifButton);
+        exportMenu.add(new JSeparator());
+        exportMenu.add(openExportsButton);
 
         // Build Menu Bar
         add(optionsMenu);
         add(datasetMenu);
         add(displayMenu);
-        add(exportMenu);
+//        add(exportMenu);
 
         validateDatasetMenu();
         addListeners();
@@ -96,6 +105,19 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
         githubButton.addActionListener(e -> ZUtil.openLink("https://github.com/zmilla93/PlaceViewer"));
         paypalButton.addActionListener(e -> ZUtil.openLink("https://www.paypal.com/paypalme/zmilla93"));
         quitButton.addActionListener(e -> System.exit(0));
+        exportImageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        openExportsButton.addActionListener(e -> ZUtil.openExplorer(SaveManager.settings.data.dataDirectory + "exports"));
+        exportCanvasButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                testExport();
+            }
+        });
     }
 
     private void testExport() {
@@ -109,12 +131,7 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
         boolean showMissing = !show2017 && !show2022;
         dataset2017Button.setEnabled(show2017);
         dataset2022Button.setEnabled(true);
-        exportCanvasButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                testExport();
-            }
-        });
+
         closeDatasetButton.setVisible(App.dataset() != null);
     }
 
