@@ -5,16 +5,20 @@ import com.zrmiller.core.enums.ZoomLevel;
 import com.zrmiller.core.strings.References;
 import com.zrmiller.core.utility.PlaceCanvas;
 import com.zrmiller.core.utility.ZUtil;
+import com.zrmiller.gui.FrameManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ExportImageWindow extends JFrame {
+
+    private JButton exportButton = new JButton("Export");
 
     public ExportImageWindow() {
         setTitle(References.APP_NAME + " - Export PNG");
         setLayout(new BorderLayout());
-
         JTextField fileNameInput = new JTextField(20);
         JComboBox<ExportSelection> selectionCombo = new JComboBox<>();
         JComboBox<ZoomLevel> zoomCombo = new JComboBox<>();
@@ -22,7 +26,6 @@ public class ExportImageWindow extends JFrame {
         for (ZoomLevel zoom : ZoomLevel.values()) zoomCombo.addItem(zoom);
         JLabel info1 = new JLabel("Click and drag right mouse to create a selection.");
         JLabel info2 = new JLabel("Tap right click to clear selection.");
-        JButton exportButton = new JButton("Export");
 
         JPanel filePanel = new JPanel(new GridBagLayout());
         JPanel selectionPanel = new JPanel(new GridBagLayout());
@@ -67,12 +70,38 @@ public class ExportImageWindow extends JFrame {
         gc.gridy++;
         panel.add(infoPanel, gc);
         gc.gridy++;
+        panel.add(exportButton, gc);
+        gc.gridy++;
 
         add(panel, BorderLayout.CENTER);
         setMinimumSize(new Dimension(400, 300));
         pack();
 //        revalidate();
 //        repaint();
+
+        addListeners();
+    }
+
+    private void addListeners() {
+        exportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlaceCanvas canvas = FrameManager.canvasPanel.getCanvas();
+                PlaceCanvas renderCanvas = new PlaceCanvas(FrameManager.canvasPanel.getPlayer());
+                renderCanvas.zoomLevel = canvas.zoomLevel;
+                Rectangle rect;
+                System.out.println("zoom:" + renderCanvas.zoomLevel);
+                if (FrameManager.canvasPanel.getCanvas().selection) {
+                    System.out.println("SELECTION:" + canvas.getSelectionBounds());
+                    rect = canvas.getSelectionBounds();
+                    System.out.println(rect);
+                } else {
+                    // FIXME:
+                    rect = new Rectangle(0, 0, 1000, 1000);
+                }
+                renderCanvas.exportImage(rect.x, rect.y, rect.width, rect.height, renderCanvas.zoomLevel);
+            }
+        });
     }
 
     public void applyCanvasValues(PlaceCanvas canvas) {

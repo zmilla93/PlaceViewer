@@ -125,16 +125,21 @@ public class ExportGifWindow extends JDialog implements ICanvasListener {
         addUpdateEstimatedTimeListener(tilesPerSecondInput);
         exportButton.addActionListener(e -> {
             readInputs();
-            PlaceCanvas placeCanvas = new PlaceCanvas(FrameManager.canvasPanel.getPlayer());
+            PlaceCanvas canvas = FrameManager.canvasPanel.getCanvas();
+            PlaceCanvas renderCanvas = new PlaceCanvas(FrameManager.canvasPanel.getPlayer());
+            renderCanvas.zoomLevel = canvas.zoomLevel;
             Rectangle rect;
+            System.out.println("zoom:" + renderCanvas.zoomLevel);
             if (FrameManager.canvasPanel.getCanvas().selection) {
-                rect = FrameManager.canvasPanel.getCanvas().getSelectionBounds();
+                rect = canvas.getSelectionBounds();
+                System.out.println(rect);
             } else {
                 // FIXME:
                 rect = new Rectangle(0, 0, 1000, 1000);
             }
-            FrameManager.canvasPanel.getCanvas().getSelectionBounds();
-            placeCanvas.exportGIF(rect.x, rect.y, rect.width, rect.height, ZoomLevel.Zoom_1, startFrame, endFrame, tilesPerSecond, fps);
+//            FrameManager.canvasPanel.getCanvas().getSelectionBounds();
+//            Point p = canvas
+            renderCanvas.exportGIF(rect.x, rect.y, rect.width, rect.height, renderCanvas.zoomLevel, startFrame, endFrame, tilesPerSecond, fps);
         });
     }
 
@@ -170,7 +175,6 @@ public class ExportGifWindow extends JDialog implements ICanvasListener {
         if (totalFrames < 1) {
             estimatedTimeLabel.setText("Invalid Range");
         }
-        System.out.println("TOT:" + totalFrames);
         float time = totalFrames / (float) tilesPerSecond;
         estimatedTimeLabel.setText("Estimated Time: " + time + " seconds");
     }

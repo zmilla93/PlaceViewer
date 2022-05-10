@@ -42,6 +42,16 @@ public enum ZoomLevel {
         return 100 * zoom + "%";
     }
 
+    public int scale(int value) {
+        if (zoomOut) return value / modifier;
+        else return value * modifier;
+    }
+
+    public int unscale(int value) {
+        if (zoomOut) return value * modifier;
+        else return value / modifier;
+    }
+
     @Override
     public String toString() {
         return name;
