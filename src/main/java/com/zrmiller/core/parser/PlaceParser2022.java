@@ -22,8 +22,6 @@ public class PlaceParser2022 extends AbstractPlaceParser {
         try {
             currentStream = new PlaceInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(PlaceInfo.fileOrder[0])));
             nextStream = new PlaceInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(PlaceInfo.fileOrder[1])));
-            currentStream.openStream();
-            nextStream.openStream();
             fileIndex = 2;
             return true;
         } catch (IOException e) {
@@ -73,7 +71,6 @@ public class PlaceParser2022 extends AbstractPlaceParser {
         if (fileIndex < PlaceInfo.fileOrder.length) {
             try {
                 nextStream = new PlaceInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(PlaceInfo.fileOrder[fileIndex])));
-                nextStream.openStream();
                 fileIndex++;
             } catch (IOException e) {
                 e.printStackTrace();

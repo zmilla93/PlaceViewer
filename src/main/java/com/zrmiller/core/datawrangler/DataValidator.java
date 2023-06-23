@@ -60,7 +60,6 @@ public class DataValidator {
             for (int i = 0; i < PlaceInfo.FILE_COUNT_2022; i++) {
                 System.out.println("I:" + SaveManager.getSaveDirectory() + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i));
                 PlaceInputStream inputStream = new PlaceInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i)));
-                inputStream.openStream();
                 inputStream.ready();
                 TileEdit tile = inputStream.getNextTile();
                 orderMap.put(tile.timestamp, i);

@@ -18,28 +18,6 @@ public class PlaceInputStream extends BufferedInputStream {
         super(inputStream);
     }
 
-    /**
-     * Reads the first 6 bytes of the file, which are metadata.
-     *
-     * @return
-     */
-    public boolean openStream() {
-        byte[] meta = new byte[TileEdit.META_COUNT];
-        try {
-            int numByteRead = read(meta);
-            if (numByteRead != TileEdit.META_COUNT) {
-                return false;
-            }
-//            ByteBuffer buffer = ByteBuffer.wrap(meta);
-//            int year = buffer.getShort();
-//            int format = buffer.getInt();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     public boolean ready() throws IOException {
         return tryGetNextTile();
     }
