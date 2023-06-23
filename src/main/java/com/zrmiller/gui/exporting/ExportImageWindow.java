@@ -1,5 +1,6 @@
 package com.zrmiller.gui.exporting;
 
+import com.zrmiller.App;
 import com.zrmiller.core.enums.ExportSelection;
 import com.zrmiller.core.enums.ZoomLevel;
 import com.zrmiller.core.strings.References;
@@ -76,8 +77,6 @@ public class ExportImageWindow extends JFrame {
         add(panel, BorderLayout.CENTER);
         setMinimumSize(new Dimension(400, 300));
         pack();
-//        revalidate();
-//        repaint();
 
         addListeners();
     }
@@ -90,24 +89,15 @@ public class ExportImageWindow extends JFrame {
                 PlaceCanvas renderCanvas = new PlaceCanvas(FrameManager.canvasPanel.getPlayer());
                 renderCanvas.zoomLevel = canvas.zoomLevel;
                 Rectangle rect;
-                System.out.println("zoom:" + renderCanvas.zoomLevel);
                 if (FrameManager.canvasPanel.getCanvas().selection) {
-                    System.out.println("SELECTION:" + canvas.getSelectionBounds());
                     rect = canvas.getSelectionBounds();
                     System.out.println(rect);
                 } else {
-                    // FIXME:
-                    rect = new Rectangle(0, 0, 1000, 1000);
+                    rect = new Rectangle(0, 0, App.dataset().CANVAS_SIZE_X, App.dataset().CANVAS_SIZE_Y);
                 }
                 renderCanvas.exportImage(rect.x, rect.y, rect.width, rect.height, renderCanvas.zoomLevel);
             }
         });
-    }
-
-    public void applyCanvasValues(PlaceCanvas canvas) {
-        if (canvas.selection) {
-
-        }
     }
 
 }

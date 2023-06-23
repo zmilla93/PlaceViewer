@@ -1,17 +1,20 @@
 package com.zrmiller.gui.exporting;
 
+import com.zrmiller.App;
 import com.zrmiller.core.enums.ZoomLevel;
 import com.zrmiller.core.strings.References;
 import com.zrmiller.core.utility.PlaceCanvas;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.FrameManager;
 import com.zrmiller.gui.mainframe.listeners.ICanvasListener;
+import com.zrmiller.gui.misc.NumberDocumentFilter;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.PlainDocument;
 import java.awt.*;
 
 public class ExportGifWindow extends JDialog implements ICanvasListener {
@@ -129,21 +132,18 @@ public class ExportGifWindow extends JDialog implements ICanvasListener {
             PlaceCanvas renderCanvas = new PlaceCanvas(FrameManager.canvasPanel.getPlayer());
             renderCanvas.zoomLevel = canvas.zoomLevel;
             Rectangle rect;
-            System.out.println("zoom:" + renderCanvas.zoomLevel);
             if (FrameManager.canvasPanel.getCanvas().selection) {
                 rect = canvas.getSelectionBounds();
                 System.out.println(rect);
             } else {
-                // FIXME:
-                rect = new Rectangle(0, 0, 1000, 1000);
+                rect = new Rectangle(0, 0, App.dataset().CANVAS_SIZE_X, App.dataset().CANVAS_SIZE_Y);
             }
-//            FrameManager.canvasPanel.getCanvas().getSelectionBounds();
-//            Point p = canvas
             renderCanvas.exportGIF(rect.x, rect.y, rect.width, rect.height, renderCanvas.zoomLevel, startFrame, endFrame, tilesPerSecond, fps);
         });
     }
 
     private void addUpdateEstimatedTimeListener(JTextField textField) {
+        ((PlainDocument) textField.getDocument()).setDocumentFilter(new NumberDocumentFilter());
         textField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -163,19 +163,20 @@ public class ExportGifWindow extends JDialog implements ICanvasListener {
     }
 
     private void readInputs() {
-        startFrame = Integer.parseInt(startFrameInput.getText());
-        endFrame = Integer.parseInt(endFrameInput.getText());
-        tilesPerSecond = Integer.parseInt(tilesPerSecondInput.getText());
+        startFrame = startFrameInput.getText().equals("") ? 0 : Integer.parseInt(startFrameInput.getText());
+        endFrame = endFrameInput.getText().equals("") ? 0 : Integer.parseInt(endFrameInput.getText());
+        tilesPerSecond = tilesPerSecondInput.getText().equals("") ? 0 : Integer.parseInt(tilesPerSecondInput.getText());
         fps = fpsSlider.getValue();
     }
 
     private void updateEstimatedTime() {
         readInputs();
         int totalFrames = endFrame - startFrame;
-        if (totalFrames < 1) {
-            estimatedTimeLabel.setText("Invalid Range");
-        }
         float time = totalFrames / (float) tilesPerSecond;
+        if (time <= 0 || Float.isNaN(time) || Float.isInfinite(time)) {
+            estimatedTimeLabel.setText("Invalid Range");
+            return;
+        }
         estimatedTimeLabel.setText("Estimated Time: " + time + " seconds");
     }
 

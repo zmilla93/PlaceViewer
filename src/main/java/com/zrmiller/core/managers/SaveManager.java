@@ -15,6 +15,7 @@ public class SaveManager {
     private static final String folderWin = "PlaceViewer";
     private static final String folderOther = ".placeviewer";
 
+    // FIXME : Switch to local low
     public static String getSaveDirectory() {
         if (saveDirectory == null) {
             String os = (System.getProperty("os.name")).toUpperCase();
