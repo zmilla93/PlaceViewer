@@ -1,5 +1,6 @@
-package com.zrmiller.core.datawrangler;
+package com.zrmiller.core.datawrangler.legacy;
 
+import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;

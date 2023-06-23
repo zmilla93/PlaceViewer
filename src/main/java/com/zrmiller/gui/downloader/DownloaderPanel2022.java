@@ -1,7 +1,7 @@
 package com.zrmiller.gui.downloader;
 
 import com.zrmiller.core.datawrangler.DataValidator;
-import com.zrmiller.core.datawrangler.DataWrangler2022;
+import com.zrmiller.core.datawrangler.legacy.DataWrangler2022;
 import com.zrmiller.core.datawrangler.DownloadManager;
 import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.core.utility.ZUtil;
@@ -57,7 +57,7 @@ public class DownloaderPanel2022 extends CardDownloaderPanel {
 
     private void addListeners() {
         downloadButton.addActionListener(e -> {
-            DataWrangler2022 wrangler2022 = DownloadManager.runDownload2022();
+            DataWrangler2022 wrangler2022 = DownloadManager.OLD_runDownload2022();
             datasetManagerFrame.getProgressPanel2022().setWrangler(wrangler2022);
             datasetManagerFrame.swapToProgress2022();
         });

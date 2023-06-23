@@ -1,6 +1,6 @@
 package com.zrmiller.gui.downloader.progress;
 
-import com.zrmiller.core.datawrangler.DataWrangler2022;
+import com.zrmiller.core.datawrangler.legacy.DataWrangler2022;
 import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2022;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
 
@@ -50,6 +50,16 @@ public class DownloaderProgressPanel2022 extends AbstractDownloadProgressPanel {
         timer = new Timer(1000 / DOWNLOADER_PROGRESS_FPS, e -> proc());
         dataWrangler2022.addStatusTracker(tracker);
         timer.start();
+    }
+
+    @Override
+    protected void bindDownloader() {
+        // TODO
+    }
+
+    @Override
+    void tick() {
+        // TODO
     }
 
     private void proc() {

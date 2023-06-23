@@ -1,4 +1,4 @@
-package com.zrmiller.core.datawrangler;
+package com.zrmiller.core.datawrangler.legacy;
 
 import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2017;
 import com.zrmiller.core.enums.Dataset;

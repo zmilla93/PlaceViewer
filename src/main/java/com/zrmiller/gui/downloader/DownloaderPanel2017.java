@@ -1,7 +1,8 @@
 package com.zrmiller.gui.downloader;
 
+import com.zrmiller.core.datawrangler.DataDownloader2017;
 import com.zrmiller.core.datawrangler.DataValidator;
-import com.zrmiller.core.datawrangler.DataWrangler2017;
+import com.zrmiller.core.datawrangler.legacy.DataWrangler2017;
 import com.zrmiller.core.datawrangler.DownloadManager;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.FrameManager;
@@ -47,8 +48,10 @@ public class DownloaderPanel2017 extends CardDownloaderPanel {
             showTestScreen();
             return;
         }
-        DataWrangler2017 dataWrangler2017 = DownloadManager.runDownload2017();
-        datasetManagerFrame.getProgressPanel2017().setWrangler(dataWrangler2017);
+//        DataWrangler2017 dataWrangler2017 = DownloadManager.OLD_runDownload2017();
+//        datasetManagerFrame.getProgressPanel2017().setWrangler(dataWrangler2017);
+        DataDownloader2017 downloader = DownloadManager.runDownload2017();
+        datasetManagerFrame.getProgressPanel2017().setDownloader(downloader);
         datasetManagerFrame.swapToProgress2017();
     }
 

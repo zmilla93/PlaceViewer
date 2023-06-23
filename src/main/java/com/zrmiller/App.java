@@ -1,6 +1,6 @@
 package com.zrmiller;
 
-import com.zrmiller.core.datawrangler.DataWrangler2022;
+import com.zrmiller.core.datawrangler.legacy.DataWrangler2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.SaveManager;

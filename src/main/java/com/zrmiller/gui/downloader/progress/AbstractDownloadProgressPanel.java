@@ -1,6 +1,7 @@
 package com.zrmiller.gui.downloader.progress;
 
-import com.zrmiller.core.datawrangler.DataWrangler;
+import com.zrmiller.core.datawrangler.DataDownloader;
+import com.zrmiller.core.datawrangler.legacy.DataWrangler;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.downloader.BaseDownloaderPanel;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
@@ -17,6 +18,8 @@ public abstract class AbstractDownloadProgressPanel extends BaseDownloaderPanel 
     protected final int DOWNLOADER_PROGRESS_FPS = 10;
     protected Timer timer;
     protected DataWrangler wrangler;
+    protected DataDownloader downloader;
+    private final int TIMER_DELAY_MILLISECONDS = 200;
 
     public AbstractDownloadProgressPanel(DatasetManagerFrame datasetManagerFrame) {
         super(datasetManagerFrame);
@@ -39,6 +42,8 @@ public abstract class AbstractDownloadProgressPanel extends BaseDownloaderPanel 
 
     protected abstract void bindWrangler();
 
+    protected abstract void bindDownloader();
+
     public void setInfoUpper(String text) {
         labelUpper.setText(text);
     }
@@ -51,6 +56,26 @@ public abstract class AbstractDownloadProgressPanel extends BaseDownloaderPanel 
         this.wrangler = wrangler;
         bindWrangler();
     }
+
+    public void setDownloader(DataDownloader downloader){
+        this.downloader = downloader;
+        bindDownloader();
+    }
+
+    public void startTimer(){
+        if(timer != null) timer.stop();
+        timer = new Timer(TIMER_DELAY_MILLISECONDS, e -> {
+            tick();
+        });
+        timer.start();
+    }
+
+    public void stopTimer(){
+        if(timer != null) timer.stop();
+        timer = null;
+    }
+
+    abstract void tick();
 
     public JProgressBar getProgressBar() {
         return progressBar;

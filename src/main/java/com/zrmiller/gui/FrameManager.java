@@ -45,8 +45,8 @@ public class FrameManager {
 
         // Visibility
         mainFrame.setVisible(true);
-        exportImageWindow.setVisible(true);
-        exportGifWindow.setVisible(true);
+//        exportImageWindow.setVisible(true);
+//        exportGifWindow.setVisible(true);
     }
 
     public static void tryShowDataset(Dataset dataset) {

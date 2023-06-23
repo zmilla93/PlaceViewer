@@ -1,8 +1,9 @@
 package com.zrmiller.gui.downloader.progress;
 
-import com.zrmiller.core.datawrangler.DataWrangler2017;
 import com.zrmiller.core.datawrangler.DownloadManager;
+import com.zrmiller.core.datawrangler.callbacks.IDownloadTracker;
 import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2017;
+import com.zrmiller.core.datawrangler.legacy.DataWrangler2017;
 import com.zrmiller.core.utility.TileEdit;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
@@ -15,13 +16,14 @@ public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
 
     private DownloadState state;
 
-    enum DownloadState {DOWNLOADING, COMPRESSING, SORTING, SAVING,}
+    enum DownloadState {DOWNLOADING, COMPRESSING, SORTING, SAVING, COMPLETE, CANCELED}
 
     public DownloaderProgressPanel2017(DatasetManagerFrame datasetManagerFrame) {
         super(datasetManagerFrame);
         addListeners();
     }
 
+    // TODO : Remove
     @Override
     public void bindWrangler() {
         state = DownloadState.DOWNLOADING;
@@ -67,6 +69,36 @@ public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
         timer.start();
     }
 
+    @Override
+    protected void bindDownloader() {
+        state = DownloadState.DOWNLOADING;
+        setInfoUpper("Downloading 2017 dataset...");
+        setInfoLower("Loading...");
+        IDownloadTracker tracker = new IDownloadTracker() {
+            @Override
+            public void onDownloadComplete() {
+                state = DownloadState.COMPLETE;
+                stopTimer();
+                datasetManagerFrame.validate2017();
+                datasetManagerFrame.swapToDownloader();
+            }
+
+            @Override
+            public void onCancel() {
+                state = DownloadState.CANCELED;
+                stopTimer();
+                datasetManagerFrame.swapToDownloader();
+            }
+        };
+        downloader.setTracker(tracker);
+        startTimer();
+    }
+
+    @Override
+    void tick() {
+        updateDownloadProgress();
+    }
+
     private void addListeners() {
         // FIXME:
         cancelButton.addActionListener(new ActionListener() {
@@ -81,7 +113,7 @@ public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
     private void proc(DownloadState downloadStage2017) {
         switch (downloadStage2017) {
             case DOWNLOADING:
-                updateDownloading();
+                OLD_updateDownloading();
                 break;
             case COMPRESSING:
                 updateCompressing();
@@ -95,7 +127,15 @@ public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
         }
     }
 
-    public void updateDownloading() {
+    public void updateDownloadProgress(){
+        progressBar.setValue(downloader.getProgress());
+        if(downloader.getFileSizeInBytes() == 0)
+            setInfoLower("Loading...");
+        else
+            setInfoLower(ZUtil.byteCountToString(downloader.getBytesProcessed()) + " / " + ZUtil.byteCountToString(downloader.getFileSizeInBytes()));
+    }
+
+    public void OLD_updateDownloading() {
         progressBar.setValue(wrangler.getProgress());
         if (wrangler.getFileSizeInBytes() == 0)
             setInfoLower("Loading...");
