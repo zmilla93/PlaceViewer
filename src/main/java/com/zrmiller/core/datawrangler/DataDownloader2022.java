@@ -7,6 +7,8 @@ import com.zrmiller.core.strings.FileName;
 import com.zrmiller.core.utility.PlaceInfo;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DataDownloader2022 extends DataDownloader {
 
@@ -18,12 +20,12 @@ public class DataDownloader2022 extends DataDownloader {
     public void run() {
         if (!validateDirectory(Dataset.PLACE_2017.YEAR_STRING)) return;
         directory = SaveManager.settings.data.dataDirectory + yearString + File.separator;
-        System.out.println(directory);
-        int startIndex = getStartingFileIndex();
-        filesDownloaded = startIndex;
+        // Get missing file count before starting thread so UI can show starting status
+        ArrayList<Integer> fileIndexes = getMissingFileIndexes();
+        filesDownloaded = PlaceInfo.FILE_COUNT_2022 - fileIndexes.size();
         Thread thread = new Thread(() -> {
-            for (int i = startIndex; i < PlaceInfo.FILE_COUNT_2022; i++) {
-                String downloadPath = getIndexedURL(i);
+            for (int index : fileIndexes) {
+                String downloadPath = getIndexedURL(index);
                 IDownloadTracker tracker = new IDownloadTracker() {
                     @Override
                     public void onDownloadComplete() {
@@ -36,7 +38,7 @@ public class DataDownloader2022 extends DataDownloader {
                     }
                 };
                 setTracker(tracker);
-                downloadFile(FileName.BINARY_2022.getIndexedName(i), Dataset.PLACE_2022.YEAR_STRING, downloadPath);
+                downloadFile(FileName.BINARY_2022.getIndexedName(index), Dataset.PLACE_2022.YEAR_STRING, downloadPath);
                 filesDownloaded++;
                 multipleFileTracker.updateProgress();
                 System.gc();
@@ -44,18 +46,21 @@ public class DataDownloader2022 extends DataDownloader {
             multipleFileTracker.downloadComplete();
         });
         thread.start();
-//        downloadFile(FileName.BINARY_2017.toString(), Dataset.PLACE_2017.YEAR_STRING, downloadURL);
     }
 
-    private int getStartingFileIndex() {
-        int index;
-        for (index = 0; index < PlaceInfo.FILE_COUNT_2022; index++) {
-            File file = new File(directory + FileName.BINARY_2022.getIndexedName(index));
-            if (!file.exists() || !file.isFile()) {
-                return index;
+    private ArrayList<Integer> getMissingFileIndexes() {
+        ArrayList<Integer> indexList = new ArrayList<>();
+        for (int i = 0; i < PlaceInfo.FILE_COUNT_2022; i++) {
+            File file = new File(directory + FileName.BINARY_2022.getIndexedName(i));
+            if (!file.exists()) {
+                indexList.add(i);
+            } else {
+                boolean valid = false;
+                if (file.isDirectory()) valid = file.delete();
+                if (valid) indexList.add(i);
             }
         }
-        return index;
+        return indexList;
     }
 
     private String getIndexedURL(int index) {

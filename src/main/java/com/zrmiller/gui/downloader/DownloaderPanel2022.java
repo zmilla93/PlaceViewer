@@ -57,9 +57,9 @@ public class DownloaderPanel2022 extends CardDownloaderPanel {
     private void addListeners() {
         downloadButton.addActionListener(e -> {
             DataDownloader2022 downloader = new DataDownloader2022();
-            downloader.run();
             datasetManagerFrame.getProgressPanel2022().setDownloader(downloader);
             datasetManagerFrame.swapToProgress2022();
+            downloader.run();
         });
     }
 

@@ -62,7 +62,7 @@ public abstract class AbstractDownloadProgressPanel extends BaseDownloaderPanel 
         bindWrangler();
     }
 
-    public void setDownloader(DataDownloader downloader){
+    public void setDownloader(DataDownloader downloader) {
         this.downloader = downloader;
         bindDownloader();
     }
