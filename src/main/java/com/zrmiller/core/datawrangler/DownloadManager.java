@@ -72,6 +72,22 @@ public class DownloadManager {
         return downloader;
     }
 
+    public static DataDownloader2022 runDownload2022(){
+        DataDownloader2022 downloader = new DataDownloader2022();
+        thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                downloader.run();
+            }
+        });
+        thread.start();
+        return downloader;
+    }
+
+//    public static DataDownloader2022 runDownload2022(){
+//        Datado
+//    }
+
     public static void cancel() {
         if (thread != null)
             thread.interrupt();

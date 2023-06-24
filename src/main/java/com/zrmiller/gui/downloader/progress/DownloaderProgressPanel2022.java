@@ -1,7 +1,10 @@
 package com.zrmiller.gui.downloader.progress;
 
-import com.zrmiller.core.datawrangler.legacy.DataWrangler2022;
+import com.zrmiller.core.datawrangler.DataDownloader2022;
+import com.zrmiller.core.datawrangler.callbacks.IFileDownloadTracker;
+import com.zrmiller.core.datawrangler.callbacks.IMultipleFileDownloadTracker;
 import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2022;
+import com.zrmiller.core.datawrangler.legacy.DataWrangler2022;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
 
 import javax.swing.*;
@@ -9,11 +12,13 @@ import javax.swing.*;
 public class DownloaderProgressPanel2022 extends AbstractDownloadProgressPanel {
 
     private DataWrangler2022 dataWrangler2022;
+    private DataDownloader2022 downloader2022;
 
     private DownloadState state = DownloadState.DOWNLOADING;
 
     public DownloaderProgressPanel2022(DatasetManagerFrame datasetManagerFrame) {
         super(datasetManagerFrame);
+        progressBarLower.setVisible(true);
     }
 
     private enum DownloadState {DOWNLOADING, UNZIPPING, COMPRESSING}
@@ -54,18 +59,35 @@ public class DownloaderProgressPanel2022 extends AbstractDownloadProgressPanel {
 
     @Override
     protected void bindDownloader() {
-        // TODO
-    }
+        downloader2022 = (DataDownloader2022) downloader;
+        IFileDownloadTracker fileTracker = new IFileDownloadTracker() {
+            @Override
+            public void updateProgress() {
+                updateDownloadProgress();
+            }
+        };
+        IMultipleFileDownloadTracker multipleFileTracker = new IMultipleFileDownloadTracker() {
+            @Override
+            public void updateProgress() {
+                updateFileProgress();
+            }
 
-    @Override
-    void tick() {
-        // TODO
+            @Override
+            public void downloadComplete() {
+                datasetManagerFrame.validate2022();
+                datasetManagerFrame.swapToDownloader();
+            }
+        };
+        downloader.setFileTracker(fileTracker);
+        downloader.setMultipleFileTracker(multipleFileTracker);
+        updateFileProgress();
+        updateDownloadProgress();
     }
 
     private void proc() {
         switch (state) {
             case DOWNLOADING:
-                updateDownloading();
+                OLD_updateDownloading();
                 break;
             case UNZIPPING:
                 updateUnzipping();
@@ -76,7 +98,19 @@ public class DownloaderProgressPanel2022 extends AbstractDownloadProgressPanel {
         }
     }
 
-    private void updateDownloading() {
+    private void updateDownloadProgress() {
+        setInfoUpper("Downloading file " + (downloader2022.getFilesDownloaded() + 1) + " / " + downloader2022.getExpectedFiles() + "...");
+        setInfoLower((downloader.getBytesProcessed() / 1000000) + " MB / " + downloader.getFileSizeInBytes() / 1000000 + " MB");
+        progressBar.setValue(downloader.getProgress());
+    }
+
+    private void updateFileProgress() {
+        double progress = downloader2022.getFilesDownloaded() / (double) downloader2022.getExpectedFiles();
+//        int p = (int)Math.ceil(progress * 100);
+        progressBarLower.setValue((int) Math.ceil(progress * 100.0));
+    }
+
+    private void OLD_updateDownloading() {
         setInfoUpper("Downloading file " + (dataWrangler2022.getFilesDownloaded() + 1) + " / " + dataWrangler2022.getExpectedFiles() + "...");
         setInfoLower((dataWrangler2022.getBytesProcessed() / 1000000) + " MB / " + dataWrangler2022.getFileSizeInBytes() / 1000000 + " MB");
         progressBar.setValue(dataWrangler2022.getProgress());

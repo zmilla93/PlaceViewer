@@ -1,6 +1,8 @@
 package com.zrmiller.core.datawrangler;
 
 import com.zrmiller.core.datawrangler.callbacks.IDownloadTracker;
+import com.zrmiller.core.datawrangler.callbacks.IFileDownloadTracker;
+import com.zrmiller.core.datawrangler.callbacks.IMultipleFileDownloadTracker;
 import com.zrmiller.core.managers.SaveManager;
 
 import java.io.*;
@@ -13,6 +15,8 @@ public abstract class DataDownloader {
     protected int bytesProcessed;
     private static final int BYTE_BUFFER_SIZE = 1024 * 4;
     private IDownloadTracker tracker;
+    private IFileDownloadTracker fileTracker;
+    protected IMultipleFileDownloadTracker multipleFileTracker;
 
     protected boolean downloadFile(String fileName, String yearString, String urlString) {
         if (!validateDirectory(yearString))
@@ -28,6 +32,7 @@ public abstract class DataDownloader {
             while ((numBytesRead = inputStream.read(data, 0, BYTE_BUFFER_SIZE)) >= 0) {
                 bytesProcessed += numBytesRead;
                 outputStream.write(data, 0, numBytesRead);
+                if (fileTracker != null) fileTracker.updateProgress();
                 if (Thread.currentThread().isInterrupted()) {
                     inputStream.close();
                     outputStream.close();
@@ -52,20 +57,30 @@ public abstract class DataDownloader {
         return file.mkdirs();
     }
 
-    public void setTracker(IDownloadTracker tracker){
+    public void setTracker(IDownloadTracker tracker) {
         this.tracker = tracker;
     }
 
-    public int getFileSizeInBytes(){
+    public void setMultipleFileTracker(IMultipleFileDownloadTracker tracker){
+        this.multipleFileTracker = tracker;
+    }
+
+    public void setFileTracker(IFileDownloadTracker tracker) {
+        this.fileTracker = tracker;
+    }
+
+    public int getFileSizeInBytes() {
         return fileSize;
     }
 
-    public int getBytesProcessed(){
+    public int getBytesProcessed() {
         return bytesProcessed;
     }
 
     abstract public void cancelDownload();
 
-    abstract public int getProgress();
+    public int getProgress(){
+        return (int) Math.ceil(bytesProcessed / (float) fileSize * 100);
+    }
 
 }

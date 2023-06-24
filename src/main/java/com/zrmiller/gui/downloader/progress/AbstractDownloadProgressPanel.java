@@ -12,6 +12,7 @@ import java.awt.*;
 public abstract class AbstractDownloadProgressPanel extends BaseDownloaderPanel {
 
     protected final JProgressBar progressBar = new JProgressBar();
+    protected final JProgressBar progressBarLower = new JProgressBar();
     protected final JLabel labelUpper = new JLabel();
     protected final JLabel labelLower = new JLabel();
     protected final JButton cancelButton = new JButton("Cancel");
@@ -19,7 +20,7 @@ public abstract class AbstractDownloadProgressPanel extends BaseDownloaderPanel 
     protected Timer timer;
     protected DataWrangler wrangler;
     protected DataDownloader downloader;
-    private final int TIMER_DELAY_MILLISECONDS = 200;
+    private static final int TIMER_DELAY_MILLISECONDS = 200;
 
     public AbstractDownloadProgressPanel(DatasetManagerFrame datasetManagerFrame) {
         super(datasetManagerFrame);
@@ -37,6 +38,10 @@ public abstract class AbstractDownloadProgressPanel extends BaseDownloaderPanel 
         gc.insets = new Insets(0, inset, 0, inset);
         centerPanel.add(progressBar, gc);
         gc.gridy++;
+        gc.insets = new Insets(10, inset, 0, inset);
+        centerPanel.add(progressBarLower, gc);
+        gc.gridy++;
+        progressBarLower.setVisible(false);
         addWestButton(cancelButton);
     }
 
@@ -61,21 +66,6 @@ public abstract class AbstractDownloadProgressPanel extends BaseDownloaderPanel 
         this.downloader = downloader;
         bindDownloader();
     }
-
-    public void startTimer(){
-        if(timer != null) timer.stop();
-        timer = new Timer(TIMER_DELAY_MILLISECONDS, e -> {
-            tick();
-        });
-        timer.start();
-    }
-
-    public void stopTimer(){
-        if(timer != null) timer.stop();
-        timer = null;
-    }
-
-    abstract void tick();
 
     public JProgressBar getProgressBar() {
         return progressBar;

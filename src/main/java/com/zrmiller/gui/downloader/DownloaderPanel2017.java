@@ -50,7 +50,9 @@ public class DownloaderPanel2017 extends CardDownloaderPanel {
         }
 //        DataWrangler2017 dataWrangler2017 = DownloadManager.OLD_runDownload2017();
 //        datasetManagerFrame.getProgressPanel2017().setWrangler(dataWrangler2017);
-        DataDownloader2017 downloader = DownloadManager.runDownload2017();
+//        DataDownloader2017 downloader = DownloadManager.runDownload2017();
+        DataDownloader2017 downloader = new DataDownloader2017();
+        downloader.run();
         datasetManagerFrame.getProgressPanel2017().setDownloader(downloader);
         datasetManagerFrame.swapToProgress2017();
     }
