@@ -128,9 +128,9 @@ public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
         }
     }
 
-    public void updateDownloadProgress(){
+    public void updateDownloadProgress() {
         progressBar.setValue(downloader.getProgress());
-        if(downloader.getFileSizeInBytes() == 0)
+        if (downloader.getFileSizeInBytes() == 0)
             setInfoLower("Loading...");
         else
             setInfoLower(ZUtil.byteCountToString(downloader.getBytesProcessed()) + " / " + ZUtil.byteCountToString(downloader.getFileSizeInBytes()));

@@ -39,6 +39,7 @@ public class DataDownloader2022 extends DataDownloader {
                 downloadFile(FileName.BINARY_2022.getIndexedName(i), Dataset.PLACE_2022.YEAR_STRING, downloadPath);
                 filesDownloaded++;
                 multipleFileTracker.updateProgress();
+                System.gc();
             }
             multipleFileTracker.downloadComplete();
         });

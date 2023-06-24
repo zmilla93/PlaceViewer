@@ -60,7 +60,7 @@ public class DownloadManager {
         return wrangler;
     }
 
-    public static DataDownloader2017 runDownload2017(){
+    public static DataDownloader2017 runDownload2017() {
         DataDownloader2017 downloader = new DataDownloader2017();
         thread = new Thread(new Runnable() {
             @Override
@@ -72,7 +72,7 @@ public class DownloadManager {
         return downloader;
     }
 
-    public static DataDownloader2022 runDownload2022(){
+    public static DataDownloader2022 runDownload2022() {
         DataDownloader2022 downloader = new DataDownloader2022();
         thread = new Thread(new Runnable() {
             @Override

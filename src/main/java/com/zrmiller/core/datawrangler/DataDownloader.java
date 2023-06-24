@@ -61,7 +61,7 @@ public abstract class DataDownloader {
         this.tracker = tracker;
     }
 
-    public void setMultipleFileTracker(IMultipleFileDownloadTracker tracker){
+    public void setMultipleFileTracker(IMultipleFileDownloadTracker tracker) {
         this.multipleFileTracker = tracker;
     }
 
@@ -79,7 +79,7 @@ public abstract class DataDownloader {
 
     abstract public void cancelDownload();
 
-    public int getProgress(){
+    public int getProgress() {
         return (int) Math.ceil(bytesProcessed / (float) fileSize * 100);
     }
 

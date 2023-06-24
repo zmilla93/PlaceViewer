@@ -2,8 +2,6 @@ package com.zrmiller.gui.downloader;
 
 import com.zrmiller.core.datawrangler.DataDownloader2022;
 import com.zrmiller.core.datawrangler.DataValidator;
-import com.zrmiller.core.datawrangler.legacy.DataWrangler2022;
-import com.zrmiller.core.datawrangler.DownloadManager;
 import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
