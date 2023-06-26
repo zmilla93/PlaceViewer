@@ -12,9 +12,12 @@ import java.util.ArrayList;
 public class DataDownloader2022 extends DataDownloader {
 
     private static final String downloadURLTemplate = "https://www.zrmiller.com/PlaceData/2022/Place_2022_INDEX.placetiles";
-    private static final String yearString = Dataset.PLACE_2022.YEAR_STRING;
     private String directory;
     private int filesDownloaded;
+
+    public DataDownloader2022() {
+        super(Dataset.PLACE_2022.YEAR_STRING);
+    }
 
     public void run() {
         if (!validateDirectory(Dataset.PLACE_2017.YEAR_STRING)) return;
@@ -22,8 +25,15 @@ public class DataDownloader2022 extends DataDownloader {
         // Get missing file count before starting thread so UI can show starting status
         ArrayList<Integer> fileIndexes = getMissingFileIndexes();
         filesDownloaded = PlaceInfo.FILE_COUNT_2022 - fileIndexes.size();
+        DataDownloader downloader = this;
         Thread thread = new Thread(() -> {
+            DataDownloader.activeDownloader = downloader;
+//            downloader.getMultipleFileTracker().updateProgress();
             for (int index : fileIndexes) {
+                if (isCanceled()) {
+                    downloader.getFileTracker().onDownloadComplete();
+                    return;
+                }
                 String downloadPath = getIndexedURL(index);
                 IDownloadTracker tracker = new IDownloadTracker() {
                     @Override
@@ -37,12 +47,14 @@ public class DataDownloader2022 extends DataDownloader {
                     }
                 };
                 setTracker(tracker);
-                downloadFile(FileName.BINARY_2022.getIndexedName(index), Dataset.PLACE_2022.YEAR_STRING, downloadPath);
+                downloader.getMultipleFileTracker().updateProgress();
+                downloadFile(FileName.BINARY_2022.getIndexedName(index), downloadPath);
                 filesDownloaded++;
                 multipleFileTracker.updateProgress();
                 System.gc();
             }
             multipleFileTracker.downloadComplete();
+            DataDownloader.activeDownloader = null;
         });
         thread.start();
     }

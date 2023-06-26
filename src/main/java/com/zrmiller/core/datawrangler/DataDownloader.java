@@ -18,8 +18,14 @@ public abstract class DataDownloader {
     private IFileDownloadTracker fileTracker;
     protected IMultipleFileDownloadTracker multipleFileTracker;
     private boolean cancel = false;
+    public static DataDownloader activeDownloader;
+    protected String yearString;
 
-    protected boolean downloadFile(String fileName, String yearString, String urlString) {
+    public DataDownloader(String yearString) {
+        this.yearString = yearString;
+    }
+
+    protected boolean downloadFile(String fileName, String urlString) {
         if (!validateDirectory(yearString))
             return false;
         try {
@@ -40,6 +46,7 @@ public abstract class DataDownloader {
                     outputStream.close();
                     deleteFile(outputFile);
                     tracker.onDownloadComplete();
+                    if (multipleFileTracker != null) multipleFileTracker.downloadComplete();
                     return false;
                 }
             }
@@ -64,6 +71,14 @@ public abstract class DataDownloader {
         this.tracker = tracker;
     }
 
+    public IDownloadTracker getFileTracker() {
+        return tracker;
+    }
+
+    public IMultipleFileDownloadTracker getMultipleFileTracker() {
+        return multipleFileTracker;
+    }
+
     public void setMultipleFileTracker(IMultipleFileDownloadTracker tracker) {
         this.multipleFileTracker = tracker;
     }
@@ -80,18 +95,22 @@ public abstract class DataDownloader {
         return bytesProcessed;
     }
 
-    public void cancelDownload(){
+    public void cancelDownload() {
         cancel = true;
+    }
+
+    public boolean isCanceled() {
+        return cancel;
     }
 
     public int getProgress() {
         return (int) Math.ceil(bytesProcessed / (float) fileSize * 100);
     }
 
-    protected void deleteFile(String outputFile){
+    protected void deleteFile(String outputFile) {
         File file = new File(outputFile);
         boolean success = file.delete();
-        if(!success) System.err.println("Failed to delete file '" + outputFile + "'.");
+        if (!success) System.err.println("Failed to delete file '" + outputFile + "'.");
     }
 
 }

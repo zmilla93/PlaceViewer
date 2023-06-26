@@ -1,6 +1,5 @@
 package com.zrmiller.gui.downloader.progress;
 
-import com.zrmiller.core.datawrangler.DownloadManager;
 import com.zrmiller.core.datawrangler.callbacks.IDownloadTracker;
 import com.zrmiller.core.datawrangler.callbacks.IFileDownloadTracker;
 import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2017;
@@ -19,7 +18,6 @@ public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
 
     public DownloaderProgressPanel2017(DatasetManagerFrame datasetManagerFrame) {
         super(datasetManagerFrame);
-        addListeners();
     }
 
     // TODO : Remove
@@ -96,13 +94,6 @@ public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
         };
         downloader.setTracker(tracker);
         downloader.setFileTracker(fileTracker);
-    }
-
-    private void addListeners() {
-        cancelButton.addActionListener(e -> {
-            DownloadManager.cancel();
-            downloader.cancelDownload();
-        });
     }
 
     private void proc(DownloadState downloadStage2017) {

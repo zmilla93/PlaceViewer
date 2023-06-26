@@ -7,9 +7,18 @@ public class DataDownloader2017 extends DataDownloader {
 
     private static final String downloadURL = "https://www.zrmiller.com/PlaceData/2017/Place_2017.placetiles";
 
+    public DataDownloader2017() {
+        super(Dataset.PLACE_2017.YEAR_STRING);
+    }
+
     public void run() {
         if (!validateDirectory(Dataset.PLACE_2017.YEAR_STRING)) return;
-        Thread thread = new Thread(() -> downloadFile(FileName.BINARY_2017.toString(), Dataset.PLACE_2017.YEAR_STRING, downloadURL));
+        DataDownloader downloader = this;
+        Thread thread = new Thread(() -> {
+            DataDownloader.activeDownloader = downloader;
+            downloadFile(FileName.BINARY_2017.toString(), downloadURL);
+            DataDownloader.activeDownloader = null;
+        });
         thread.start();
     }
 

@@ -17,7 +17,7 @@ public class FrameManager {
 
     // Windows
     public static MainFrame mainFrame;
-    public static DatasetManagerFrame dataDownloader;
+    public static DatasetManagerFrame dataDownloaderFrame;
     public static ExportImageWindow exportImageWindow;
     public static ExportGifWindow exportGifWindow;
 
@@ -31,13 +31,13 @@ public class FrameManager {
 
         // Create GUI
         mainFrame = new MainFrame();
-        dataDownloader = new DatasetManagerFrame();
+        dataDownloaderFrame = new DatasetManagerFrame();
         exportImageWindow = new ExportImageWindow();
         exportGifWindow = new ExportGifWindow();
 
         // Color Manager Setup
         ColorManager.addFrame(mainFrame);
-        ColorManager.addFrame(dataDownloader);
+        ColorManager.addFrame(dataDownloaderFrame);
         ColorManager.addFrame(exportImageWindow);
         ColorManager.addFrame(exportGifWindow);
         ColorTheme theme = SaveManager.settings.data.colorTheme == null ? ColorTheme.SOLARIZED_LIGHT : SaveManager.settings.data.colorTheme;

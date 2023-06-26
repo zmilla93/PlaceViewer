@@ -40,7 +40,7 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
     // Export Menu Bar
     private final JMenuItem exportCanvasButton = new JMenuItem("Export Canvas");
     private final JMenuItem exportImageButton = new JMenuItem("Export PNG...");
-//    private final JMenuItem exportGifButton = new JMenuItem("Export GIF...");
+    //    private final JMenuItem exportGifButton = new JMenuItem("Export GIF...");
     private final JMenuItem openExportsButton = new JMenuItem("Open Exports Folder");
 
     public MainMenuBar() {
@@ -97,7 +97,7 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
         dataset2017Button.addActionListener(e -> App.datasetManager.changeDataset(Dataset.PLACE_2017));
         dataset2022Button.addActionListener(e -> App.datasetManager.changeDataset(Dataset.PLACE_2022));
         closeDatasetButton.addActionListener(e -> App.datasetManager.changeDataset(null));
-        datasetManagerButton.addActionListener(e -> FrameManager.dataDownloader.setVisible(true));
+        datasetManagerButton.addActionListener(e -> FrameManager.dataDownloaderFrame.setVisible(true));
         githubButton.addActionListener(e -> ZUtil.openLink("https://github.com/zmilla93/PlaceViewer"));
         quitButton.addActionListener(e -> System.exit(0));
         exportImageButton.addActionListener(e -> FrameManager.exportImageWindow.setVisible(true));

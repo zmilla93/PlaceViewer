@@ -1,5 +1,6 @@
 package com.zrmiller;
 
+import com.zrmiller.core.datawrangler.DataDownloader;
 import com.zrmiller.core.datawrangler.legacy.DataWrangler2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.DatasetManager;
@@ -34,8 +35,7 @@ public class App {
             e.printStackTrace();
         }
 
-//        int[] order = DataValidator.getFileOrder();
-//        System.out.println("FILE ORDER:" + Arrays.toString(order));
+        Runtime.getRuntime().addShutdownHook(new Thread(App::shutdown));
 
     }
 
@@ -71,6 +71,12 @@ public class App {
 
     public static Dataset dataset() {
         return datasetManager.currentDataset();
+    }
+
+    private static void shutdown() {
+        if (DataDownloader.activeDownloader != null) {
+            DataDownloader.activeDownloader.cancelDownload();
+        }
     }
 
 }

@@ -60,6 +60,10 @@ public class DownloaderProgressPanel2022 extends AbstractDownloadProgressPanel {
     @Override
     protected void bindDownloader() {
         downloader2022 = (DataDownloader2022) downloader;
+        setInfoUpper("Downloading 2022 dataset...");
+        setInfoLower("Loading...");
+        progressBar.setValue(0);
+        progressBarLower.setValue(0);
         IFileDownloadTracker fileTracker = new IFileDownloadTracker() {
             @Override
             public void updateProgress() {
@@ -80,8 +84,8 @@ public class DownloaderProgressPanel2022 extends AbstractDownloadProgressPanel {
         };
         downloader.setFileTracker(fileTracker);
         downloader.setMultipleFileTracker(multipleFileTracker);
-        updateFileProgress();
-        updateDownloadProgress();
+//        updateFileProgress();
+//        updateDownloadProgress();
     }
 
     private void proc() {

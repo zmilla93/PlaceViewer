@@ -43,6 +43,7 @@ public abstract class AbstractDownloadProgressPanel extends BaseDownloaderPanel 
         gc.gridy++;
         progressBarLower.setVisible(false);
         addWestButton(cancelButton);
+        addCancelListener();
     }
 
     protected abstract void bindWrangler();
@@ -70,4 +71,9 @@ public abstract class AbstractDownloadProgressPanel extends BaseDownloaderPanel 
     public JProgressBar getProgressBar() {
         return progressBar;
     }
+
+    private void addCancelListener() {
+        cancelButton.addActionListener(e -> downloader.cancelDownload());
+    }
+
 }

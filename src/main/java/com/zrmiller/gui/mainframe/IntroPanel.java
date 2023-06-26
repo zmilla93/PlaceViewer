@@ -30,7 +30,7 @@ public class IntroPanel extends JPanel {
         openDatasetsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FrameManager.dataDownloader.setVisible(true);
+                FrameManager.dataDownloaderFrame.setVisible(true);
             }
         });
     }
