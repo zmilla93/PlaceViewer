@@ -1,8 +1,10 @@
 package com.zrmiller.gui.downloader;
 
+import com.zrmiller.App;
 import com.zrmiller.core.datawrangler.DataDownloader2017;
 import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.legacy.DataWrangler2017;
+import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.FrameManager;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
@@ -75,6 +77,8 @@ public class DownloaderPanel2017 extends CardDownloaderPanel {
             String confirm = JOptionPane.showInputDialog(self, "Are you sure you want to delete this dataset?\n" +
                     "Type '2017' to delete.", "Delete 2017 Dataset", JOptionPane.PLAIN_MESSAGE);
             if (confirm != null && confirm.equals("2017")) {
+                if (App.dataset().YEAR_STRING.equals(Dataset.PLACE_2017.YEAR_STRING))
+                    App.datasetManager.changeDataset(null);
                 DataWrangler2017 dataWrangler2017 = new DataWrangler2017();
                 if (!dataWrangler2017.deleteData()) {
                     JOptionPane.showMessageDialog(self,
