@@ -10,8 +10,6 @@ import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
 
@@ -75,6 +73,7 @@ public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
         state = DownloadState.DOWNLOADING;
         setInfoUpper("Downloading 2017 dataset...");
         setInfoLower("Loading...");
+        progressBar.setValue(0);
         IDownloadTracker tracker = new IDownloadTracker() {
             @Override
             public void onDownloadComplete() {
@@ -97,18 +96,13 @@ public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
         };
         downloader.setTracker(tracker);
         downloader.setFileTracker(fileTracker);
-//        startTimer();
     }
 
     private void addListeners() {
-        // FIXME:
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                DownloadManager.cancel();
-            }
+        cancelButton.addActionListener(e -> {
+            DownloadManager.cancel();
+            downloader.cancelDownload();
         });
-//        cancelButton.addActionListener(e -> datasetManagerFrame.swapToDownloader());
     }
 
     private void proc(DownloadState downloadStage2017) {

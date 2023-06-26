@@ -8,7 +8,6 @@ import com.zrmiller.core.utility.PlaceInfo;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class DataDownloader2022 extends DataDownloader {
 
@@ -74,11 +73,6 @@ public class DataDownloader2022 extends DataDownloader {
     public int getExpectedFiles() {
         // FIXME
         return PlaceInfo.FILE_COUNT_2022;
-    }
-
-    @Override
-    public void cancelDownload() {
-
     }
 
 }

@@ -17,6 +17,7 @@ public abstract class DataDownloader {
     private IDownloadTracker tracker;
     private IFileDownloadTracker fileTracker;
     protected IMultipleFileDownloadTracker multipleFileTracker;
+    private boolean cancel = false;
 
     protected boolean downloadFile(String fileName, String yearString, String urlString) {
         if (!validateDirectory(yearString))
@@ -25,7 +26,8 @@ public abstract class DataDownloader {
             HttpURLConnection httpConnection = (HttpURLConnection) (new URL(urlString).openConnection());
             fileSize = httpConnection.getContentLength();
             BufferedInputStream inputStream = new BufferedInputStream(httpConnection.getInputStream());
-            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(SaveManager.settings.data.dataDirectory + yearString + File.separator + fileName));
+            String outputFile = SaveManager.settings.data.dataDirectory + yearString + File.separator + fileName;
+            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
             byte[] data = new byte[BYTE_BUFFER_SIZE];
             bytesProcessed = 0;
             int numBytesRead;
@@ -33,10 +35,11 @@ public abstract class DataDownloader {
                 bytesProcessed += numBytesRead;
                 outputStream.write(data, 0, numBytesRead);
                 if (fileTracker != null) fileTracker.updateProgress();
-                if (Thread.currentThread().isInterrupted()) {
+                if (Thread.currentThread().isInterrupted() || cancel) {
                     inputStream.close();
                     outputStream.close();
-                    cancelDownload();
+                    deleteFile(outputFile);
+                    tracker.onDownloadComplete();
                     return false;
                 }
             }
@@ -77,10 +80,18 @@ public abstract class DataDownloader {
         return bytesProcessed;
     }
 
-    abstract public void cancelDownload();
+    public void cancelDownload(){
+        cancel = true;
+    }
 
     public int getProgress() {
         return (int) Math.ceil(bytesProcessed / (float) fileSize * 100);
+    }
+
+    protected void deleteFile(String outputFile){
+        File file = new File(outputFile);
+        boolean success = file.delete();
+        if(!success) System.err.println("Failed to delete file '" + outputFile + "'.");
     }
 
 }
