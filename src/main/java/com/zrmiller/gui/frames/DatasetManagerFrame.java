@@ -20,8 +20,6 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
     private final JFileChooser fileChooser = new JFileChooser();
 
     private final JLabel directoryLabel = new JLabel();
-    private final Container container = getContentPane();
-    private final JTabbedPane tabbedPane = new JTabbedPane();
 
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel cardPanel = new JPanel(cardLayout);
@@ -33,13 +31,14 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
 
     public DatasetManagerFrame() {
         setTitle("Dataset Manager");
-        //FIXME: modality
         setModalityType(ModalityType.APPLICATION_MODAL);
         setModal(true);
+        Container container = getContentPane();
         container.setLayout(new BorderLayout());
         setMinimumSize(new Dimension(500, 300));
         setSize(500, 300);
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.addTab("2017 Data", downloaderPanel2017);
         tabbedPane.addTab("2022 Data", downloaderPanel2022);
 
@@ -85,6 +84,7 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
         ColorManager.addListener(this);
         pack();
         setLocationRelativeTo(null);
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
     }
 
     private void updateDirectoryLabel() {
@@ -103,21 +103,23 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
                 updateDirectoryLabel();
                 downloaderPanel2017.validateData();
                 downloaderPanel2022.validateData();
-//                App.datasetManager.changeDataset(null);
             }
         });
     }
 
     public void swapToDownloader() {
         cardLayout.show(cardPanel, "P1");
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
     }
 
     public void swapToProgress2017() {
         cardLayout.show(cardPanel, "P2");
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 
     public void swapToProgress2022() {
         cardLayout.show(cardPanel, "P3");
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 
     public AbstractDownloadProgressPanel getProgressPanel2017() {
