@@ -25,7 +25,6 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
     // Options
     private final JMenu themeMenu = new JMenu("Color Theme");
     private final JMenuItem githubButton = new JMenuItem("Github");
-    private final JMenuItem paypalButton = new JMenuItem("Paypal");
 
     private final JMenuItem quitButton = new JMenuItem("Quit");
 
@@ -41,7 +40,7 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
     // Export Menu Bar
     private final JMenuItem exportCanvasButton = new JMenuItem("Export Canvas");
     private final JMenuItem exportImageButton = new JMenuItem("Export PNG...");
-    private final JMenuItem exportGifButton = new JMenuItem("Export GIF...");
+//    private final JMenuItem exportGifButton = new JMenuItem("Export GIF...");
     private final JMenuItem openExportsButton = new JMenuItem("Open Exports Folder");
 
     public MainMenuBar() {
@@ -59,11 +58,10 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
 
         // Options
         optionsMenu.add(themeMenu);
-        optionsMenu.add(new JSeparator());
+//        optionsMenu.add(new JSeparator());
         optionsMenu.add(exportMenu);
-        optionsMenu.add(new JSeparator());
+//        optionsMenu.add(new JSeparator());
         optionsMenu.add(githubButton);
-        optionsMenu.add(paypalButton);
         optionsMenu.add(new JSeparator());
         optionsMenu.add(quitButton);
 
@@ -78,7 +76,7 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
         // Export
 //        exportMenu.add(exportCanvasButton);
         exportMenu.add(exportImageButton);
-        exportMenu.add(exportGifButton);
+//        exportMenu.add(exportGifButton);
         exportMenu.add(new JSeparator());
         exportMenu.add(openExportsButton);
 
@@ -101,10 +99,9 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
         closeDatasetButton.addActionListener(e -> App.datasetManager.changeDataset(null));
         datasetManagerButton.addActionListener(e -> FrameManager.dataDownloader.setVisible(true));
         githubButton.addActionListener(e -> ZUtil.openLink("https://github.com/zmilla93/PlaceViewer"));
-        paypalButton.addActionListener(e -> ZUtil.openLink("https://www.paypal.com/paypalme/zmilla93"));
         quitButton.addActionListener(e -> System.exit(0));
         exportImageButton.addActionListener(e -> FrameManager.exportImageWindow.setVisible(true));
-        exportGifButton.addActionListener(e -> FrameManager.exportGifWindow.setVisible(true));
+//        exportGifButton.addActionListener(e -> FrameManager.exportGifWindow.setVisible(true));
         openExportsButton.addActionListener(e -> ZUtil.openExplorer(SaveManager.settings.data.dataDirectory + "exports"));
         exportCanvasButton.addActionListener(new ActionListener() {
             @Override

@@ -76,9 +76,9 @@ public class ExportImageWindow extends JFrame {
 
         add(panel, BorderLayout.CENTER);
         setMinimumSize(new Dimension(400, 300));
-        pack();
-
         addListeners();
+        pack();
+        setLocationRelativeTo(null);
     }
 
     private void addListeners() {
