@@ -5,6 +5,7 @@ import com.zrmiller.core.utility.PlaceInfo;
 
 import java.awt.*;
 import java.io.File;
+import java.text.NumberFormat;
 
 public enum Dataset {
 
@@ -17,6 +18,7 @@ public enum Dataset {
     public final int CANVAS_SIZE_X;
     public final int CANVAS_SIZE_Y;
     public final int FRAME_COUNT;
+    public final String FORMATTED_FRAME_COUNT;
     public final Color[] COLOR_ARRAY;
     public final int WHITE_INDEX;
 
@@ -26,6 +28,7 @@ public enum Dataset {
         CANVAS_SIZE_X = x;
         CANVAS_SIZE_Y = y;
         FRAME_COUNT = frameCount;
+        FORMATTED_FRAME_COUNT = NumberFormat.getInstance().format(frameCount);
         COLOR_ARRAY = colorArray;
         WHITE_INDEX = whiteIndex;
     }

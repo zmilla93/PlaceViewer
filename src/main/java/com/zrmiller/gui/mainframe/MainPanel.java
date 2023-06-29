@@ -42,11 +42,12 @@ public class MainPanel extends JPanel implements ICanvasListener, IDatasetListen
         northPanel.add(new SeparatorPanel(), BorderLayout.SOUTH);
 
         // South Panel
-        JPanel southRightPanel = new JPanel();
-        southRightPanel.add(zoomLabel);
+        JPanel positionWrapperPanel = new JPanel(new BorderLayout());
+        positionWrapperPanel.add(Box.createHorizontalStrut(10), BorderLayout.WEST);
+        positionWrapperPanel.add(positionLabel, BorderLayout.CENTER);
         southPanel.add(frameCountLabel, BorderLayout.WEST);
-        southPanel.add(southRightPanel, BorderLayout.EAST);
-        southPanel.add(positionLabel, BorderLayout.CENTER);
+        southPanel.add(positionWrapperPanel, BorderLayout.CENTER);
+        southPanel.add(zoomLabel, BorderLayout.EAST);
         southPanel.add(new SeparatorPanel(), BorderLayout.NORTH);
 
         // Card Panel
@@ -95,9 +96,9 @@ public class MainPanel extends JPanel implements ICanvasListener, IDatasetListen
     @Override
     public void onDraw(int frameCount) {
         if (App.dataset() == null)
-            frameCountLabel.setText("");
+            frameCountLabel.setText("Frame 0 / 0");
         else
-            frameCountLabel.setText("Frame " + NumberFormat.getInstance().format(frameCount) + " / " + App.dataset().FRAME_COUNT);
+            frameCountLabel.setText("Frame " + NumberFormat.getInstance().format(frameCount) + " / " + App.dataset().FORMATTED_FRAME_COUNT);
     }
 
     @Override
