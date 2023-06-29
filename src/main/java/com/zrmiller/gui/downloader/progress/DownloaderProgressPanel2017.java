@@ -1,5 +1,6 @@
 package com.zrmiller.gui.downloader.progress;
 
+import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.callbacks.IDownloadTracker;
 import com.zrmiller.core.datawrangler.callbacks.IFileDownloadTracker;
 import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2017;
@@ -49,7 +50,7 @@ public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
 
             @Override
             public void onCompressComplete() {
-                datasetManagerFrame.validate2017();
+//                datasetManagerFrame.validate2017();
                 datasetManagerFrame.swapToDownloader();
                 timer.stop();
             }
@@ -76,7 +77,7 @@ public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
             @Override
             public void onDownloadComplete() {
                 state = DownloadState.COMPLETE;
-                datasetManagerFrame.validate2017();
+//                datasetManagerFrame.validate2017();
                 datasetManagerFrame.swapToDownloader();
             }
 
@@ -90,6 +91,10 @@ public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
             @Override
             public void updateProgress() {
                 SwingUtilities.invokeLater(() -> updateDownloadProgress());
+            }
+            @Override
+            public void onDownloadComplete() {
+                DataValidator.runValidation2017();
             }
         };
         downloader.setTracker(tracker);

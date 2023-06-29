@@ -4,4 +4,6 @@ public interface IFileDownloadTracker {
 
     void updateProgress();
 
+    void onDownloadComplete();
+
 }

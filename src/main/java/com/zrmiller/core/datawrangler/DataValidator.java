@@ -1,5 +1,7 @@
 package com.zrmiller.core.datawrangler;
 
+import com.zrmiller.core.datawrangler.callbacks.IValidationListener2017;
+import com.zrmiller.core.datawrangler.callbacks.IValidationListener2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.parser.PlaceInputStream;
@@ -10,10 +12,14 @@ import com.zrmiller.core.utility.TileEdit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
 public class DataValidator {
+
+    private static final ArrayList<IValidationListener2017> listeners2017 = new ArrayList<>();
+    private static final ArrayList<IValidationListener2022> listeners2022 = new ArrayList<>();
 
     // 2017
     public static boolean checkExists2017() {
@@ -25,6 +31,13 @@ public class DataValidator {
         if (file.exists() && file.isFile())
             return file.length();
         return -1;
+    }
+
+    public static void runValidation2017() {
+        long fileSize = getFileSize2017();
+        boolean valid = fileSize > 0;
+        for (IValidationListener2017 listener : listeners2017)
+            listener.onValidation2017(valid, fileSize);
     }
 
     // 2022
@@ -52,6 +65,10 @@ public class DataValidator {
         return fileSize;
     }
 
+    public static void runValidation2022() {
+
+    }
+
     public static int[] getFileOrder() {
         try {
             HashMap<Integer, Integer> orderMap = new HashMap<>();
@@ -74,6 +91,14 @@ public class DataValidator {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static void addValidationListener2017(IValidationListener2017 listener) {
+        listeners2017.add(listener);
+    }
+
+    public static void addValidationListener2022(IValidationListener2022 listener) {
+        listeners2022.add(listener);
     }
 
 }

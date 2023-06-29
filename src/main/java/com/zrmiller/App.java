@@ -1,6 +1,7 @@
 package com.zrmiller;
 
 import com.zrmiller.core.datawrangler.DataDownloader;
+import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.legacy.DataWrangler2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.DatasetManager;
@@ -35,6 +36,8 @@ public class App {
             e.printStackTrace();
         }
 
+        DataValidator.runValidation2017();
+        DataValidator.runValidation2022();
         Runtime.getRuntime().addShutdownHook(new Thread(App::shutdown));
 
     }

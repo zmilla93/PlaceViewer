@@ -1,6 +1,7 @@
 package com.zrmiller.gui.downloader.progress;
 
 import com.zrmiller.core.datawrangler.DataDownloader2022;
+import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.callbacks.IFileDownloadTracker;
 import com.zrmiller.core.datawrangler.callbacks.IMultipleFileDownloadTracker;
 import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2022;
@@ -68,6 +69,11 @@ public class DownloaderProgressPanel2022 extends AbstractDownloadProgressPanel {
             @Override
             public void updateProgress() {
                 updateDownloadProgress();
+            }
+
+            @Override
+            public void onDownloadComplete() {
+                DataValidator.runValidation2022();
             }
         };
         IMultipleFileDownloadTracker multipleFileTracker = new IMultipleFileDownloadTracker() {

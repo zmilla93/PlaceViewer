@@ -14,6 +14,7 @@ public abstract class DataDownloader {
     protected int fileSize;
     protected int bytesProcessed;
     private static final int BYTE_BUFFER_SIZE = 1024 * 4;
+    // FIXME : remove tracker
     private IDownloadTracker tracker;
     private IFileDownloadTracker fileTracker;
     protected IMultipleFileDownloadTracker multipleFileTracker;
@@ -46,6 +47,7 @@ public abstract class DataDownloader {
                     outputStream.close();
                     deleteFile(outputFile);
                     tracker.onDownloadComplete();
+                    if(fileTracker != null) fileTracker.onDownloadComplete();
                     if (multipleFileTracker != null) multipleFileTracker.downloadComplete();
                     return false;
                 }
@@ -53,6 +55,7 @@ public abstract class DataDownloader {
             inputStream.close();
             outputStream.close();
             tracker.onDownloadComplete();
+            if(fileTracker != null) fileTracker.onDownloadComplete();
             return true;
         } catch (IOException e) {
             e.printStackTrace();

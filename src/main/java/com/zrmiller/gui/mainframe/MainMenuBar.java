@@ -2,6 +2,8 @@ package com.zrmiller.gui.mainframe;
 
 import com.zrmiller.App;
 import com.zrmiller.core.datawrangler.DataValidator;
+import com.zrmiller.core.datawrangler.callbacks.IValidationListener2017;
+import com.zrmiller.core.datawrangler.callbacks.IValidationListener2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
@@ -14,7 +16,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MainMenuBar extends JMenuBar implements IDatasetListener {
+public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidationListener2017, IValidationListener2022 {
 
     // Menus
     private final JMenu optionsMenu = new JMenu("Options");
@@ -89,6 +91,8 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
         validateDatasetMenu();
         addListeners();
         App.datasetManager.addListener(this);
+        DataValidator.addValidationListener2017(this);
+        DataValidator.addValidationListener2022(this);
     }
 
     private void addListeners() {
@@ -116,6 +120,7 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
 //        placeCanvas.export(0, 0, 1000, 1000, ZoomLevel.Zoom_1);
     }
 
+    // FIXME : Remove
     public void validateDatasetMenu() {
         boolean show2017 = DataValidator.checkExists2017();
         boolean show2022 = DataValidator.checkFileCount2022();
@@ -129,5 +134,17 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener {
     @Override
     public void onDatasetChanged(Dataset datasets) {
         validateDatasetMenu();
+        closeDatasetButton.setVisible(App.dataset() != null);
     }
+
+    @Override
+    public void onValidation2017(boolean valid, long fileSize) {
+        dataset2017Button.setEnabled(valid);
+    }
+
+    @Override
+    public void onValidation2022(boolean valid) {
+        dataset2022Button.setEnabled(valid);
+    }
+
 }

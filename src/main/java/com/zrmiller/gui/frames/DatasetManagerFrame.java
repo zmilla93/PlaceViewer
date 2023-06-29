@@ -1,5 +1,6 @@
 package com.zrmiller.gui.frames;
 
+import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.downloader.DownloaderPanel2017;
@@ -101,8 +102,10 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
                 SaveManager.settings.data.dataDirectory = path + File.separator;
                 SaveManager.settings.saveToDisk();
                 updateDirectoryLabel();
-                downloaderPanel2017.validateData();
-                downloaderPanel2022.validateData();
+                DataValidator.runValidation2017();
+                DataValidator.runValidation2022();
+//                downloaderPanel2017.validateData();
+//                downloaderPanel2022.validateData();
             }
         });
     }
@@ -130,9 +133,9 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
         return downloadProgressPanel2022;
     }
 
-    public void validate2017() {
-        downloaderPanel2017.validateData();
-    }
+//    public void validate2017() {
+//        downloaderPanel2017.validateData();
+//    }
 
     public void validate2022() {
         downloaderPanel2022.validateData();
