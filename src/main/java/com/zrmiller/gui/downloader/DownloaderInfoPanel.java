@@ -23,13 +23,18 @@ public class DownloaderInfoPanel extends JPanel {
         gc.insets = new Insets(TEXT_INSET, TEXT_INSET, 0, 0);
     }
 
-    public void addText(String line) {
-        panel.add(new JLabel(line), gc);
+    protected void addText(String line) {
+        JLabel label = new JLabel(line);
+        addText(label);
+    }
+
+    protected void addText(JLabel label){
+        panel.add(label, gc);
         gc.insets = new Insets(0, TEXT_INSET, 0, 0);
         gc.gridy++;
     }
 
-    public void addComponent(JComponent component) {
+    protected void addComponent(JComponent component) {
         panel.add(component, gc);
         gc.insets = new Insets(0, TEXT_INSET, 0, 0);
         gc.gridy++;
