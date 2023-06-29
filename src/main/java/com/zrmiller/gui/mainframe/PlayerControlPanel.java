@@ -13,12 +13,12 @@ import java.util.Objects;
 
 public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerListener> {
 
-    private JButton resetButton = new FlatColorIconButton("/icons/media-stop.png");
-    private JButton playButton = new FlatColorIconButton("icons/media-play.png");
-    private JButton pauseButton = new FlatColorIconButton("icons/media-pause.png");
-    private JSlider speedSlider = new JSlider();
-    private JLabel speedLabel = new JLabel();
-    private JComboBox<PlaybackSpeed> speedCombo = new JComboBox<>();
+    private final JButton resetButton = new FlatColorIconButton("/icons/media-stop.png");
+    private final JButton playButton = new FlatColorIconButton("icons/media-play.png");
+    private final JButton pauseButton = new FlatColorIconButton("icons/media-pause.png");
+    private final JSlider speedSlider = new JSlider();
+    private final JLabel speedLabel = new JLabel();
+    private final JComboBox<PlaybackSpeed> speedCombo = new JComboBox<>();
 
     public PlayerControlPanel() {
         setLayout(new GridBagLayout());
@@ -26,7 +26,6 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
         for (PlaybackSpeed speed : PlaybackSpeed.values()) {
             speedCombo.addItem(speed);
         }
-
         add(speedCombo);
         gc.gridx++;
         add(speedSlider);
@@ -42,7 +41,7 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
         speedSlider.setPreferredSize(new Dimension(100, getPreferredSize().height));
         addListeners();
         speedCombo.setSelectedItem(PlaybackSpeed.FAST);
-        speedSlider.setValue(100000);
+        speedSlider.setValue(500000);
     }
 
     private void setPlaybackSpeed(PlaybackSpeed speed) {
@@ -66,28 +65,20 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
                 listener.onPause();
             }
         });
-        speedSlider.addChangeListener(e -> {
-            for (IPlayerControllerListener listener : listeners) {
-                listener.onSpeedChange(speedSlider.getValue());
-            }
-        });
         speedCombo.addActionListener(e -> setPlaybackSpeed((PlaybackSpeed) Objects.requireNonNull(speedCombo.getSelectedItem())));
-//        spee.addActionListener(e -> {
-//            for(IPlayerControllerListener listener : listeners){
-//                listener.onReset();
-//            }
-//        });
-
-//        resetButton.addActionListener(e -> player.stop());
-//        playButton.addActionListener(e -> player.play());
-//        pauseButton.addActionListener(e -> player.pause());
-//        speedCombo.addActionListener(e -> setPlaybackSpeed((PlaybackSpeed) Objects.requireNonNull(speedCombo.getSelectedItem())));
         speedSlider.addChangeListener(e -> {
             int speed = speedSlider.getValue();
             String info = speed > 1 ? "Tiles per Second" : "Tile per second";
             speedLabel.setText(NumberFormat.getInstance().format(speed) + " " + info);
-//            player.setSpeed(speedSlider.getValue());
+            for (IPlayerControllerListener listener : listeners) {
+                listener.onSpeedChange(speedSlider.getValue());
+            }
         });
     }
 
+    @Override
+    public void onListenerAdded(IPlayerControllerListener listener) {
+        super.onListenerAdded(listener);
+        listener.onSpeedChange(speedSlider.getValue());
+    }
 }
