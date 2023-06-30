@@ -46,8 +46,6 @@ public abstract class AbstractDownloadProgressPanel extends BaseDownloaderPanel 
         addCancelListener();
     }
 
-    protected abstract void bindWrangler();
-
     protected abstract void bindDownloader();
 
     public void setInfoUpper(String text) {
@@ -56,11 +54,6 @@ public abstract class AbstractDownloadProgressPanel extends BaseDownloaderPanel 
 
     public void setInfoLower(String text) {
         labelLower.setText(text);
-    }
-
-    public void setWrangler(DataWrangler wrangler) {
-        this.wrangler = wrangler;
-        bindWrangler();
     }
 
     public void setDownloader(DataDownloader downloader) {

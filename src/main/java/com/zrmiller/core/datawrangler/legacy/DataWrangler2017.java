@@ -12,6 +12,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+@Deprecated
 public class DataWrangler2017 extends DataWrangler {
 
     private String downloadURL = "https://storage.googleapis.com/place_data_share/place_tiles.csv";

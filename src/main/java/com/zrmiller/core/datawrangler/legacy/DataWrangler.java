@@ -12,6 +12,7 @@ import java.util.ArrayList;
 /**
  * IMPORTANT : When writing binary files, first make a call to writeYear, then writeMetaInt.
  */
+@Deprecated
 public abstract class DataWrangler {
 
     protected int fileSize;

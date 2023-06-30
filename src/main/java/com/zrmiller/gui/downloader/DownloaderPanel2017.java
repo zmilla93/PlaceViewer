@@ -4,7 +4,6 @@ import com.zrmiller.App;
 import com.zrmiller.core.datawrangler.DataDownloader2017;
 import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.callbacks.IValidationListener2017;
-import com.zrmiller.core.datawrangler.legacy.DataWrangler2017;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
@@ -42,7 +41,6 @@ public class DownloaderPanel2017 extends CardDownloaderPanel implements IValidat
 
         addListeners();
         DataValidator.addValidationListener2017(this);
-//        validateData();
     }
 
     private void runDownload() {
@@ -50,9 +48,6 @@ public class DownloaderPanel2017 extends CardDownloaderPanel implements IValidat
             showTestScreen();
             return;
         }
-//        DataWrangler2017 dataWrangler2017 = DownloadManager.OLD_runDownload2017();
-//        datasetManagerFrame.getProgressPanel2017().setWrangler(dataWrangler2017);
-//        DataDownloader2017 downloader = DownloadManager.runDownload2017();
         DataDownloader2017 downloader = new DataDownloader2017();
         downloader.run();
         datasetManagerFrame.getProgressPanel2017().setDownloader(downloader);
@@ -82,38 +77,17 @@ public class DownloaderPanel2017 extends CardDownloaderPanel implements IValidat
                 if (App.dataset() != null && App.dataset().YEAR_STRING.equals(Dataset.PLACE_2017.YEAR_STRING))
                     App.datasetManager.changeDataset(null);
                 // FIXME : Switch to downloader instead of wrangler
-                DataWrangler2017 dataWrangler2017 = new DataWrangler2017();
-                if (!dataWrangler2017.deleteData()) {
+                DataDownloader2017 downloader = new DataDownloader2017();
+                if (!downloader.deleteData()) {
                     JOptionPane.showMessageDialog(self,
                             "Failed to delete data. Make sure the player is stopped, then try again.\n" +
                                     "If this problem persists, close this app and manually delete the files.",
                             "Delete Failed", JOptionPane.PLAIN_MESSAGE);
                 }
                 DataValidator.runValidation2017();
-//                FrameManager.mainFrame.validateDatasetMenu();
-                // FIXME : Move this to end of app lauch?
-//                validateData();
             }
         });
     }
-
-//    public void validateData() {
-//        long fileSize = DataValidator.getFileSize2017();
-//        if (fileSize > 0) {
-//            deleteButton.setEnabled(true);
-//            downloadButton.setEnabled(false);
-//            fileSizeLabel.setText("File Size: " + ZUtil.byteCountToString(fileSize));
-//            cardLayout.show(cardPanel, Panel.INSTALLED.toString());
-//        } else {
-//            deleteButton.setEnabled(false);
-//            downloadButton.setEnabled(true);
-//            cardLayout.show(cardPanel, Panel.UNINSTALLED.toString());
-//        }
-//        if (SHOW_TEST_SCREEN) {
-//            downloadButton.setText("Download 2017*");
-//            downloadButton.setEnabled(true);
-//        }
-//    }
 
     @Override
     public void onValidation2017(boolean valid, long fileSize) {
