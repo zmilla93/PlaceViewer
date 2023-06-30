@@ -1,13 +1,18 @@
 package com.zrmiller.gui.downloader;
 
+import com.zrmiller.App;
+import com.zrmiller.core.datawrangler.DataDownloader2017;
 import com.zrmiller.core.datawrangler.DataDownloader2022;
 import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.callbacks.IValidationListener2022;
+import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class DownloaderPanel2022 extends CardDownloaderPanel implements IValidationListener2022 {
 
@@ -57,32 +62,34 @@ public class DownloaderPanel2022 extends CardDownloaderPanel implements IValidat
     }
 
     private void addListeners() {
-        downloadButton.addActionListener(e -> {
-            DataDownloader2022 downloader = new DataDownloader2022();
-            datasetManagerFrame.getProgressPanel2022().setDownloader(downloader);
-            datasetManagerFrame.swapToProgress2022();
-            downloader.run();
-        });
+        downloadButton.addActionListener(e -> runDownloadAction());
+        deleteButton.addActionListener(e -> runDeleteAction());
     }
 
-//    public void validateData() {
-//        int fileCount = DataValidator.getFileCount2022();
-//        if (fileCount == PlaceInfo.FILE_COUNT_2022) {
-//            cardLayout.show(cardPanel, Panel.FULLY_INSTALLED.toString());
-//            fileSizeLabel.setText("Total File Size: " + ZUtil.byteCountToString(DataValidator.getTotalFileSize2022()));
-//            downloadButton.setEnabled(false);
-//            deleteButton.setEnabled(true);
-//        } else if (fileCount < PlaceInfo.FILE_COUNT_2022 && fileCount > 0) {
-//            cardLayout.show(cardPanel, Panel.PARTIALLY_INSTALLED.toString());
-//            partialFileCountLabel.setText("File Count: " + fileCount + " / " + PlaceInfo.FILE_COUNT_2022);
-//            downloadButton.setEnabled(true);
-//            deleteButton.setEnabled(true);
-//        } else {
-//            cardLayout.show(cardPanel, Panel.UNINSTALLED.toString());
-//            downloadButton.setEnabled(true);
-//            deleteButton.setEnabled(false);
-//        }
-//    }
+    private void runDownloadAction(){
+        DataDownloader2022 downloader = new DataDownloader2022();
+        datasetManagerFrame.getProgressPanel2022().setDownloader(downloader);
+        datasetManagerFrame.swapToProgress2022();
+        downloader.run();
+    }
+
+    private void runDeleteAction(){
+        DownloaderPanel2022 self = this;
+        String confirm = JOptionPane.showInputDialog(self, "Are you sure you want to delete this dataset?\n" +
+                "Type '2022' to delete.", "Delete 2022 Dataset", JOptionPane.PLAIN_MESSAGE);
+        if (confirm != null && confirm.equals("2022")) {
+            if (App.dataset() != null && App.dataset().YEAR_STRING.equals(Dataset.PLACE_2022.YEAR_STRING))
+                App.datasetManager.changeDataset(null);
+            DataDownloader2022 downloader = new DataDownloader2022();
+            if (!downloader.deleteData()) {
+                JOptionPane.showMessageDialog(self,
+                        "One or more files could not be deleted.\n" +
+                                "If this problem persists, close this app and manually delete the files.",
+                        "Delete Failed", JOptionPane.PLAIN_MESSAGE);
+            }
+            DataValidator.runValidation2022();
+        }
+    }
 
     @Override
     public void onValidation2022(boolean valid, int fileCount, long installSize) {

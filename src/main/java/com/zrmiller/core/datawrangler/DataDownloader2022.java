@@ -88,4 +88,16 @@ public class DataDownloader2022 extends DataDownloader {
         return PlaceInfo.FILE_COUNT_2022;
     }
 
+    public boolean deleteData() {
+        directory = SaveManager.settings.data.dataDirectory + yearString + File.separator;
+        boolean success = true;
+        for (int i = 0; i < PlaceInfo.FILE_COUNT_2022; i++) {
+            File file = new File(directory + FileName.BINARY_2022.getIndexedName(i));
+            if (file.exists()) {
+                if (!file.delete()) success = false;
+            }
+        }
+        return success;
+    }
+
 }

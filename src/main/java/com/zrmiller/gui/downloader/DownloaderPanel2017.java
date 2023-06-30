@@ -76,7 +76,6 @@ public class DownloaderPanel2017 extends CardDownloaderPanel implements IValidat
             if (confirm != null && confirm.equals("2017")) {
                 if (App.dataset() != null && App.dataset().YEAR_STRING.equals(Dataset.PLACE_2017.YEAR_STRING))
                     App.datasetManager.changeDataset(null);
-                // FIXME : Switch to downloader instead of wrangler
                 DataDownloader2017 downloader = new DataDownloader2017();
                 if (!downloader.deleteData()) {
                     JOptionPane.showMessageDialog(self,
