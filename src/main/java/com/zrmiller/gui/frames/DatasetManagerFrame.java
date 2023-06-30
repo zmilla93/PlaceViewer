@@ -137,9 +137,9 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
 //        downloaderPanel2017.validateData();
 //    }
 
-    public void validate2022() {
-        downloaderPanel2022.validateData();
-    }
+//    public void validate2022() {
+//        downloaderPanel2022.validateData();
+//    }
 
     @Override
     public void onThemeChange() {

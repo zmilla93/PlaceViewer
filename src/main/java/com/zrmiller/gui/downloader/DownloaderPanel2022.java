@@ -2,18 +2,20 @@ package com.zrmiller.gui.downloader;
 
 import com.zrmiller.core.datawrangler.DataDownloader2022;
 import com.zrmiller.core.datawrangler.DataValidator;
+import com.zrmiller.core.datawrangler.callbacks.IValidationListener2022;
 import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
 
 import javax.swing.*;
 
-public class DownloaderPanel2022 extends CardDownloaderPanel {
+public class DownloaderPanel2022 extends CardDownloaderPanel implements IValidationListener2022 {
 
     private final JButton deleteButton = new JButton("Delete 2022");
     private final JButton downloadButton = new JButton("Download 2022");
 
     private final JLabel partialFileCountLabel = new JLabel();
+    private final JLabel partialFileSizeLabel = new JLabel();
     private final JLabel fileSizeLabel = new JLabel();
 
     public enum Panel {UNINSTALLED, PARTIALLY_INSTALLED, FULLY_INSTALLED}
@@ -31,6 +33,7 @@ public class DownloaderPanel2022 extends CardDownloaderPanel {
         DownloaderInfoPanel partiallyInstalledPanel = new DownloaderInfoPanel();
         partiallyInstalledPanel.addText("Dataset Partially Installed");
         partiallyInstalledPanel.addComponent(partialFileCountLabel);
+        partiallyInstalledPanel.addComponent(partialFileSizeLabel);
 
         DownloaderInfoPanel fullyInstalledPanel = new DownloaderInfoPanel();
         fullyInstalledPanel.addText("Dataset Installed");
@@ -46,8 +49,7 @@ public class DownloaderPanel2022 extends CardDownloaderPanel {
         addEastButton(downloadButton);
 
         addListeners();
-
-        validateData();
+        DataValidator.addValidationListener2022(this);
     }
 
     public void showPanel(Panel panel) {
@@ -63,16 +65,36 @@ public class DownloaderPanel2022 extends CardDownloaderPanel {
         });
     }
 
-    public void validateData() {
-        int fileCount = DataValidator.getFileCount2022();
+//    public void validateData() {
+//        int fileCount = DataValidator.getFileCount2022();
+//        if (fileCount == PlaceInfo.FILE_COUNT_2022) {
+//            cardLayout.show(cardPanel, Panel.FULLY_INSTALLED.toString());
+//            fileSizeLabel.setText("Total File Size: " + ZUtil.byteCountToString(DataValidator.getTotalFileSize2022()));
+//            downloadButton.setEnabled(false);
+//            deleteButton.setEnabled(true);
+//        } else if (fileCount < PlaceInfo.FILE_COUNT_2022 && fileCount > 0) {
+//            cardLayout.show(cardPanel, Panel.PARTIALLY_INSTALLED.toString());
+//            partialFileCountLabel.setText("File Count: " + fileCount + " / " + PlaceInfo.FILE_COUNT_2022);
+//            downloadButton.setEnabled(true);
+//            deleteButton.setEnabled(true);
+//        } else {
+//            cardLayout.show(cardPanel, Panel.UNINSTALLED.toString());
+//            downloadButton.setEnabled(true);
+//            deleteButton.setEnabled(false);
+//        }
+//    }
+
+    @Override
+    public void onValidation2022(boolean valid, int fileCount, long installSize) {
         if (fileCount == PlaceInfo.FILE_COUNT_2022) {
             cardLayout.show(cardPanel, Panel.FULLY_INSTALLED.toString());
-            fileSizeLabel.setText("Total File Size: " + ZUtil.byteCountToString(DataValidator.getTotalFileSize2022()));
+            fileSizeLabel.setText("Total File Size: " + ZUtil.byteCountToString(installSize));
             downloadButton.setEnabled(false);
             deleteButton.setEnabled(true);
         } else if (fileCount < PlaceInfo.FILE_COUNT_2022 && fileCount > 0) {
             cardLayout.show(cardPanel, Panel.PARTIALLY_INSTALLED.toString());
             partialFileCountLabel.setText("File Count: " + fileCount + " / " + PlaceInfo.FILE_COUNT_2022);
+            partialFileSizeLabel.setText("Installed File Size: " + ZUtil.byteCountToString(installSize) + " / 1.49 GB");
             downloadButton.setEnabled(true);
             deleteButton.setEnabled(true);
         } else {

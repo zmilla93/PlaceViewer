@@ -7,7 +7,6 @@ import com.zrmiller.core.datawrangler.callbacks.IValidationListener2017;
 import com.zrmiller.core.datawrangler.legacy.DataWrangler2017;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.utility.ZUtil;
-import com.zrmiller.gui.FrameManager;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
 
 import javax.swing.*;
@@ -118,12 +117,12 @@ public class DownloaderPanel2017 extends CardDownloaderPanel implements IValidat
 
     @Override
     public void onValidation2017(boolean valid, long fileSize) {
-        if(valid){
+        if (valid) {
             deleteButton.setEnabled(true);
             downloadButton.setEnabled(false);
             fileSizeLabel.setText("File Size: " + ZUtil.byteCountToString(fileSize));
             cardLayout.show(cardPanel, Panel.INSTALLED.toString());
-        }else{
+        } else {
             deleteButton.setEnabled(false);
             downloadButton.setEnabled(true);
             cardLayout.show(cardPanel, Panel.UNINSTALLED.toString());

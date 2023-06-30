@@ -32,6 +32,7 @@ public class DataDownloader2022 extends DataDownloader {
             for (int index : fileIndexes) {
                 if (isCanceled()) {
                     downloader.getFileTracker().onDownloadComplete();
+                    if (downloader.multipleFileTracker != null) downloader.multipleFileTracker.onDownloadComplete();
                     return;
                 }
                 String downloadPath = getIndexedURL(index);
@@ -53,7 +54,7 @@ public class DataDownloader2022 extends DataDownloader {
                 multipleFileTracker.updateProgress();
                 System.gc();
             }
-            multipleFileTracker.downloadComplete();
+            multipleFileTracker.onDownloadComplete();
             DataDownloader.activeDownloader = null;
         });
         thread.start();

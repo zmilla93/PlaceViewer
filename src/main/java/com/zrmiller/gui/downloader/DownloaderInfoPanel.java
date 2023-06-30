@@ -25,13 +25,7 @@ public class DownloaderInfoPanel extends JPanel {
 
     protected void addText(String line) {
         JLabel label = new JLabel(line);
-        addText(label);
-    }
-
-    protected void addText(JLabel label){
-        panel.add(label, gc);
-        gc.insets = new Insets(0, TEXT_INSET, 0, 0);
-        gc.gridy++;
+        addComponent(label);
     }
 
     protected void addComponent(JComponent component) {

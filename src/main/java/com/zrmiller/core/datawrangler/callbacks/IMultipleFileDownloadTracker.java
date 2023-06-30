@@ -4,6 +4,6 @@ public interface IMultipleFileDownloadTracker {
 
     void updateProgress();
 
-    void downloadComplete();
+    void onDownloadComplete();
 
 }

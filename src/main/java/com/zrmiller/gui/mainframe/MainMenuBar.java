@@ -143,7 +143,7 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
     }
 
     @Override
-    public void onValidation2022(boolean valid) {
+    public void onValidation2022(boolean valid, int filecount, long fileSize) {
         dataset2022Button.setEnabled(valid);
     }
 

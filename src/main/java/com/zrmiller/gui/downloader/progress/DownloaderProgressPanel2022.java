@@ -43,7 +43,7 @@ public class DownloaderProgressPanel2022 extends AbstractDownloadProgressPanel {
             @Override
             public void onCompressComplete() {
                 if (dataWrangler2022.getFilesDownloaded() == dataWrangler2022.getExpectedFiles()) {
-                    datasetManagerFrame.validate2022();
+//                    datasetManagerFrame.validate2022();
                     datasetManagerFrame.swapToDownloader();
                     timer.stop();
                     timer = null;
@@ -73,7 +73,7 @@ public class DownloaderProgressPanel2022 extends AbstractDownloadProgressPanel {
 
             @Override
             public void onDownloadComplete() {
-                DataValidator.runValidation2022();
+                // Do nothing, multipleFileTracker handles this
             }
         };
         IMultipleFileDownloadTracker multipleFileTracker = new IMultipleFileDownloadTracker() {
@@ -83,9 +83,9 @@ public class DownloaderProgressPanel2022 extends AbstractDownloadProgressPanel {
             }
 
             @Override
-            public void downloadComplete() {
-                datasetManagerFrame.validate2022();
+            public void onDownloadComplete() {
                 datasetManagerFrame.swapToDownloader();
+                DataValidator.runValidation2022();
             }
         };
         downloader.setFileTracker(fileTracker);

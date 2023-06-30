@@ -92,6 +92,7 @@ public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
             public void updateProgress() {
                 SwingUtilities.invokeLater(() -> updateDownloadProgress());
             }
+
             @Override
             public void onDownloadComplete() {
                 DataValidator.runValidation2017();

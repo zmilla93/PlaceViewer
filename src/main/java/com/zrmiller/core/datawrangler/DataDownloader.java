@@ -47,15 +47,15 @@ public abstract class DataDownloader {
                     outputStream.close();
                     deleteFile(outputFile);
                     tracker.onDownloadComplete();
-                    if(fileTracker != null) fileTracker.onDownloadComplete();
-                    if (multipleFileTracker != null) multipleFileTracker.downloadComplete();
+                    if (fileTracker != null) fileTracker.onDownloadComplete();
+                    if (multipleFileTracker != null) multipleFileTracker.onDownloadComplete();
                     return false;
                 }
             }
             inputStream.close();
             outputStream.close();
             tracker.onDownloadComplete();
-            if(fileTracker != null) fileTracker.onDownloadComplete();
+            if (fileTracker != null) fileTracker.onDownloadComplete();
             return true;
         } catch (IOException e) {
             e.printStackTrace();

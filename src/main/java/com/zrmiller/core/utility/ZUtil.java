@@ -11,6 +11,8 @@ public class ZUtil {
 
     private static final int BYTE_TO_MB = 1000000;
     private static final int BYTE_TO_GB = 1000000000;
+    private static final int BYTE_TO_MB_BINARY = 1048576;
+    private static final int BYTE_TO_GB_BINARY = 1073741824;
 
     private static final DecimalFormat gbFormat = new DecimalFormat("#.##");
 
@@ -21,11 +23,11 @@ public class ZUtil {
      * @return
      */
     public static String byteCountToString(long byteCount) {
-        String text = null;
-        if (byteCount > BYTE_TO_GB) {
-            text = gbFormat.format(byteCount / (float) BYTE_TO_GB) + " GB";
+        String text;
+        if (byteCount > BYTE_TO_GB_BINARY) {
+            text = gbFormat.format(byteCount / (float) BYTE_TO_GB_BINARY) + " GB";
         } else {
-            text = ((int) Math.ceil(byteCount / (float) BYTE_TO_MB) + " MB");
+            text = (Math.round(byteCount / (float) BYTE_TO_MB_BINARY) + " MB");
         }
         return text;
     }
@@ -42,19 +44,19 @@ public class ZUtil {
      * @param input
      * @return
      */
-//    public static String enumToString(String input) {
-//        input = input.replaceAll("_", " ");
-//        input = input.toLowerCase();
-//        StringBuilder builder = new StringBuilder();
-//        for (int i = 0; i < input.length(); i++) {
-//            if (i == 0 || input.charAt(i - 1) == ' ') {
-//                builder.append(Character.toUpperCase(input.charAt(i)));
-//            } else {
-//                builder.append(input.charAt(i));
-//            }
-//        }
-//        return builder.toString();
-//    }
+    public static String enumToString(String input) {
+        input = input.replaceAll("_", " ");
+        input = input.toLowerCase();
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < input.length(); i++) {
+            if (i == 0 || input.charAt(i - 1) == ' ') {
+                builder.append(Character.toUpperCase(input.charAt(i)));
+            } else {
+                builder.append(input.charAt(i));
+            }
+        }
+        return builder.toString();
+    }
 
     /**
      * Returns a new GridBagConstraint with gridX and gridY initialized to 0.
@@ -81,7 +83,6 @@ public class ZUtil {
                 Desktop.getDesktop().browse(new URI(link));
                 return true;
             } catch (IOException | URISyntaxException e) {
-//                e.printStackTrace();
                 return false;
             }
         }

@@ -66,7 +66,12 @@ public class DataValidator {
     }
 
     public static void runValidation2022() {
-
+        int fileCount = getFileCount2022();
+        boolean valid = fileCount == PlaceInfo.FILE_COUNT_2022;
+        long installSize = getTotalFileSize2022();
+        for (IValidationListener2022 listener : listeners2022) {
+            listener.onValidation2022(valid, fileCount, installSize);
+        }
     }
 
     public static int[] getFileOrder() {
