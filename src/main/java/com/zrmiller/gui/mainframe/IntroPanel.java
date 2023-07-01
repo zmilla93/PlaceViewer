@@ -17,7 +17,7 @@ public class IntroPanel extends JPanel {
         setLayout(new BorderLayout());
         JPanel infoPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gc = ZUtil.getGC();
-        infoPanel.add(new JLabel("Welcome to PlaceViewer! Download a dataset to get started."), gc);
+        infoPanel.add(new JLabel("Welcome to PlaceViewer! Download a dataset to get started, or select an installed one from the top menu."), gc);
         gc.gridy++;
         gc.insets.top = BUTTON_GAP;
         infoPanel.add(openDatasetsButton, gc);
