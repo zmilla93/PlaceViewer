@@ -5,14 +5,19 @@ import com.zrmiller.core.datawrangler.DataDownloader2017;
 import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.callbacks.IValidationListener2017;
 import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.utility.CustomColors;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
+import com.zrmiller.modules.colortheme.ColorManager;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class DownloaderPanel2017 extends CardDownloaderPanel implements IValidationListener2017 {
 
     private final JLabel fileSizeLabel = new JLabel();
+//    private final JLabel uninstalledLabel = new JLabel("Dataset not installed.");
+//    private final JLabel installedLabel = new JLabel("Dataset installed.");
     protected JButton deleteButton = new JButton("Delete");
     protected JButton downloadButton = new JButton("Download");
     private static final boolean SHOW_TEST_SCREEN = false;
@@ -24,13 +29,15 @@ public class DownloaderPanel2017 extends CardDownloaderPanel implements IValidat
         deleteButton.setText("Delete 2017");
         downloadButton.setText("Download 2017");
 
+        uninstalledLabel.setForeground(Color.RED);
         DownloaderInfoPanel uninstalledPanel = new DownloaderInfoPanel();
-        uninstalledPanel.addText("Download Size: 1 GB");
-        uninstalledPanel.addText("Compressed Size: 162 MB");
-        uninstalledPanel.addText("Data will be downloaded into a single file, compressed, then sorted.");
+        uninstalledPanel.addComponent(uninstalledLabel);
+        uninstalledPanel.addText("Download Size: 158 MB");
+//        uninstalledPanel.addText("Compressed Size: 162 MB");
+//        uninstalledPanel.addText("Data will be downloaded into a single file, compressed, then sorted.");
 
         DownloaderInfoPanel installedPanel = new DownloaderInfoPanel();
-        installedPanel.addText("Dataset Installed");
+        installedPanel.addComponent(installedLabel);
         installedPanel.addComponent(fileSizeLabel);
 
         cardPanel.add(uninstalledPanel, Panel.UNINSTALLED.toString());

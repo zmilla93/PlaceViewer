@@ -26,19 +26,17 @@ public class DownloaderPanel2022 extends CardDownloaderPanel implements IValidat
         super(datasetManagerFrame);
 
         DownloaderInfoPanel uninstalledPanel = new DownloaderInfoPanel();
-        uninstalledPanel.addText("Total Download Size: 11.4 GB");
-        uninstalledPanel.addText("Total Compressed Size: 1.49 GB");
+        uninstalledPanel.addComponent(uninstalledLabel);
         uninstalledPanel.addText("File Count: " + PlaceInfo.FILE_COUNT_2022);
-        uninstalledPanel.addText("Files will be downloaded, unzipped, then compressed one at a time.");
-        uninstalledPanel.addText("This process can be paused.");
+        uninstalledPanel.addText("Total Download Size: 1.49 GB");
 
         DownloaderInfoPanel partiallyInstalledPanel = new DownloaderInfoPanel();
-        partiallyInstalledPanel.addText("Dataset Partially Installed");
+        partiallyInstalledPanel.addComponent(partiallyInstalledLabel);
         partiallyInstalledPanel.addComponent(partialFileCountLabel);
         partiallyInstalledPanel.addComponent(partialFileSizeLabel);
 
         DownloaderInfoPanel fullyInstalledPanel = new DownloaderInfoPanel();
-        fullyInstalledPanel.addText("Dataset Installed");
+        fullyInstalledPanel.addComponent(installedLabel);
         fullyInstalledPanel.addText("File Count: " + PlaceInfo.FILE_COUNT_2022);
         fullyInstalledPanel.addComponent(fileSizeLabel);
 
