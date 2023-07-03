@@ -1,6 +1,7 @@
 package com.zrmiller.core.utility;
 
 import com.zrmiller.App;
+import com.zrmiller.core.colors.Gradient;
 import com.zrmiller.core.enums.ZoomLevel;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.parser.PlacePlayer;
@@ -40,10 +41,21 @@ public class PlaceCanvas {
 
     public ZoomLevel zoomLevel = ZoomLevel.Zoom_1;
     private final PlacePlayer player;
-    private int heatMax = 0;
+    private final Gradient heatGradient = new Gradient();
+
+    public ColorMode colorMode = ColorMode.HEATMAP_COLOR;
+
+    public enum ColorMode {
+        NORMAL, HEATMAP_BW, HEATMAP_COLOR
+    }
 
     public PlaceCanvas(PlacePlayer player) {
         this.player = player;
+        heatGradient.addKey(0f, new Color(0, 0, 0));
+        heatGradient.addKey(0.25f, new Color(17, 59, 229));
+        heatGradient.addKey(0.5f, new Color(198, 21, 211));
+        heatGradient.addKey(0.75f, new Color(220, 10, 49));
+        heatGradient.addKey(1f, new Color(231, 220, 13));
     }
 
     public void updateColorBuffer() {
@@ -78,12 +90,26 @@ public class PlaceCanvas {
             rgbColorBuffer[colorBufferIndex + 2] = backgroundColor.getBlue();
             return;
         }
-        int heat = player.getHeatmapBuffer()[canvasIndex];
-        int colorIndex = player.getColorBuffer()[canvasIndex];
-        float heatNormal = ZUtil.clamp(heat / (float) PlacePlayer.heatmapMax, 0f, 1f);
-        int heatColorValue = Math.round(heatNormal * 255);
-        Color color = App.dataset().COLOR_ARRAY[colorIndex];
-//        Color color = new Color(heatColorValue, heatColorValue, heatColorValue);
+        Color color = Color.BLACK;
+        int heat = 0;
+        float heatNormal = 0;
+        if (colorMode == ColorMode.HEATMAP_BW || colorMode == ColorMode.HEATMAP_COLOR) {
+            heat = player.getHeatmapBuffer()[canvasIndex];
+            heatNormal = ZUtil.clamp(heat / (float) PlacePlayer.heatmapMax, 0f, 1f);
+        }
+        switch (colorMode) {
+            case NORMAL:
+                int colorIndex = player.getColorBuffer()[canvasIndex];
+                color = App.dataset().COLOR_ARRAY[colorIndex];
+                break;
+            case HEATMAP_BW:
+                int heatColorValue = Math.round(heatNormal * 255);
+                color = new Color(heatColorValue, heatColorValue, heatColorValue);
+                break;
+            case HEATMAP_COLOR:
+                color = heatGradient.resolveColor(heatNormal);
+                break;
+        }
         if (selection) {
             if (pixelX < selectionXLower || pixelX >= selectionXUpper ||
                     pixelY < selectionYLower || pixelY >= selectionYUpper) {

@@ -5,10 +5,8 @@ import com.zrmiller.core.datawrangler.DataDownloader2017;
 import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.callbacks.IValidationListener2017;
 import com.zrmiller.core.enums.Dataset;
-import com.zrmiller.core.utility.CustomColors;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
-import com.zrmiller.modules.colortheme.ColorManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +14,7 @@ import java.awt.*;
 public class DownloaderPanel2017 extends CardDownloaderPanel implements IValidationListener2017 {
 
     private final JLabel fileSizeLabel = new JLabel();
-//    private final JLabel uninstalledLabel = new JLabel("Dataset not installed.");
+    //    private final JLabel uninstalledLabel = new JLabel("Dataset not installed.");
 //    private final JLabel installedLabel = new JLabel("Dataset installed.");
     protected JButton deleteButton = new JButton("Delete");
     protected JButton downloadButton = new JButton("Download");

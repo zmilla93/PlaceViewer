@@ -27,7 +27,7 @@ public class PlacePlayer implements IDatasetListener {
     // Heatmap
     public static int heatmapWeight = 2000;
     public static int heatmapMax = 100000;
-    public static float heatmapDecayFactor = 0f; // Should be 0-1
+    public static float heatmapDecayFactor = 0.0f; // Should be 0-1
 
     private State state = State.STOPPED;
 
@@ -167,6 +167,7 @@ public class PlacePlayer implements IDatasetListener {
     }
 
     private void decayHeatmap(int iterations) {
+        if (heatmapDecayFactor == 0) return;
         for (int i = 0; i < heatmapBuffer.length; i++) {
             int heat = heatmapBuffer[i] - Math.round(iterations * heatmapDecayFactor);
             if (heat < 0) heat = 0;

@@ -103,12 +103,12 @@ public class ColorManager<T> {
         }
     }
 
-    public static ColorTheme getCurrentTheme(){
+    public static ColorTheme getCurrentTheme() {
         return currentTheme;
     }
 
-    public static boolean isDarkTheme(){
-        if(currentTheme == null) return false;
+    public static boolean isDarkTheme() {
+        if (currentTheme == null) return false;
         return currentTheme.lookAndFeel.isDark();
     }
 

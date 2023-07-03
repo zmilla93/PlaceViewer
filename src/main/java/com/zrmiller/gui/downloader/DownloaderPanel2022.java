@@ -61,14 +61,14 @@ public class DownloaderPanel2022 extends CardDownloaderPanel implements IValidat
         deleteButton.addActionListener(e -> runDeleteAction());
     }
 
-    private void runDownloadAction(){
+    private void runDownloadAction() {
         DataDownloader2022 downloader = new DataDownloader2022();
         datasetManagerFrame.getProgressPanel2022().setDownloader(downloader);
         datasetManagerFrame.swapToProgress2022();
         downloader.run();
     }
 
-    private void runDeleteAction(){
+    private void runDeleteAction() {
         DownloaderPanel2022 self = this;
         String confirm = JOptionPane.showInputDialog(self, "Are you sure you want to delete this dataset?\n" +
                 "Type '2022' to delete.", "Delete 2022 Dataset", JOptionPane.PLAIN_MESSAGE);
