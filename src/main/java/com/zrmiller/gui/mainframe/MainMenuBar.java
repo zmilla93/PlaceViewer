@@ -40,7 +40,6 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
     private final JMenuItem datasetManagerButton = new JMenuItem("Dataset Manager...");
 
     // Export Menu Bar
-    private final JMenuItem exportCanvasButton = new JMenuItem("Export Canvas");
     private final JMenuItem exportImageButton = new JMenuItem("Export PNG...");
     //    private final JMenuItem exportGifButton = new JMenuItem("Export GIF...");
     private final JMenuItem openExportsButton = new JMenuItem("Open Exports Folder");
@@ -76,7 +75,6 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
         datasetMenu.add(datasetManagerButton);
 
         // Export
-//        exportMenu.add(exportCanvasButton);
         exportMenu.add(exportImageButton);
 //        exportMenu.add(exportGifButton);
         exportMenu.add(new JSeparator());
@@ -88,7 +86,6 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
         add(displayMenu);
 //        add(exportMenu);
 
-        validateDatasetMenu();
         addListeners();
         App.datasetManager.addListener(this);
         DataValidator.addValidationListener2017(this);
@@ -107,33 +104,10 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
         exportImageButton.addActionListener(e -> FrameManager.exportImageWindow.setVisible(true));
 //        exportGifButton.addActionListener(e -> FrameManager.exportGifWindow.setVisible(true));
         openExportsButton.addActionListener(e -> ZUtil.openExplorer(SaveManager.settings.data.dataDirectory + "exports"));
-        exportCanvasButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                testExport();
-            }
-        });
-    }
-
-    private void testExport() {
-//        PlaceCanvas placeCanvas = new PlaceCanvas(FrameManager.canvasPanel.getPlayer());
-//        placeCanvas.export(0, 0, 1000, 1000, ZoomLevel.Zoom_1);
-    }
-
-    // FIXME : Remove
-    public void validateDatasetMenu() {
-        boolean show2017 = DataValidator.checkExists2017();
-        boolean show2022 = DataValidator.checkFileCount2022();
-        boolean showMissing = !show2017 && !show2022;
-        dataset2017Button.setEnabled(show2017);
-        dataset2022Button.setEnabled(true);
-
-        closeDatasetButton.setVisible(App.dataset() != null);
     }
 
     @Override
     public void onDatasetChanged(Dataset datasets) {
-        validateDatasetMenu();
         closeDatasetButton.setVisible(App.dataset() != null);
     }
 
