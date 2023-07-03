@@ -40,6 +40,7 @@ public class PlaceCanvas {
 
     public ZoomLevel zoomLevel = ZoomLevel.Zoom_1;
     private final PlacePlayer player;
+    private int heatMax = 0;
 
     public PlaceCanvas(PlacePlayer player) {
         this.player = player;
@@ -80,7 +81,11 @@ public class PlaceCanvas {
         // FIXME : Heatmap : IllegalArgumentException: Color parameter outside of expected range: Red Green Blue
         int heat = player.getHeatmapBuffer()[canvasIndex];
         int colorIndex = player.getColorBuffer()[canvasIndex];
-        Color color = App.dataset().COLOR_ARRAY[colorIndex];
+//        System.out.println(heat);
+//        Color color = App.dataset().COLOR_ARRAY[colorIndex];
+        float heatNormal = ZUtil.clamp(heat / (float) PlacePlayer.heatmapMax, 0f, 1f);
+        int heatColorValue = Math.round(heatNormal * 255);
+        Color color = new Color(heatColorValue, heatColorValue, heatColorValue);
         if (selection) {
             if (pixelX < selectionXLower || pixelX >= selectionXUpper ||
                     pixelY < selectionYLower || pixelY >= selectionYUpper) {
