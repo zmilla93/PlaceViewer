@@ -42,12 +42,7 @@ public class PlaceCanvas {
     public ZoomLevel zoomLevel = ZoomLevel.Zoom_1;
     private final PlacePlayer player;
     private final Gradient heatGradient = new Gradient();
-
-    public ColorMode colorMode = ColorMode.HEATMAP_COLOR;
-
-    public enum ColorMode {
-        NORMAL, HEATMAP_BW, HEATMAP_COLOR
-    }
+    private ColorMode colorMode = ColorMode.NORMAL;
 
     public PlaceCanvas(PlacePlayer player) {
         this.player = player;
@@ -90,10 +85,11 @@ public class PlaceCanvas {
             rgbColorBuffer[colorBufferIndex + 2] = backgroundColor.getBlue();
             return;
         }
+//        ColorMode colorMode = App.datasetManager.getColorMode();
         Color color = Color.BLACK;
         int heat = 0;
         float heatNormal = 0;
-        if (colorMode == ColorMode.HEATMAP_BW || colorMode == ColorMode.HEATMAP_COLOR) {
+        if (colorMode == ColorMode.HEATMAP_GRAYSCALE || colorMode == ColorMode.HEATMAP_COLOR) {
             heat = player.getHeatmapBuffer()[canvasIndex];
             heatNormal = ZUtil.clamp(heat / (float) PlacePlayer.heatmapMax, 0f, 1f);
         }
@@ -102,7 +98,7 @@ public class PlaceCanvas {
                 int colorIndex = player.getColorBuffer()[canvasIndex];
                 color = App.dataset().COLOR_ARRAY[colorIndex];
                 break;
-            case HEATMAP_BW:
+            case HEATMAP_GRAYSCALE:
                 int heatColorValue = Math.round(heatNormal * 255);
                 color = new Color(heatColorValue, heatColorValue, heatColorValue);
                 break;
@@ -314,6 +310,10 @@ public class PlaceCanvas {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setColorMode(ColorMode colorMode) {
+        this.colorMode = colorMode;
     }
 
 }

@@ -13,6 +13,7 @@ import java.util.HashMap;
  */
 public class Gradient {
 
+    // FIXME : Hashmaps are a bit slow for this use case. Could optimize by using an array and multiplying float values by 100.
     private final HashMap<Float, Color> colorMap = new HashMap<>();
     private final HashMap<Float, Color> colorCache = new HashMap<>();
     private final ArrayList<Float> keyList = new ArrayList<>();
@@ -52,17 +53,15 @@ public class Gradient {
             }
         }
         // If only one key is found, return a solid color
-        if (lowerKeyIndex == -1){
+        if (lowerKeyIndex == -1) {
             Color color = colorMap.get(keyList.get(upperKeyIndex));
             colorCache.put(value, color);
             return color;
-        }
-        else if (upperKeyIndex == -1) {
+        } else if (upperKeyIndex == -1) {
             Color color = colorMap.get(keyList.get(lowerKeyIndex));
             colorCache.put(value, color);
             return color;
-        }
-        else {
+        } else {
             // If the value is between two keys, return an interpolated color
             float lowerValue = keyList.get(lowerKeyIndex);
             float upperValue = keyList.get(upperKeyIndex);

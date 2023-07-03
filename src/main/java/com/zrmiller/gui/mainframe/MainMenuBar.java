@@ -7,14 +7,13 @@ import com.zrmiller.core.datawrangler.callbacks.IValidationListener2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
+import com.zrmiller.core.utility.ColorMode;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.FrameManager;
 import com.zrmiller.modules.colortheme.ColorManager;
 import com.zrmiller.modules.colortheme.ColorTheme;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidationListener2017, IValidationListener2022 {
 
@@ -31,6 +30,9 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
     private final JMenuItem quitButton = new JMenuItem("Quit");
 
     // Display
+    private final JMenuItem displayNormalButton = new JRadioButtonMenuItem("Normal");
+    private final JMenuItem displayHeatmapGrayscaleButton = new JRadioButtonMenuItem("Heatmap (Grayscale)");
+    private final JMenuItem displayHeatmapColorButton = new JRadioButtonMenuItem("Heatmap (Color)");
 
     // Datasets
     private final JMenuItem dataset2017Button = new JMenuItem("Place 2017");
@@ -80,6 +82,16 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
         exportMenu.add(new JSeparator());
         exportMenu.add(openExportsButton);
 
+        // Display
+        ButtonGroup displayGroup = new ButtonGroup();
+        displayGroup.add(displayNormalButton);
+        displayGroup.add(displayHeatmapGrayscaleButton);
+        displayGroup.add(displayHeatmapColorButton);
+        displayGroup.setSelected(displayNormalButton.getModel(), true);
+        displayMenu.add(displayNormalButton);
+        displayMenu.add(displayHeatmapGrayscaleButton);
+        displayMenu.add(displayHeatmapColorButton);
+
         // Build Menu Bar
         add(optionsMenu);
         add(datasetMenu);
@@ -104,6 +116,11 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
         exportImageButton.addActionListener(e -> FrameManager.exportImageWindow.setVisible(true));
 //        exportGifButton.addActionListener(e -> FrameManager.exportGifWindow.setVisible(true));
         openExportsButton.addActionListener(e -> ZUtil.openExplorer(SaveManager.settings.data.dataDirectory + "exports"));
+
+        // Display
+        displayNormalButton.addActionListener(e -> App.datasetManager.setColorMode(ColorMode.NORMAL));
+        displayHeatmapGrayscaleButton.addActionListener(e -> App.datasetManager.setColorMode(ColorMode.HEATMAP_GRAYSCALE));
+        displayHeatmapColorButton.addActionListener(e -> App.datasetManager.setColorMode(ColorMode.HEATMAP_COLOR));
     }
 
     @Override

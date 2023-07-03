@@ -2,8 +2,10 @@ package com.zrmiller.gui.mainframe;
 
 import com.zrmiller.App;
 import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.managers.listeners.IColorModeListener;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.parser.PlacePlayer;
+import com.zrmiller.core.utility.ColorMode;
 import com.zrmiller.core.utility.PlaceCanvas;
 import com.zrmiller.gui.mainframe.listeners.ICanvasListener;
 import com.zrmiller.gui.mainframe.listeners.IPlayerControllerListener;
@@ -17,7 +19,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
-public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements IThemeListener, IDatasetListener, IPlayerControllerListener {
+public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements IThemeListener, IDatasetListener, IPlayerControllerListener, IColorModeListener {
 
     private final int targetFPS = 60;
 
@@ -46,6 +48,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
         timer.start();
         addListeners();
         App.datasetManager.addListener(this);
+        App.datasetManager.addColorModeListener(this);
         playerControlPanel.addListener(this);
     }
 
@@ -216,4 +219,13 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     public void onSpeedChange(int tilesPerSecond) {
         player.setSpeed(tilesPerSecond);
     }
+
+    @Override
+    public void onColorModeChange(ColorMode colorMode) {
+        canvas.setColorMode(colorMode);
+        canvas.updateColorBuffer();
+        revalidate();
+        repaint();
+    }
+
 }
