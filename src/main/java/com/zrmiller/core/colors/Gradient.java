@@ -52,8 +52,16 @@ public class Gradient {
             }
         }
         // If only one key is found, return a solid color
-        if (lowerKeyIndex == -1) return colorMap.get(keyList.get(upperKeyIndex));
-        else if (upperKeyIndex == -1) return colorMap.get(keyList.get(lowerKeyIndex));
+        if (lowerKeyIndex == -1){
+            Color color = colorMap.get(keyList.get(upperKeyIndex));
+            colorCache.put(value, color);
+            return color;
+        }
+        else if (upperKeyIndex == -1) {
+            Color color = colorMap.get(keyList.get(lowerKeyIndex));
+            colorCache.put(value, color);
+            return color;
+        }
         else {
             // If the value is between two keys, return an interpolated color
             float lowerValue = keyList.get(lowerKeyIndex);
