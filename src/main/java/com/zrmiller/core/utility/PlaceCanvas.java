@@ -78,14 +78,12 @@ public class PlaceCanvas {
             rgbColorBuffer[colorBufferIndex + 2] = backgroundColor.getBlue();
             return;
         }
-        // FIXME : Heatmap : IllegalArgumentException: Color parameter outside of expected range: Red Green Blue
         int heat = player.getHeatmapBuffer()[canvasIndex];
         int colorIndex = player.getColorBuffer()[canvasIndex];
-//        System.out.println(heat);
-//        Color color = App.dataset().COLOR_ARRAY[colorIndex];
         float heatNormal = ZUtil.clamp(heat / (float) PlacePlayer.heatmapMax, 0f, 1f);
         int heatColorValue = Math.round(heatNormal * 255);
-        Color color = new Color(heatColorValue, heatColorValue, heatColorValue);
+        Color color = App.dataset().COLOR_ARRAY[colorIndex];
+//        Color color = new Color(heatColorValue, heatColorValue, heatColorValue);
         if (selection) {
             if (pixelX < selectionXLower || pixelX >= selectionXUpper ||
                     pixelY < selectionYLower || pixelY >= selectionYUpper) {
