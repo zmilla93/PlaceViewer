@@ -49,7 +49,7 @@ public class DataDownloader2022 extends DataDownloader {
                 };
                 setTracker(tracker);
                 downloader.getMultipleFileTracker().updateProgress();
-                downloadFile(FileName.BINARY_2022.getIndexedName(index), downloadPath);
+                if (!downloadFile(FileName.BINARY_2022.getIndexedName(index), downloadPath)) cancelDownload();
                 filesDownloaded++;
                 multipleFileTracker.updateProgress();
                 System.gc();
