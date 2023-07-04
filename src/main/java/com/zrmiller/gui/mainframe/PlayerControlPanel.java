@@ -14,8 +14,7 @@ import java.util.Objects;
 public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerListener> implements IPlayerControllerListener {
 
     private final JButton stopButton = new FlatColorIconButton("/icons/media-stop.png");
-    private final FlatColorIconButton playButton = new FlatColorIconButton("icons/media-play.png", "icons/media-pause.png");
-    private final JButton pauseButton = new FlatColorIconButton("icons/media-pause.png");
+    private final FlatColorIconButton playPauseButton = new FlatColorIconButton("icons/media-play.png", "icons/media-pause.png");
     private final JSlider speedSlider = new JSlider();
     private final JLabel speedLabel = new JLabel();
     private final JComboBox<PlaybackSpeed> speedCombo = new JComboBox<>();
@@ -30,9 +29,7 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
         gc.gridx++;
         add(speedSlider);
         gc.gridx++;
-        add(playButton);
-        gc.gridx++;
-        add(pauseButton, gc);
+        add(playPauseButton);
         gc.gridx++;
         add(stopButton);
         gc.gridx++;
@@ -55,19 +52,10 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
                 listener.onStop();
             }
         });
-        playButton.addActionListener(e -> {
+        playPauseButton.addActionListener(e -> {
             for (IPlayerControllerListener listener : listeners) {
-                listener.onPlay();
-            }
-            // FIXME:
-            int iconIndex = playButton.getIconIndex();
-            iconIndex++;
-            if(iconIndex == 2) iconIndex = 0;
-            playButton.setIconIndex(iconIndex);
-        });
-        pauseButton.addActionListener(e -> {
-            for (IPlayerControllerListener listener : listeners) {
-                listener.onPause();
+//                listener.onPlay();
+                listener.onTogglePlayPause();
             }
         });
         speedCombo.addActionListener(e -> setPlaybackSpeed((PlaybackSpeed) Objects.requireNonNull(speedCombo.getSelectedItem())));
@@ -88,17 +76,22 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
     }
 
     @Override
-    public void onStop() {
-
-    }
-
-    @Override
     public void onPlay() {
-
+        playPauseButton.setIconIndex(1);
     }
 
     @Override
     public void onPause() {
+        playPauseButton.setIconIndex(0);
+    }
+
+    @Override
+    public void onStop() {
+        playPauseButton.setIconIndex(0);
+    }
+
+    @Override
+    public void onTogglePlayPause() {
 
     }
 
@@ -106,4 +99,5 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
     public void onSpeedChange(int tilesPerSecond) {
 
     }
+
 }

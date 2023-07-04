@@ -202,11 +202,6 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     // Player Controls
 
     @Override
-    public void onStop() {
-        player.stop();
-    }
-
-    @Override
     public void onPlay() {
         player.play();
     }
@@ -214,6 +209,18 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     @Override
     public void onPause() {
         player.pause();
+    }
+
+    @Override
+    public void onStop() {
+        player.stop();
+    }
+
+    @Override
+    public void onTogglePlayPause() {
+        PlacePlayer.State state = player.getState();
+        if (state == PlacePlayer.State.PAUSED || state == PlacePlayer.State.STOPPED) player.play();
+        else if (state == PlacePlayer.State.PLAYING) player.pause();
     }
 
     @Override

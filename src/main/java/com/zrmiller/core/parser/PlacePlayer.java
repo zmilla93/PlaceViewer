@@ -33,8 +33,9 @@ public class PlacePlayer implements IDatasetListener {
     public static float heatmapDecayFactor = 0.0f; // Should be 0-1
 
     // Listeners
-    private ArrayList<IPlayerControllerListener> playerListeners = new ArrayList<>();
+    private final ArrayList<IPlayerControllerListener> playerListeners = new ArrayList<>();
 
+    public enum State {STOPPED, PLAYING, PAUSED, SEEKING}
     private State state = State.STOPPED;
 
     /**
@@ -45,8 +46,6 @@ public class PlacePlayer implements IDatasetListener {
         parser = new PlaceParser2022();
         DatasetManager.addDatasetListener(this);
     }
-
-    private enum State {STOPPED, PLAYING, PAUSED, SEEKING}
 
     //
     // Public Stuff
@@ -159,6 +158,10 @@ public class PlacePlayer implements IDatasetListener {
 
     public int[] getHeatmapBuffer() {
         return heatmapBuffer;
+    }
+
+    public State getState(){
+        return state;
     }
 
     //
