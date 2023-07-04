@@ -14,7 +14,7 @@ import java.util.Objects;
 public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerListener> implements IPlayerControllerListener {
 
     private final JButton stopButton = new FlatColorIconButton("/icons/media-stop.png");
-    private final JButton playButton = new FlatColorIconButton("icons/media-play.png");
+    private final FlatColorIconButton playButton = new FlatColorIconButton("icons/media-play.png", "icons/media-pause.png");
     private final JButton pauseButton = new FlatColorIconButton("icons/media-pause.png");
     private final JSlider speedSlider = new JSlider();
     private final JLabel speedLabel = new JLabel();
@@ -59,6 +59,11 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
             for (IPlayerControllerListener listener : listeners) {
                 listener.onPlay();
             }
+            // FIXME:
+            int iconIndex = playButton.getIconIndex();
+            iconIndex++;
+            if(iconIndex == 2) iconIndex = 0;
+            playButton.setIconIndex(iconIndex);
         });
         pauseButton.addActionListener(e -> {
             for (IPlayerControllerListener listener : listeners) {
