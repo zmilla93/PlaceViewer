@@ -1,6 +1,7 @@
 package com.zrmiller.gui.frames;
 
 import com.zrmiller.core.datawrangler.DataValidator;
+import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.downloader.DownloaderPanel2017;
@@ -95,7 +96,6 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
         browseButton.addActionListener(e -> {
             if (fileChooser.showOpenDialog(self) == JFileChooser.APPROVE_OPTION) {
                 String path = String.valueOf(fileChooser.getSelectedFile());
-                directoryLabel.setText(path);
                 SaveManager.settings.data.dataDirectory = path + File.separator;
                 SaveManager.settings.saveToDisk();
                 updateDirectory();
@@ -106,6 +106,7 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
     }
 
     private void updateDirectory(){
+        DatasetManager.setDataset(null);
         String dir = SaveManager.settings.data.dataDirectory;
         File file = new File(dir);
         if(file.isDirectory()){

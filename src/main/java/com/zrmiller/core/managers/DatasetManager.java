@@ -21,7 +21,7 @@ public final class DatasetManager {
 
     }
 
-    public static void changeDataset(Dataset dataset) {
+    public static void setDataset(Dataset dataset) {
         DatasetManager.dataset = dataset;
         for (IDatasetListener listener : datasetListeners) {
             listener.onDatasetChanged(dataset);

@@ -33,7 +33,7 @@ public class App {
         // Validate datasets
         DataValidator.runValidation2017();
         DataValidator.runValidation2022();
-        DatasetManager.changeDataset(null);
+        DatasetManager.setDataset(null);
 
         // Add shutdown hook
         Runtime.getRuntime().addShutdownHook(new Thread(App::shutdown));

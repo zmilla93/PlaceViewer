@@ -108,9 +108,9 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
     private void addListeners() {
         // Note: Color theme listeners are added during construction
         // Datasets
-        dataset2017Button.addActionListener(e -> DatasetManager.changeDataset(Dataset.PLACE_2017));
-        dataset2022Button.addActionListener(e -> DatasetManager.changeDataset(Dataset.PLACE_2022));
-        closeDatasetButton.addActionListener(e -> DatasetManager.changeDataset(null));
+        dataset2017Button.addActionListener(e -> DatasetManager.setDataset(Dataset.PLACE_2017));
+        dataset2022Button.addActionListener(e -> DatasetManager.setDataset(Dataset.PLACE_2022));
+        closeDatasetButton.addActionListener(e -> DatasetManager.setDataset(null));
         datasetManagerButton.addActionListener(e -> FrameManager.dataDownloaderFrame.setVisible(true));
         githubButton.addActionListener(e -> ZUtil.openLink("https://github.com/zmilla93/PlaceViewer"));
         quitButton.addActionListener(e -> System.exit(0));

@@ -81,7 +81,7 @@ public class DownloaderPanel2017 extends CardDownloaderPanel implements IValidat
                     "Type '2017' to delete.", "Delete 2017 Dataset", JOptionPane.PLAIN_MESSAGE);
             if (confirm != null && confirm.equals("2017")) {
                 if (App.dataset() != null && App.dataset().YEAR_STRING.equals(Dataset.PLACE_2017.YEAR_STRING))
-                    DatasetManager.changeDataset(null);
+                    DatasetManager.setDataset(null);
                 DataDownloader2017 downloader = new DataDownloader2017();
                 if (!downloader.deleteData()) {
                     JOptionPane.showMessageDialog(self,
