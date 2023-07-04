@@ -20,7 +20,7 @@ public class MainPanel extends JPanel implements ICanvasListener, IDatasetListen
     private final CanvasPanel canvasPanel = new CanvasPanel(controlPanel);
 
     private final JPanel southPanel = new JPanel(new BorderLayout());
-    private final JLabel positionLabel = new JLabel("Pos -");
+    private final JLabel positionLabel = new JLabel();
     private final JLabel frameCountLabel = new JLabel("-");
     private final JLabel zoomLabel = new JLabel("100%");
 
@@ -109,6 +109,7 @@ public class MainPanel extends JPanel implements ICanvasListener, IDatasetListen
         } else {
             cardLayout.show(cardPanel, Card.INTRO.toString());
         }
+        positionLabel.setText("Pos 0, 0");
     }
 
 }

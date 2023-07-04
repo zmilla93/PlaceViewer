@@ -1,6 +1,9 @@
 package com.zrmiller.gui.mainframe;
 
+import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.enums.PlaybackSpeed;
+import com.zrmiller.core.managers.DatasetManager;
+import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.mainframe.listeners.IPlayerControllerListener;
 import com.zrmiller.modules.colortheme.components.FlatColorIconButton;
@@ -11,13 +14,15 @@ import java.awt.*;
 import java.text.NumberFormat;
 import java.util.Objects;
 
-public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerListener> implements IPlayerControllerListener {
+public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerListener> implements IPlayerControllerListener, IDatasetListener {
 
     private final JButton stopButton = new FlatColorIconButton("/icons/media-stop.png");
     private final FlatColorIconButton playPauseButton = new FlatColorIconButton("icons/media-play.png", "icons/media-pause.png");
     private final JSlider speedSlider = new JSlider();
     private final JLabel speedLabel = new JLabel();
     private final JComboBox<PlaybackSpeed> speedCombo = new JComboBox<>();
+    private final JComponent[] components;
+    private final JButton[] buttons;
 
     public PlayerControlPanel() {
         setLayout(new GridBagLayout());
@@ -39,6 +44,9 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
         addListeners();
         speedCombo.setSelectedItem(PlaybackSpeed.FAST);
         speedSlider.setValue(500000);
+        components = new JComponent[]{playPauseButton, stopButton, speedSlider, speedCombo};
+        buttons = new JButton[]{playPauseButton, stopButton};
+        DatasetManager.addDatasetListener(this);
     }
 
     private void setPlaybackSpeed(PlaybackSpeed speed) {
@@ -97,6 +105,15 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
     @Override
     public void onSpeedChange(int tilesPerSecond) {
         // Do nothing
+    }
+
+    @Override
+    public void onDatasetChanged(Dataset dataset) {
+        boolean enabled = dataset != null;
+        for (JComponent component : components) {
+            component.setEnabled(enabled);
+        }
+        requestFocus();
     }
 
 }

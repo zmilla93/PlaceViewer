@@ -88,7 +88,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
             if (mod == -1) canvas.zoomIn();
             else canvas.zoomOut();
             markForRepaint = true;
-            alertListeners();
+            alertZoomListeners();
         });
         addMouseListener(new MouseAdapter() {
             @Override
@@ -168,7 +168,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
         return point;
     }
 
-    private void alertListeners() {
+    private void alertZoomListeners() {
         for (ICanvasListener listener : listeners) {
             listener.onZoom(canvas.zoomLevel);
         }
@@ -196,6 +196,8 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
 
     @Override
     public void onDatasetChanged(Dataset dataset) {
+        canvas.resetZoom();
+        alertZoomListeners();
         tryRepaint(true);
     }
 

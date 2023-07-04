@@ -1,5 +1,8 @@
 package com.zrmiller.gui.mainframe;
 
+import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.managers.DatasetManager;
+import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.parser.PlacePlayer;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.misc.NumberDocumentFilter;
@@ -7,10 +10,8 @@ import com.zrmiller.gui.misc.NumberDocumentFilter;
 import javax.swing.*;
 import javax.swing.text.PlainDocument;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class JumpToFramePanel extends JPanel {
+public class JumpToFramePanel extends JPanel implements IDatasetListener {
 
     private final PlacePlayer player;
     private final CanvasPanel canvasPanel;
@@ -33,18 +34,15 @@ public class JumpToFramePanel extends JPanel {
         gc.gridx++;
 
         addListeners();
+        DatasetManager.addDatasetListener(this);
     }
 
     private void addListeners() {
-        jumpToFrameButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int targetFrame = getTargetFrame();
-                if (targetFrame == -1) return;
-                player.jumpToFrame(targetFrame);
-//                canvasPanel.jumpToPixelTopLeft(1,1);
-                canvasPanel.tryRepaint(true);
-            }
+        jumpToFrameButton.addActionListener(e -> {
+            int targetFrame = getTargetFrame();
+            if (targetFrame == -1) return;
+            player.jumpToFrame(targetFrame);
+            canvasPanel.tryRepaint(true);
         });
     }
 
@@ -52,6 +50,13 @@ public class JumpToFramePanel extends JPanel {
         String input = frameInput.getText();
         if (input.length() == 0) return -1;
         return Integer.parseInt(input);
+    }
+
+    @Override
+    public void onDatasetChanged(Dataset dataset) {
+        boolean enabled = dataset != null;
+        jumpToFrameButton.setEnabled(enabled);
+        frameInput.setEnabled(enabled);
     }
 
 }
