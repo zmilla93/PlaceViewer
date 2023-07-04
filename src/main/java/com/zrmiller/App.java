@@ -35,8 +35,6 @@ public class App {
         DataValidator.runValidation2022();
         DatasetManager.changeDataset(null);
 
-        int[] values = {1, 2, 4};
-
         // Add shutdown hook
         Runtime.getRuntime().addShutdownHook(new Thread(App::shutdown));
     }

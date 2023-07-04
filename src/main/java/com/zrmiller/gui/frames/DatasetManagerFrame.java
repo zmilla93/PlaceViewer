@@ -50,7 +50,7 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
         JPanel browsePanel = new JPanel(new FlowLayout());
         browsePanel.add(browseButton);
         browsePanel.add(directoryLabel);
-        updateDirectoryLabel();
+        updateDirectory();
 
         JPanel infoPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gc = ZUtil.getGC();
@@ -88,10 +88,7 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
         setDefaultCloseOperation(HIDE_ON_CLOSE);
     }
 
-    private void updateDirectoryLabel() {
-        String text = SaveManager.settings.data.dataDirectory == null ? "No Folder Selected" : SaveManager.settings.data.dataDirectory;
-        directoryLabel.setText(text);
-    }
+
 
     private void addListeners() {
         JDialog self = this;
@@ -101,13 +98,25 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
                 directoryLabel.setText(path);
                 SaveManager.settings.data.dataDirectory = path + File.separator;
                 SaveManager.settings.saveToDisk();
-                updateDirectoryLabel();
+                updateDirectory();
                 DataValidator.runValidation2017();
                 DataValidator.runValidation2022();
-//                downloaderPanel2017.validateData();
-//                downloaderPanel2022.validateData();
             }
         });
+    }
+
+    private void updateDirectory(){
+        String dir = SaveManager.settings.data.dataDirectory;
+        File file = new File(dir);
+        if(file.isDirectory()){
+            fileChooser.setCurrentDirectory(file);
+            updateDirectoryLabel();
+        }
+    }
+
+    private void updateDirectoryLabel() {
+        String text = SaveManager.settings.data.dataDirectory == null ? "No Folder Selected" : SaveManager.settings.data.dataDirectory;
+        directoryLabel.setText(text);
     }
 
     public void swapToDownloader() {
@@ -132,14 +141,6 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
     public AbstractDownloadProgressPanel getProgressPanel2022() {
         return downloadProgressPanel2022;
     }
-
-//    public void validate2017() {
-//        downloaderPanel2017.validateData();
-//    }
-
-//    public void validate2022() {
-//        downloaderPanel2022.validateData();
-//    }
 
     @Override
     public void onThemeChange() {
