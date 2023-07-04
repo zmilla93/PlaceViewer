@@ -10,7 +10,7 @@ import java.text.NumberFormat;
 public enum Dataset {
 
     PLACE_2017(2017, 1001, 1001, 16567564, PlaceInfo.canvasColors, 0),
-    PLACE_2022(2022, 2000, 2000, 160353085, ColorConverter2022.intToColorArr, 31),
+    PLACE_2022(2022, 2000, 2000, 153383211, ColorConverter2022.intToColorArr, 31),
     ;
 
     public final int YEAR;
