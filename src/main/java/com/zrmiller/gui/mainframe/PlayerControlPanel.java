@@ -54,7 +54,6 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
         });
         playPauseButton.addActionListener(e -> {
             for (IPlayerControllerListener listener : listeners) {
-//                listener.onPlay();
                 listener.onTogglePlayPause();
             }
         });
@@ -87,17 +86,17 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
 
     @Override
     public void onStop() {
-        playPauseButton.setIconIndex(0);
+        // Stop will always trigger pause first, so nothing needs to be done here
     }
 
     @Override
     public void onTogglePlayPause() {
-
+        // Do nothing
     }
 
     @Override
     public void onSpeedChange(int tilesPerSecond) {
-
+        // Do nothing
     }
 
 }

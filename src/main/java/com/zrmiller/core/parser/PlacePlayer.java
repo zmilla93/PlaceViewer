@@ -36,7 +36,9 @@ public class PlacePlayer implements IDatasetListener {
     private final ArrayList<IPlayerControllerListener> playerListeners = new ArrayList<>();
 
     public enum State {STOPPED, PLAYING, PAUSED, SEEKING}
+
     private State state = State.STOPPED;
+    private boolean finished = false;
 
     /**
      * Provides a media player style state machine for interacting with a dataset.
@@ -54,6 +56,7 @@ public class PlacePlayer implements IDatasetListener {
     public void play() {
         if (App.dataset() == null) return;
         if (state == State.PLAYING || state == State.SEEKING) return;
+        if (finished) stop();
         if (!streamIsOpen) {
             streamIsOpen = parser.openStream();
             if (!streamIsOpen) return;
@@ -75,7 +78,7 @@ public class PlacePlayer implements IDatasetListener {
             }
         }, 0, 1000 / LOGIC_UPDATES_PER_SECOND);
         state = State.PLAYING;
-        for(IPlayerControllerListener listener : playerListeners){
+        for (IPlayerControllerListener listener : playerListeners) {
             listener.onPlay();
         }
     }
@@ -85,13 +88,14 @@ public class PlacePlayer implements IDatasetListener {
         timer.cancel();
         timer.purge();
         state = State.PAUSED;
-        for(IPlayerControllerListener listener : playerListeners){
+        for (IPlayerControllerListener listener : playerListeners) {
             listener.onPause();
         }
     }
 
     public void stop() {
         if (state == State.STOPPED) return;
+        finished = false;
         pause();
         streamIsOpen = false;
         if (parser != null)
@@ -104,14 +108,14 @@ public class PlacePlayer implements IDatasetListener {
         Arrays.fill(colorBuffer, App.dataset().WHITE_INDEX);
         Arrays.fill(heatmapBuffer, 0);
         state = State.STOPPED;
-        for(IPlayerControllerListener listener : playerListeners){
+        for (IPlayerControllerListener listener : playerListeners) {
             listener.onStop();
         }
     }
 
     public void setSpeed(int speed) {
         tileUpdatesPerSecond = speed;
-        for(IPlayerControllerListener listener : playerListeners){
+        for (IPlayerControllerListener listener : playerListeners) {
             listener.onSpeedChange(speed);
         }
     }
@@ -160,7 +164,7 @@ public class PlacePlayer implements IDatasetListener {
         return heatmapBuffer;
     }
 
-    public State getState(){
+    public State getState() {
         return state;
     }
 
@@ -182,6 +186,7 @@ public class PlacePlayer implements IDatasetListener {
             return true;
         } else {
             pause();
+            finished = true;
             return false;
         }
     }
@@ -206,7 +211,7 @@ public class PlacePlayer implements IDatasetListener {
         Arrays.fill(colorBuffer, App.dataset().WHITE_INDEX);
     }
 
-    public void addPlayerListener(IPlayerControllerListener listener){
+    public void addPlayerListener(IPlayerControllerListener listener) {
         playerListeners.add(listener);
     }
 
