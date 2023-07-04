@@ -5,6 +5,7 @@ import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.callbacks.IValidationListener2017;
 import com.zrmiller.core.datawrangler.callbacks.IValidationListener2022;
 import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.utility.ColorMode;
@@ -99,7 +100,7 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
 //        add(exportMenu);
 
         addListeners();
-        App.datasetManager.addListener(this);
+        DatasetManager.addDatasetListener(this);
         DataValidator.addValidationListener2017(this);
         DataValidator.addValidationListener2022(this);
     }
@@ -107,9 +108,9 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
     private void addListeners() {
         // Note: Color theme listeners are added during construction
         // Datasets
-        dataset2017Button.addActionListener(e -> App.datasetManager.changeDataset(Dataset.PLACE_2017));
-        dataset2022Button.addActionListener(e -> App.datasetManager.changeDataset(Dataset.PLACE_2022));
-        closeDatasetButton.addActionListener(e -> App.datasetManager.changeDataset(null));
+        dataset2017Button.addActionListener(e -> DatasetManager.changeDataset(Dataset.PLACE_2017));
+        dataset2022Button.addActionListener(e -> DatasetManager.changeDataset(Dataset.PLACE_2022));
+        closeDatasetButton.addActionListener(e -> DatasetManager.changeDataset(null));
         datasetManagerButton.addActionListener(e -> FrameManager.dataDownloaderFrame.setVisible(true));
         githubButton.addActionListener(e -> ZUtil.openLink("https://github.com/zmilla93/PlaceViewer"));
         quitButton.addActionListener(e -> System.exit(0));
@@ -118,9 +119,9 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
         openExportsButton.addActionListener(e -> ZUtil.openExplorer(SaveManager.settings.data.dataDirectory + "exports"));
 
         // Display
-        displayNormalButton.addActionListener(e -> App.datasetManager.setColorMode(ColorMode.NORMAL));
-        displayHeatmapGrayscaleButton.addActionListener(e -> App.datasetManager.setColorMode(ColorMode.HEATMAP_GRAYSCALE));
-        displayHeatmapColorButton.addActionListener(e -> App.datasetManager.setColorMode(ColorMode.HEATMAP_COLOR));
+        displayNormalButton.addActionListener(e -> DatasetManager.setColorMode(ColorMode.NORMAL));
+        displayHeatmapGrayscaleButton.addActionListener(e -> DatasetManager.setColorMode(ColorMode.HEATMAP_GRAYSCALE));
+        displayHeatmapColorButton.addActionListener(e -> DatasetManager.setColorMode(ColorMode.HEATMAP_COLOR));
     }
 
     @Override

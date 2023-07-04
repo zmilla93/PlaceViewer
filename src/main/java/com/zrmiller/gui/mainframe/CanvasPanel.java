@@ -1,7 +1,7 @@
 package com.zrmiller.gui.mainframe;
 
-import com.zrmiller.App;
 import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.listeners.IColorModeListener;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.parser.PlacePlayer;
@@ -47,8 +47,8 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
         });
         timer.start();
         addListeners();
-        App.datasetManager.addListener(this);
-        App.datasetManager.addColorModeListener(this);
+        DatasetManager.addDatasetListener(this);
+        DatasetManager.addColorModeListener(this);
         playerControlPanel.addListener(this);
     }
 

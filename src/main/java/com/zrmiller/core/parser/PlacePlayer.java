@@ -2,6 +2,7 @@ package com.zrmiller.core.parser;
 
 import com.zrmiller.App;
 import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.utility.TileEdit;
 
@@ -37,7 +38,7 @@ public class PlacePlayer implements IDatasetListener {
      */
     public PlacePlayer() {
         parser = new PlaceParser2022();
-        App.datasetManager.addListener(this);
+        DatasetManager.addDatasetListener(this);
     }
 
     private enum State {STOPPED, PLAYING, PAUSED, SEEKING}
@@ -47,8 +48,7 @@ public class PlacePlayer implements IDatasetListener {
     //
 
     public void play() {
-        if (App.dataset() == null)
-            return;
+        if (App.dataset() == null) return;
         if (state == State.PLAYING || state == State.SEEKING) return;
         if (!streamIsOpen) {
             streamIsOpen = parser.openStream();

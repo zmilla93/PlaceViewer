@@ -15,7 +15,6 @@ import java.util.Objects;
 public class App {
 
     public static ImageIcon APP_ICON = new ImageIcon(Objects.requireNonNull(App.class.getResource("/place.png")));
-    public static DatasetManager datasetManager = new DatasetManager();
 
     public static void main(String[] args) {
         // Load save data
@@ -34,7 +33,7 @@ public class App {
         // Validate datasets
         DataValidator.runValidation2017();
         DataValidator.runValidation2022();
-        datasetManager.changeDataset(null);
+        DatasetManager.changeDataset(null);
 
         int[] values = {1, 2, 4};
 
@@ -43,7 +42,7 @@ public class App {
     }
 
     public static Dataset dataset() {
-        return datasetManager.currentDataset();
+        return DatasetManager.getDataset();
     }
 
     private static void shutdown() {

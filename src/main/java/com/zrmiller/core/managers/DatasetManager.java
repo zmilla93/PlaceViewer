@@ -4,44 +4,51 @@ import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.listeners.IColorModeListener;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.utility.ColorMode;
-import com.zrmiller.modules.listening.ListenManager;
 
 import java.util.ArrayList;
 
 /**
  * Controls which dataset is loaded. Notifies all listeners when dataset is changed.
  */
-// FIXME : Should probably just convert this to a static class
-public class DatasetManager extends ListenManager<IDatasetListener> {
+public final class DatasetManager {
 
-    private Dataset dataset = null;
-    private ColorMode colorMode = ColorMode.NORMAL;
-    private final ArrayList<IColorModeListener> colorModeListeners = new ArrayList<>();
+    private static Dataset dataset = null;
+    private static ColorMode colorMode = ColorMode.NORMAL;
+    private static final ArrayList<IColorModeListener> colorModeListeners = new ArrayList<>();
+    private static final ArrayList<IDatasetListener> datasetListeners = new ArrayList<>();
 
-    public void changeDataset(Dataset dataset) {
-        this.dataset = dataset;
-        for (IDatasetListener listener : listeners) {
+    private DatasetManager() {
+
+    }
+
+    public static void changeDataset(Dataset dataset) {
+        DatasetManager.dataset = dataset;
+        for (IDatasetListener listener : datasetListeners) {
             listener.onDatasetChanged(dataset);
         }
     }
 
-    public void setColorMode(ColorMode colorMode) {
-        this.colorMode = colorMode;
+    public static void setColorMode(ColorMode colorMode) {
+        DatasetManager.colorMode = colorMode;
         for (IColorModeListener listener : colorModeListeners) {
             listener.onColorModeChange(colorMode);
         }
     }
 
-    public ColorMode getColorMode() {
+    public static ColorMode getColorMode() {
         return colorMode;
     }
 
-    public Dataset currentDataset() {
+    public static Dataset getDataset() {
         return dataset;
     }
 
-    public void addColorModeListener(IColorModeListener listener) {
+    public static void addColorModeListener(IColorModeListener listener) {
         colorModeListeners.add(listener);
+    }
+
+    public static void addDatasetListener(IDatasetListener listener) {
+        datasetListeners.add(listener);
     }
 
 }

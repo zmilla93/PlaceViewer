@@ -6,7 +6,6 @@ import com.zrmiller.core.strings.FileName;
 import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.core.utility.TileEdit;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;

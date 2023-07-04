@@ -5,6 +5,7 @@ import com.zrmiller.core.datawrangler.DataDownloader2022;
 import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.callbacks.IValidationListener2022;
 import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
@@ -74,7 +75,7 @@ public class DownloaderPanel2022 extends CardDownloaderPanel implements IValidat
                 "Type '2022' to delete.", "Delete 2022 Dataset", JOptionPane.PLAIN_MESSAGE);
         if (confirm != null && confirm.equals("2022")) {
             if (App.dataset() != null && App.dataset().YEAR_STRING.equals(Dataset.PLACE_2022.YEAR_STRING))
-                App.datasetManager.changeDataset(null);
+                DatasetManager.changeDataset(null);
             DataDownloader2022 downloader = new DataDownloader2022();
             if (!downloader.deleteData()) {
                 JOptionPane.showMessageDialog(self,

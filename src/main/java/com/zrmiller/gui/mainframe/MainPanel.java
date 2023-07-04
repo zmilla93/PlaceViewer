@@ -3,6 +3,7 @@ package com.zrmiller.gui.mainframe;
 import com.zrmiller.App;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.enums.ZoomLevel;
+import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.gui.FrameManager;
 import com.zrmiller.gui.mainframe.listeners.ICanvasListener;
@@ -66,7 +67,7 @@ public class MainPanel extends JPanel implements ICanvasListener, IDatasetListen
 
         onPan(new Point(0, 0));
         addListeners();
-        App.datasetManager.addListener(this);
+        DatasetManager.addDatasetListener(this);
     }
 
     public PlayerControlPanel getControlPanel() {
