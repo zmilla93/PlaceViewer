@@ -50,6 +50,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
         DatasetManager.addDatasetListener(this);
         DatasetManager.addColorModeListener(this);
         playerControlPanel.addListener(this);
+        player.addPlayerListener(playerControlPanel);
     }
 
     private void tryRepaint() {
@@ -201,7 +202,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     // Player Controls
 
     @Override
-    public void onReset() {
+    public void onStop() {
         player.stop();
     }
 

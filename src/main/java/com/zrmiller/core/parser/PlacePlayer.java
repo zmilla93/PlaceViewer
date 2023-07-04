@@ -5,8 +5,10 @@ import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.utility.TileEdit;
+import com.zrmiller.gui.mainframe.listeners.IPlayerControllerListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -29,6 +31,9 @@ public class PlacePlayer implements IDatasetListener {
     public static int heatmapWeight = 2000;
     public static int heatmapMax = 100000;
     public static float heatmapDecayFactor = 0.0f; // Should be 0-1
+
+    // Listeners
+    private ArrayList<IPlayerControllerListener> playerListeners = new ArrayList<>();
 
     private State state = State.STOPPED;
 
@@ -71,6 +76,9 @@ public class PlacePlayer implements IDatasetListener {
             }
         }, 0, 1000 / LOGIC_UPDATES_PER_SECOND);
         state = State.PLAYING;
+        for(IPlayerControllerListener listener : playerListeners){
+            listener.onPlay();
+        }
     }
 
     public void pause() {
@@ -78,6 +86,9 @@ public class PlacePlayer implements IDatasetListener {
         timer.cancel();
         timer.purge();
         state = State.PAUSED;
+        for(IPlayerControllerListener listener : playerListeners){
+            listener.onPause();
+        }
     }
 
     public void stop() {
@@ -94,10 +105,16 @@ public class PlacePlayer implements IDatasetListener {
         Arrays.fill(colorBuffer, App.dataset().WHITE_INDEX);
         Arrays.fill(heatmapBuffer, 0);
         state = State.STOPPED;
+        for(IPlayerControllerListener listener : playerListeners){
+            listener.onStop();
+        }
     }
 
     public void setSpeed(int speed) {
         tileUpdatesPerSecond = speed;
+        for(IPlayerControllerListener listener : playerListeners){
+            listener.onSpeedChange(speed);
+        }
     }
 
     public int getSpeed() {
@@ -184,6 +201,10 @@ public class PlacePlayer implements IDatasetListener {
         colorBuffer = new int[App.dataset().CANVAS_SIZE_X * App.dataset().CANVAS_SIZE_Y];
         heatmapBuffer = new int[App.dataset().CANVAS_SIZE_X * App.dataset().CANVAS_SIZE_Y];
         Arrays.fill(colorBuffer, App.dataset().WHITE_INDEX);
+    }
+
+    public void addPlayerListener(IPlayerControllerListener listener){
+        playerListeners.add(listener);
     }
 
     @Override

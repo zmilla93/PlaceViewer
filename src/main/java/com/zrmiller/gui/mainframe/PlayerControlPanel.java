@@ -11,9 +11,9 @@ import java.awt.*;
 import java.text.NumberFormat;
 import java.util.Objects;
 
-public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerListener> {
+public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerListener> implements IPlayerControllerListener {
 
-    private final JButton resetButton = new FlatColorIconButton("/icons/media-stop.png");
+    private final JButton stopButton = new FlatColorIconButton("/icons/media-stop.png");
     private final JButton playButton = new FlatColorIconButton("icons/media-play.png");
     private final JButton pauseButton = new FlatColorIconButton("icons/media-pause.png");
     private final JSlider speedSlider = new JSlider();
@@ -34,7 +34,7 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
         gc.gridx++;
         add(pauseButton, gc);
         gc.gridx++;
-        add(resetButton);
+        add(stopButton);
         gc.gridx++;
         add(speedLabel);
         gc.gridx++;
@@ -50,9 +50,9 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
     }
 
     private void addListeners() {
-        resetButton.addActionListener(e -> {
+        stopButton.addActionListener(e -> {
             for (IPlayerControllerListener listener : listeners) {
-                listener.onReset();
+                listener.onStop();
             }
         });
         playButton.addActionListener(e -> {
@@ -80,5 +80,25 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
     public void onListenerAdded(IPlayerControllerListener listener) {
         super.onListenerAdded(listener);
         listener.onSpeedChange(speedSlider.getValue());
+    }
+
+    @Override
+    public void onStop() {
+
+    }
+
+    @Override
+    public void onPlay() {
+
+    }
+
+    @Override
+    public void onPause() {
+
+    }
+
+    @Override
+    public void onSpeedChange(int tilesPerSecond) {
+
     }
 }

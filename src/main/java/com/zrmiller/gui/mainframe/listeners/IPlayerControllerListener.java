@@ -2,7 +2,7 @@ package com.zrmiller.gui.mainframe.listeners;
 
 public interface IPlayerControllerListener {
 
-    void onReset();
+    void onStop();
 
     void onPlay();
 
