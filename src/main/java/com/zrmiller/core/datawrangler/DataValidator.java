@@ -12,6 +12,8 @@ import com.zrmiller.core.utility.TileEdit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -47,7 +49,7 @@ public class DataValidator {
 
     public static int getFileCount2022() {
         int fileCount = 0;
-        for (int i = 0; i < PlaceInfo.fileOrder.length; i++) {
+        for (int i = 0; i < PlaceInfo.FILE_COUNT_2022; i++) {
             File file = new File(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i));
             if (file.exists() && file.isFile())
                 fileCount++;
@@ -57,7 +59,7 @@ public class DataValidator {
 
     public static long getTotalFileSize2022() {
         long fileSize = 0;
-        for (int i = 0; i < PlaceInfo.fileOrder.length; i++) {
+        for (int i = 0; i < PlaceInfo.FILE_COUNT_2022; i++) {
             File file = new File(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i));
             if (file.exists() && file.isFile())
                 fileSize += file.length();
@@ -81,7 +83,7 @@ public class DataValidator {
             int[] sortedKeys = new int[PlaceInfo.FILE_COUNT_2022];
             for (int i = 0; i < PlaceInfo.FILE_COUNT_2022; i++) {
                 System.out.println("I:" + SaveManager.getSaveDirectory() + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i));
-                PlaceInputStream inputStream = new PlaceInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i)));
+                PlaceInputStream inputStream = new PlaceInputStream(Files.newInputStream(Paths.get(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(i))));
                 inputStream.ready();
                 TileEdit tile = inputStream.getNextTile();
                 orderMap.put(tile.timestamp, i);

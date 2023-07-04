@@ -8,6 +8,8 @@ import com.zrmiller.core.utility.TileEdit;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class PlaceParser2022 extends AbstractPlaceParser {
 
@@ -20,8 +22,8 @@ public class PlaceParser2022 extends AbstractPlaceParser {
     @Override
     public boolean openStream() {
         try {
-            currentStream = new PlaceInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(PlaceInfo.fileOrder[0])));
-            nextStream = new PlaceInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(PlaceInfo.fileOrder[1])));
+            currentStream = new PlaceInputStream(Files.newInputStream(Paths.get(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(0))));
+            nextStream = new PlaceInputStream(Files.newInputStream(Paths.get(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(1))));
             fileIndex = 2;
             return true;
         } catch (IOException e) {
@@ -68,9 +70,9 @@ public class PlaceParser2022 extends AbstractPlaceParser {
 
     private boolean cycleFiles() {
         currentStream = nextStream;
-        if (fileIndex < PlaceInfo.fileOrder.length) {
+        if (fileIndex < PlaceInfo.FILE_COUNT_2022) {
             try {
-                nextStream = new PlaceInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(PlaceInfo.fileOrder[fileIndex])));
+                nextStream = new PlaceInputStream(Files.newInputStream(Paths.get(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2022.getYearPath() + FileName.BINARY_2022.getIndexedName(fileIndex))));
                 fileIndex++;
             } catch (IOException e) {
                 e.printStackTrace();
