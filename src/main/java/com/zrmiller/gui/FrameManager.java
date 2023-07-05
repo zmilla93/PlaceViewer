@@ -8,6 +8,7 @@ import com.zrmiller.gui.exporting.ExportGifWindow;
 import com.zrmiller.gui.exporting.ExportImageWindow;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
 import com.zrmiller.gui.frames.MainFrame;
+import com.zrmiller.gui.frames.WaitingFrame;
 import com.zrmiller.gui.mainframe.CanvasPanel;
 import com.zrmiller.gui.mainframe.MainPanel;
 import com.zrmiller.modules.colortheme.ColorManager;
@@ -18,6 +19,7 @@ public class FrameManager {
     // Windows
     public static MainFrame mainFrame;
     public static DatasetManagerFrame dataDownloaderFrame;
+    public static WaitingFrame waitingFrame;
     public static ExportImageWindow exportImageWindow;
     public static ExportGifWindow exportGifWindow;
 
@@ -34,19 +36,19 @@ public class FrameManager {
         dataDownloaderFrame = new DatasetManagerFrame();
         exportImageWindow = new ExportImageWindow();
         exportGifWindow = new ExportGifWindow();
+        waitingFrame = new WaitingFrame();
 
         // Color Manager Setup
         ColorManager.addFrame(mainFrame);
         ColorManager.addFrame(dataDownloaderFrame);
         ColorManager.addFrame(exportImageWindow);
         ColorManager.addFrame(exportGifWindow);
+        ColorManager.addFrame(waitingFrame);
         ColorTheme theme = SaveManager.settings.data.colorTheme == null ? ColorTheme.SOLARIZED_LIGHT : SaveManager.settings.data.colorTheme;
         ColorManager.setTheme(theme);
 
         // Visibility
         mainFrame.setVisible(true);
-//        exportImageWindow.setVisible(true);
-//        exportGifWindow.setVisible(true);
     }
 
     public static void tryShowDataset(Dataset dataset) {

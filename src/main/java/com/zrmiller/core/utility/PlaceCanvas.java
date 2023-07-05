@@ -4,13 +4,16 @@ import com.zrmiller.App;
 import com.zrmiller.core.colors.ColorMode;
 import com.zrmiller.core.colors.Gradient;
 import com.zrmiller.core.enums.ZoomLevel;
-import com.zrmiller.core.managers.SaveManager;
+import com.zrmiller.core.exporting.IExportCallback;
+import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.parser.PlacePlayer;
-import com.zrmiller.gui.exporting.GifSequenceWriter;
+import com.zrmiller.gui.FrameManager;
+import com.zrmiller.modules.strings.References;
 
 import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -265,29 +268,41 @@ public class PlaceCanvas {
         backgroundColor = color;
     }
 
-    public void exportImage(int posX, int posY, int width, int height, ZoomLevel zoomLevel) {
-        if (App.dataset() == null)
-            return;
-        viewportWidth = zoomLevel.scale(width);
-        viewportHeight = zoomLevel.scale(height);
-        rgbColorBuffer = new int[viewportWidth * viewportHeight * COLOR_CHANNEL_COUNT];
+    public void exportImage(String fileName, int posX, int posY, int width, int height, ZoomLevel zoomLevel) {
+        exportImage(fileName, posX, posY, width, height, zoomLevel, null);
+    }
+
+    public void exportImage(String fileName, int posX, int posY, int width, int height, ZoomLevel zoomLevel, IExportCallback callback) {
+        if (App.dataset() == null) return;
         this.zoomLevel = zoomLevel;
-        jumpToPixelTopLeft(posX, posY);
-        updateColorBuffer();
-        BufferedImage image = new BufferedImage(zoomLevel.scale(width), zoomLevel.scale(height), BufferedImage.TYPE_INT_RGB);
-        image.getRaster().setPixels(0, 0, zoomLevel.scale(width), zoomLevel.scale(height), getColorBuffer());
-        File outDir = new File(SaveManager.settings.data.dataDirectory + "exports/");
-        File outFile = new File(SaveManager.settings.data.dataDirectory + "exports/" + "test.png");
-        if (outDir.exists()) {
-            if (!outDir.isDirectory())
+        // Export the canvas using a separate thread
+        Thread thread = new Thread(() -> {
+            viewportWidth = zoomLevel.scale(width);
+            viewportHeight = zoomLevel.scale(height);
+            rgbColorBuffer = new int[viewportWidth * viewportHeight * COLOR_CHANNEL_COUNT];
+            setColorMode(DatasetManager.getColorMode());
+            jumpToPixelTopLeft(posX, posY);
+            updateColorBuffer();
+            BufferedImage image = new BufferedImage(zoomLevel.scale(width), zoomLevel.scale(height), BufferedImage.TYPE_INT_RGB);
+            image.getRaster().setPixels(0, 0, zoomLevel.scale(width), zoomLevel.scale(height), getColorBuffer());
+            File outDir = new File(References.getExportFolder());
+            // FIXME : Validate file name
+            File outFile = new File(References.getExportFolder() + fileName + ".png");
+            if (outDir.exists()) {
+                if (!outDir.isDirectory())
+                    return;
+            } else if (!outDir.mkdirs())
                 return;
-        } else if (!outDir.mkdirs())
-            return;
-        try {
-            ImageIO.write(image, "png", outFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            try {
+                ImageIO.write(image, "png", outFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            SwingUtilities.invokeLater(() -> FrameManager.waitingFrame.hideFrame());
+            if (callback != null) callback.onExportComplete();
+        });
+        thread.start();
+        FrameManager.waitingFrame.showFrame("Exporting PNG", "Exporting image, please wait...");
     }
 
     public void exportGIF(int posX, int posY, int width, int height, ZoomLevel zoomLevel, int startFrame, int endFrame, int tilesPerSecond, int fps) {
@@ -302,8 +317,8 @@ public class PlaceCanvas {
         updateColorBuffer();
         BufferedImage image = new BufferedImage(zoomLevel.scale(width), zoomLevel.scale(height), BufferedImage.TYPE_INT_RGB);
         image.getRaster().setPixels(0, 0, zoomLevel.scale(width), zoomLevel.scale(height), getColorBuffer());
-        File outDir = new File(SaveManager.settings.data.dataDirectory + "exports/");
-        File outFile = new File(SaveManager.settings.data.dataDirectory + "exports/" + "test.gif");
+        File outDir = new File(References.getExportFolder());
+        File outFile = new File(References.getExportFolder() + "test.gif");
         if (outDir.exists()) {
             if (!outDir.isDirectory())
                 return;
@@ -324,6 +339,10 @@ public class PlaceCanvas {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void exportCleanup() {
+        rgbColorBuffer = null;
     }
 
     public void setColorMode(ColorMode colorMode) {

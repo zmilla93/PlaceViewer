@@ -3,10 +3,10 @@ package com.zrmiller.gui.exporting;
 import com.zrmiller.App;
 import com.zrmiller.core.enums.ExportSelection;
 import com.zrmiller.core.enums.ZoomLevel;
-import com.zrmiller.core.strings.References;
 import com.zrmiller.core.utility.PlaceCanvas;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.FrameManager;
+import com.zrmiller.modules.strings.References;
 
 import javax.swing.*;
 import java.awt.*;
@@ -95,7 +95,7 @@ public class ExportImageWindow extends JFrame {
                 } else {
                     rect = new Rectangle(0, 0, App.dataset().CANVAS_SIZE_X, App.dataset().CANVAS_SIZE_Y);
                 }
-                renderCanvas.exportImage(rect.x, rect.y, rect.width, rect.height, renderCanvas.zoomLevel);
+                renderCanvas.exportImage("TEST", rect.x, rect.y, rect.width, rect.height, renderCanvas.zoomLevel);
             }
         });
     }

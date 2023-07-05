@@ -5,9 +5,9 @@ import com.zrmiller.core.datawrangler.callbacks.IValidationListener2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.parser.PlaceInputStream;
-import com.zrmiller.core.strings.FileName;
 import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.core.utility.TileEdit;
+import com.zrmiller.modules.strings.FileName;
 
 import javax.swing.*;
 import java.io.File;

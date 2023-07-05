@@ -1,4 +1,4 @@
-package com.zrmiller.core.strings;
+package com.zrmiller.modules.strings;
 
 public enum FileName {
 
@@ -23,4 +23,5 @@ public enum FileName {
     public java.lang.String toString() {
         return fileName;
     }
+
 }

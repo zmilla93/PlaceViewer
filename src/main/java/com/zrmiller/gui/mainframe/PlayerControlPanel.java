@@ -18,13 +18,16 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
 
     private final JButton stopButton = new FlatColorIconButton("/icons/media-stop.png");
     private final FlatColorIconButton playPauseButton = new FlatColorIconButton("icons/media-play.png", "icons/media-pause.png");
+    private final JButton exportButton = new FlatColorIconButton("/icons/export.png");
     private final JSlider speedSlider = new JSlider();
     private final JLabel speedLabel = new JLabel();
     private final JComboBox<PlaybackSpeed> speedCombo = new JComboBox<>();
     private final JComponent[] components;
-    private final JButton[] buttons;
 
-    public PlayerControlPanel() {
+    private final JPanel exportPanel;
+
+    public PlayerControlPanel(JPanel exportPanel) {
+        this.exportPanel = exportPanel;
         setLayout(new GridBagLayout());
         GridBagConstraints gc = ZUtil.getGC();
         for (PlaybackSpeed speed : PlaybackSpeed.values()) {
@@ -38,14 +41,16 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
         gc.gridx++;
         add(stopButton);
         gc.gridx++;
+        add(exportButton);
+        gc.gridx++;
         add(speedLabel);
         gc.gridx++;
         speedSlider.setPreferredSize(new Dimension(100, getPreferredSize().height));
         addListeners();
         speedCombo.setSelectedItem(PlaybackSpeed.FAST);
         speedSlider.setValue(500000);
-        components = new JComponent[]{playPauseButton, stopButton, speedSlider, speedCombo};
-        buttons = new JButton[]{playPauseButton, stopButton};
+        components = new JComponent[]{playPauseButton, stopButton, exportButton, speedSlider, speedCombo};
+        exportButton.setToolTipText("Export PNG");
         DatasetManager.addDatasetListener(this);
     }
 
@@ -65,6 +70,7 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
                 listener.onTogglePlayPause();
             }
         });
+        exportButton.addActionListener(e -> exportPanel.setVisible(!exportPanel.isVisible()));
         speedCombo.addActionListener(e -> setPlaybackSpeed((PlaybackSpeed) Objects.requireNonNull(speedCombo.getSelectedItem())));
         speedSlider.addChangeListener(e -> {
             int speed = speedSlider.getValue();

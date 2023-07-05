@@ -16,8 +16,8 @@ import java.text.NumberFormat;
 public class MainPanel extends JPanel implements ICanvasListener, IDatasetListener {
 
     private final IntroPanel introPanel = new IntroPanel();
-    private PlayerControlPanel controlPanel = new PlayerControlPanel();
-    private final CanvasPanel canvasPanel = new CanvasPanel(controlPanel);
+    private final PlayerControlPanel controlPanel;
+    private final CanvasPanel canvasPanel;
 
     private final JPanel southPanel = new JPanel(new BorderLayout());
     private final JLabel positionLabel = new JLabel();
@@ -32,15 +32,21 @@ public class MainPanel extends JPanel implements ICanvasListener, IDatasetListen
 
     public MainPanel() {
         setLayout(new BorderLayout());
+
+        JPanel exportPanel = new ExportPanel();
+        controlPanel = new PlayerControlPanel(exportPanel);
+        canvasPanel = new CanvasPanel(controlPanel);
         FrameManager.canvasPanel = canvasPanel;
 
         // North Panel
         JPanel northBuffer = new JPanel(new BorderLayout());
         northBuffer.add(controlPanel, BorderLayout.WEST);
         northBuffer.add(new JumpToFramePanel(canvasPanel, canvasPanel.getPlayer()), BorderLayout.EAST);
+        northBuffer.add(new JSeparator(), BorderLayout.SOUTH);
 
         northPanel.add(northBuffer, BorderLayout.CENTER);
-        northPanel.add(new SeparatorPanel(), BorderLayout.SOUTH);
+//        northPanel.add(new SeparatorPanel(), BorderLayout.SOUTH);
+        northPanel.add(exportPanel, BorderLayout.SOUTH);
 
         // South Panel
         JPanel positionWrapperPanel = new JPanel(new BorderLayout());
