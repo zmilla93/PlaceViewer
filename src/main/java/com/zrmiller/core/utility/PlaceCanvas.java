@@ -6,6 +6,7 @@ import com.zrmiller.core.colors.Gradient;
 import com.zrmiller.core.enums.ZoomLevel;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.parser.PlacePlayer;
+import com.zrmiller.gui.exporting.GifSequenceWriter;
 
 import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageOutputStream;

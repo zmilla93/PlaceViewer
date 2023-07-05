@@ -1,4 +1,4 @@
-package com.zrmiller.core.utility;
+package com.zrmiller.gui.exporting;
 
 import javax.imageio.*;
 import javax.imageio.metadata.IIOMetadata;
