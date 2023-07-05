@@ -36,9 +36,13 @@ public class DataValidator {
     }
 
     public static void runValidation2017() {
-        System.out.println("EDT:" + SwingUtilities.isEventDispatchThread());
         long fileSize = getFileSize2017();
         boolean valid = fileSize > 0;
+        if (SwingUtilities.isEventDispatchThread()) alertValidationListeners2017(valid, fileSize);
+        else SwingUtilities.invokeLater(() -> alertValidationListeners2017(valid, fileSize));
+    }
+
+    private static void alertValidationListeners2017(boolean valid, long fileSize) {
         for (IValidationListener2017 listener : listeners2017)
             listener.onValidation2017(valid, fileSize);
     }
@@ -72,9 +76,13 @@ public class DataValidator {
         int fileCount = getFileCount2022();
         boolean valid = fileCount == PlaceInfo.FILE_COUNT_2022;
         long installSize = getTotalFileSize2022();
-        for (IValidationListener2022 listener : listeners2022) {
+        if (SwingUtilities.isEventDispatchThread()) alertValidationListeners2022(valid, fileCount, installSize);
+        else SwingUtilities.invokeLater(() -> alertValidationListeners2022(valid, fileCount, installSize));
+    }
+
+    private static void alertValidationListeners2022(boolean valid, int fileCount, long installSize) {
+        for (IValidationListener2022 listener : listeners2022)
             listener.onValidation2022(valid, fileCount, installSize);
-        }
     }
 
     public static int[] getFileOrder() {

@@ -5,6 +5,7 @@ import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.listeners.IColorModeListener;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 /**
@@ -23,9 +24,13 @@ public final class DatasetManager {
 
     public static void setDataset(Dataset dataset) {
         DatasetManager.dataset = dataset;
-        for (IDatasetListener listener : datasetListeners) {
+        if (SwingUtilities.isEventDispatchThread()) alertDatasetListeners(dataset);
+        else SwingUtilities.invokeLater(() -> alertDatasetListeners(dataset));
+    }
+
+    private static void alertDatasetListeners(Dataset dataset) {
+        for (IDatasetListener listener : datasetListeners)
             listener.onDatasetChanged(dataset);
-        }
     }
 
     public static void setColorMode(ColorMode colorMode) {

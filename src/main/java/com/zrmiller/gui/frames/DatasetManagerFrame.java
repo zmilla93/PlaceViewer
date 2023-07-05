@@ -119,7 +119,7 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener, IVal
     private void updateDirectory() {
         DatasetManager.setDataset(null);
         String dir = SaveManager.settings.data.dataDirectory;
-        if(dir == null) return;
+        if (dir == null) return;
         File file = new File(dir);
         if (file.isDirectory()) {
             fileChooser.setCurrentDirectory(file);
