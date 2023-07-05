@@ -1,6 +1,9 @@
 package com.zrmiller.gui.frames;
 
 import com.zrmiller.core.datawrangler.DataValidator;
+import com.zrmiller.core.datawrangler.callbacks.IValidationListener2017;
+import com.zrmiller.core.datawrangler.callbacks.IValidationListener2022;
+import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.ZUtil;
@@ -15,8 +18,12 @@ import com.zrmiller.modules.colortheme.IThemeListener;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.*;
 
-public class DatasetManagerFrame extends JDialog implements IThemeListener {
+import static java.nio.file.StandardWatchEventKinds.*;
+
+public class DatasetManagerFrame extends JDialog implements IThemeListener, IValidationListener2017, IValidationListener2022 {
 
     private final JButton browseButton = new JButton("Select Folder");
     private final JFileChooser fileChooser = new JFileChooser();
@@ -30,6 +37,8 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
     private final DownloaderPanel2022 downloaderPanel2022 = new DownloaderPanel2022(this);
     private final AbstractDownloadProgressPanel downloadProgressPanel2017 = new DownloaderProgressPanel2017(this);
     private final AbstractDownloadProgressPanel downloadProgressPanel2022 = new DownloaderProgressPanel2022(this);
+
+    private Thread watchThread;
 
     public DatasetManagerFrame() {
         setTitle("Dataset Manager");
@@ -87,6 +96,9 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
         pack();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
+
+        DataValidator.addValidationListener2017(this);
+        DataValidator.addValidationListener2022(this);
     }
 
 
@@ -111,6 +123,40 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
         if (file.isDirectory()) {
             fileChooser.setCurrentDirectory(file);
             updateDirectoryLabel();
+            setupFileWatcher(dir);
+        }
+    }
+
+    // Sets up a file watcher to revalidate datasets if files are changed externally
+    private void setupFileWatcher(String pathString) {
+        if (watchThread != null && watchThread.isAlive()) watchThread.interrupt();
+        try {
+            WatchService watcher = FileSystems.getDefault().newWatchService();
+            Path path = Paths.get(pathString);
+            path.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+            watchThread = new Thread(() -> {
+                try {
+                    while (true) {
+                        WatchKey key = watcher.take();
+                        for (WatchEvent<?> event : key.pollEvents()) {
+                            WatchEvent.Kind<?> kind = event.kind();
+                            if (kind == OVERFLOW) continue;
+                            @SuppressWarnings("unchecked") // Documentation says this suppression is safe
+                            WatchEvent<Path> pathEvent = (WatchEvent<Path>) event;
+                            Path directory = pathEvent.context();
+                            if (directory.toString().equals("2017")) DataValidator.runValidation2017();
+                            else if (directory.toString().equals("2022")) DataValidator.runValidation2022();
+                        }
+                        key.reset();
+                    }
+                } catch (InterruptedException ignore) {
+                    // Do nothing
+                }
+            });
+            watchThread.setDaemon(true);
+            watchThread.start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -146,4 +192,20 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
     public void onThemeChange() {
         fileChooser.updateUI();
     }
+
+    // Close and currently open datasets if they failed to validate
+    @Override
+    public void onValidation2017(boolean valid, long fileSize) {
+        if (DatasetManager.getDataset() == null) return;
+        if (!valid && DatasetManager.getDataset().YEAR_STRING.equals(Dataset.PLACE_2017.YEAR_STRING))
+            DatasetManager.setDataset(null);
+    }
+
+    @Override
+    public void onValidation2022(boolean valid, int fileCount, long installSize) {
+        if (DatasetManager.getDataset() == null) return;
+        if (!valid && DatasetManager.getDataset().YEAR_STRING.equals(Dataset.PLACE_2022.YEAR_STRING))
+            DatasetManager.setDataset(null);
+    }
+
 }
