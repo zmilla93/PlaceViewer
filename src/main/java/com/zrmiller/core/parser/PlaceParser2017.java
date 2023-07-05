@@ -6,8 +6,9 @@ import com.zrmiller.core.strings.FileName;
 import com.zrmiller.core.utility.TileEdit;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class PlaceParser2017 extends AbstractPlaceParser {
 
@@ -16,7 +17,13 @@ public class PlaceParser2017 extends AbstractPlaceParser {
     @Override
     public boolean openStream() {
         try {
-            inputStream = new PlaceInputStream(new FileInputStream(SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017));
+            String path = SaveManager.settings.data.dataDirectory + Dataset.PLACE_2017.YEAR_STRING + File.separator + FileName.BINARY_2017;
+            File file = new File(path);
+            if (!file.exists()) {
+                System.err.println("File not found: " + path);
+                return false;
+            }
+            inputStream = new PlaceInputStream(Files.newInputStream(Paths.get(path)));
         } catch (IOException e) {
             e.printStackTrace();
             return false;
