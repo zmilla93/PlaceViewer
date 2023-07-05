@@ -87,7 +87,6 @@ public class PlaceCanvas {
             rgbColorBuffer[colorBufferIndex + 2] = backgroundColor.getBlue();
             return;
         }
-//        ColorMode colorMode = App.datasetManager.getColorMode();
         Color color = Color.BLACK;
         int heat = 0;
         float heatNormal = 0;
@@ -159,6 +158,14 @@ public class PlaceCanvas {
             selectionYLower *= zoomLevel.modifier;
             selectionYUpper *= zoomLevel.modifier;
         }
+        // Clamp selection to canvas bounds
+        int scaledX = zoomLevel.scale(App.dataset().CANVAS_SIZE_X);
+        int scaledY = zoomLevel.scale(App.dataset().CANVAS_SIZE_Y);
+        if (selectionXLower < 0) selectionXLower = 0;
+        if (selectionXUpper > scaledX) selectionXUpper = scaledX;
+        if (selectionYLower < 0) selectionYLower = 0;
+        if (selectionYUpper > scaledY) selectionYUpper = scaledY;
+        // Modify selection based on viewport
         selectionXLower -= viewportPanX;
         selectionXUpper -= viewportPanX;
         selectionYLower -= viewportPanY;
@@ -167,8 +174,7 @@ public class PlaceCanvas {
     }
 
     public Rectangle getSelectionBounds() {
-        if (!selection)
-            return null;
+        if (!selection) return null;
         return new Rectangle(zoomLevel.unscale(selectionXLower + viewportPanX), zoomLevel.unscale(selectionYLower + viewportPanY), zoomLevel.unscale(selectionXUpper - selectionXLower), zoomLevel.unscale(selectionYUpper - selectionYLower));
     }
 
