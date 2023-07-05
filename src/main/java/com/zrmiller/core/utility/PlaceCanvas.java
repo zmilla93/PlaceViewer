@@ -1,12 +1,10 @@
 package com.zrmiller.core.utility;
 
 import com.zrmiller.App;
+import com.zrmiller.core.colors.ColorMode;
 import com.zrmiller.core.colors.Gradient;
-import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.enums.ZoomLevel;
-import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.SaveManager;
-import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.parser.PlacePlayer;
 
 import javax.imageio.ImageIO;

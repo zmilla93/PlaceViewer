@@ -1,6 +1,6 @@
 package com.zrmiller.core.enums;
 
-import com.zrmiller.core.utility.ColorConverter2022;
+import com.zrmiller.core.colors.ColorConverter2022;
 import com.zrmiller.core.utility.PlaceInfo;
 
 import java.awt.*;

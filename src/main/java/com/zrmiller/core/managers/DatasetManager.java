@@ -1,9 +1,9 @@
 package com.zrmiller.core.managers;
 
+import com.zrmiller.core.colors.ColorMode;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.listeners.IColorModeListener;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
-import com.zrmiller.core.utility.ColorMode;
 
 import java.util.ArrayList;
 

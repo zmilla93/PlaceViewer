@@ -1,4 +1,4 @@
-package com.zrmiller.core.utility;
+package com.zrmiller.core.colors;
 
 public enum ColorMode {
 

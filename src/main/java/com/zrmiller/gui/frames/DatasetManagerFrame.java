@@ -90,7 +90,6 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
     }
 
 
-
     private void addListeners() {
         JDialog self = this;
         browseButton.addActionListener(e -> {
@@ -105,11 +104,11 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener {
         });
     }
 
-    private void updateDirectory(){
+    private void updateDirectory() {
         DatasetManager.setDataset(null);
         String dir = SaveManager.settings.data.dataDirectory;
         File file = new File(dir);
-        if(file.isDirectory()){
+        if (file.isDirectory()) {
             fileChooser.setCurrentDirectory(file);
             updateDirectoryLabel();
         }

@@ -1,6 +1,7 @@
 package com.zrmiller.gui.mainframe;
 
 import com.zrmiller.App;
+import com.zrmiller.core.colors.ColorMode;
 import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.callbacks.IValidationListener2017;
 import com.zrmiller.core.datawrangler.callbacks.IValidationListener2022;
@@ -8,7 +9,6 @@ import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
-import com.zrmiller.core.utility.ColorMode;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.FrameManager;
 import com.zrmiller.modules.colortheme.ColorManager;

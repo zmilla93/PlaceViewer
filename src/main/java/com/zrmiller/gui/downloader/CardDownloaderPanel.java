@@ -1,6 +1,6 @@
 package com.zrmiller.gui.downloader;
 
-import com.zrmiller.core.utility.CustomColors;
+import com.zrmiller.core.colors.CustomColors;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
 import com.zrmiller.modules.colortheme.ColorManager;
 
