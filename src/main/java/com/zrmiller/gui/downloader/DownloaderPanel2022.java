@@ -89,6 +89,7 @@ public class DownloaderPanel2022 extends CardDownloaderPanel implements IValidat
 
     @Override
     public void onValidation2022(boolean valid, int fileCount, long installSize) {
+        boolean validDirectory = DataValidator.isDataDirectoryValid();
         if (fileCount == PlaceInfo.FILE_COUNT_2022) {
             cardLayout.show(cardPanel, Panel.FULLY_INSTALLED.toString());
             fileSizeLabel.setText("Total File Size: " + ZUtil.byteCountToString(installSize));
@@ -98,11 +99,11 @@ public class DownloaderPanel2022 extends CardDownloaderPanel implements IValidat
             cardLayout.show(cardPanel, Panel.PARTIALLY_INSTALLED.toString());
             partialFileCountLabel.setText("File Count: " + fileCount + " / " + PlaceInfo.FILE_COUNT_2022);
             partialFileSizeLabel.setText("Installed File Size: " + ZUtil.byteCountToString(installSize) + " / 1.49 GB");
-            downloadButton.setEnabled(true);
+            downloadButton.setEnabled(validDirectory);
             deleteButton.setEnabled(true);
         } else {
             cardLayout.show(cardPanel, Panel.UNINSTALLED.toString());
-            downloadButton.setEnabled(true);
+            downloadButton.setEnabled(validDirectory);
             deleteButton.setEnabled(false);
         }
     }

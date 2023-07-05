@@ -9,6 +9,7 @@ import com.zrmiller.core.strings.FileName;
 import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.core.utility.TileEdit;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,6 +36,7 @@ public class DataValidator {
     }
 
     public static void runValidation2017() {
+        System.out.println("EDT:" + SwingUtilities.isEventDispatchThread());
         long fileSize = getFileSize2017();
         boolean valid = fileSize > 0;
         for (IValidationListener2017 listener : listeners2017)
@@ -97,6 +99,13 @@ public class DataValidator {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static boolean isDataDirectoryValid() {
+        String dir = SaveManager.settings.data.dataDirectory;
+        if (dir == null) return false;
+        File file = new File(dir);
+        return file.isDirectory();
     }
 
     public static void addValidationListener2017(IValidationListener2017 listener) {
