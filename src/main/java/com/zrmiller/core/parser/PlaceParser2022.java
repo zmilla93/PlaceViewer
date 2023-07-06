@@ -2,9 +2,9 @@ package com.zrmiller.core.parser;
 
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
+import com.zrmiller.core.strings.FileName;
 import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.core.utility.TileEdit;
-import com.zrmiller.modules.strings.FileName;
 
 import java.io.File;
 import java.io.IOException;

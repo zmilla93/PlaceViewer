@@ -2,12 +2,12 @@ package com.zrmiller.gui.exporting;
 
 import com.zrmiller.App;
 import com.zrmiller.core.enums.ZoomLevel;
+import com.zrmiller.core.strings.References;
 import com.zrmiller.core.utility.PlaceCanvas;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.FrameManager;
 import com.zrmiller.gui.mainframe.listeners.ICanvasListener;
 import com.zrmiller.gui.misc.NumberDocumentFilter;
-import com.zrmiller.modules.strings.References;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;

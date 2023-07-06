@@ -1,4 +1,4 @@
-package com.zrmiller.modules.strings;
+package com.zrmiller.core.strings;
 
 import com.zrmiller.core.managers.SaveManager;
 

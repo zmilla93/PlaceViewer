@@ -7,8 +7,8 @@ import com.zrmiller.core.enums.ZoomLevel;
 import com.zrmiller.core.exporting.IExportCallback;
 import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.parser.PlacePlayer;
+import com.zrmiller.core.strings.References;
 import com.zrmiller.gui.FrameManager;
-import com.zrmiller.modules.strings.References;
 
 import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageOutputStream;
@@ -52,6 +52,7 @@ public class PlaceCanvas {
     /**
      * Converts the raw color data from a PlacePlayer into something that can be easily displayed.
      * Handles viewports, zooming, panning, selections, color converting, and image exporting.
+     *
      * @param player The PlacePlayer to process data for.
      */
     public PlaceCanvas(PlacePlayer player) {

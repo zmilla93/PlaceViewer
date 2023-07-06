@@ -10,11 +10,11 @@ import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.managers.listeners.IDataDirectoryListener;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
+import com.zrmiller.core.strings.References;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.FrameManager;
 import com.zrmiller.modules.colortheme.ColorManager;
 import com.zrmiller.modules.colortheme.ColorTheme;
-import com.zrmiller.modules.strings.References;
 
 import javax.swing.*;
 import java.io.File;

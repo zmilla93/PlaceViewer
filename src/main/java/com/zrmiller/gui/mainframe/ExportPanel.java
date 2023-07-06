@@ -7,11 +7,11 @@ import com.zrmiller.core.enums.ZoomLevel;
 import com.zrmiller.core.exporting.IExportCallback;
 import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
+import com.zrmiller.core.strings.References;
 import com.zrmiller.core.utility.PlaceCanvas;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.FrameManager;
 import com.zrmiller.modules.colortheme.components.FlatColorIconButton;
-import com.zrmiller.modules.strings.References;
 
 import javax.swing.*;
 import java.awt.*;

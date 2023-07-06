@@ -1,6 +1,6 @@
 package com.zrmiller.core.utility;
 
-import com.zrmiller.modules.strings.FileName;
+import com.zrmiller.core.strings.FileName;
 
 import java.io.*;
 import java.util.Arrays;
