@@ -43,7 +43,7 @@ public class MainPanel extends JPanel implements ICanvasListener, IDatasetListen
         // North Panel
         JPanel northBuffer = new JPanel(new BorderLayout());
         northBuffer.add(controlPanel, BorderLayout.WEST);
-        northBuffer.add(new JumpToFramePanel(canvasPanel, canvasPanel.getPlayer()), BorderLayout.EAST);
+        northBuffer.add(new JumpToFramePanel(canvasPanel.getPlayer()), BorderLayout.EAST);
         northBuffer.add(new JSeparator(), BorderLayout.SOUTH);
 
         northPanel.add(northBuffer, BorderLayout.CENTER);

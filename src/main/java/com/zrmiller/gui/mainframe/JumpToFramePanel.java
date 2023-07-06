@@ -14,13 +14,11 @@ import java.awt.*;
 public class JumpToFramePanel extends JPanel implements IDatasetListener {
 
     private final PlacePlayer player;
-    private final CanvasPanel canvasPanel;
 
     private final JButton jumpToFrameButton = new JButton("Jump to Frame");
     private final JTextField frameInput = new JTextField(8);
 
-    public JumpToFramePanel(CanvasPanel canvasPanel, PlacePlayer player) {
-        this.canvasPanel = canvasPanel;
+    public JumpToFramePanel(PlacePlayer player) {
         this.player = player;
         setLayout(new GridBagLayout());
         GridBagConstraints gc = ZUtil.getGC();
