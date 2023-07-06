@@ -13,6 +13,9 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Handles file downloads while tracking progress.
+ */
 public abstract class DataDownloader {
 
     protected int fileSize;

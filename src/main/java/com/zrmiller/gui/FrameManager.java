@@ -1,9 +1,9 @@
 package com.zrmiller.gui;
 
+import com.zrmiller.core.data.Dataset;
+import com.zrmiller.core.data.PlaceInfo;
 import com.zrmiller.core.datawrangler.DataValidator;
-import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
-import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
 import com.zrmiller.gui.frames.MainFrame;
 import com.zrmiller.gui.frames.WaitingFrame;

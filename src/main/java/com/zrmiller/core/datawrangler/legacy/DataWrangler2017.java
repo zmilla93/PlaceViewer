@@ -1,10 +1,10 @@
 package com.zrmiller.core.datawrangler.legacy;
 
+import com.zrmiller.core.data.Dataset;
+import com.zrmiller.core.data.FileName;
+import com.zrmiller.core.data.PlaceInfo;
 import com.zrmiller.core.datawrangler.legacy.callbacks.IStatusTracker2017;
-import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
-import com.zrmiller.core.strings.FileName;
-import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.core.utility.TileEdit;
 import com.zrmiller.modules.stopwatch.Stopwatch;
 

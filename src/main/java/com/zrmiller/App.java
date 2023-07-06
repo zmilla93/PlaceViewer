@@ -1,8 +1,8 @@
 package com.zrmiller;
 
+import com.zrmiller.core.data.Dataset;
 import com.zrmiller.core.datawrangler.DataDownloader;
 import com.zrmiller.core.datawrangler.DataValidator;
-import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.gui.FrameManager;

@@ -8,6 +8,7 @@ import java.util.HashMap;
  */
 public class ColorConverter2022 {
 
+    // Int values are stored as shorts to save space when writing to binary
     private final HashMap<String, Short> colorToIntMap;
 
     public static final Color[] intToColorArr = new Color[]{

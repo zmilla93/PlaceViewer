@@ -1,12 +1,12 @@
 package com.zrmiller.core.datawrangler;
 
+import com.zrmiller.core.data.Dataset;
+import com.zrmiller.core.data.FileName;
+import com.zrmiller.core.data.PlaceInfo;
 import com.zrmiller.core.datawrangler.callbacks.IValidationListener2017;
 import com.zrmiller.core.datawrangler.callbacks.IValidationListener2022;
-import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.parser.PlaceInputStream;
-import com.zrmiller.core.strings.FileName;
-import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.core.utility.TileEdit;
 
 import javax.swing.*;
@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+/**
+ * Validates the 2017 and 2022 datasets, then informs listeners of their validation status.
+ */
 public class DataValidator {
 
     private static final ArrayList<IValidationListener2017> listeners2017 = new ArrayList<>();

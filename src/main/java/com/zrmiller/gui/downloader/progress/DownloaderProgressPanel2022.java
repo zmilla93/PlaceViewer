@@ -1,10 +1,10 @@
 package com.zrmiller.gui.downloader.progress;
 
+import com.zrmiller.core.data.PlaceInfo;
 import com.zrmiller.core.datawrangler.DataDownloader2022;
 import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.callbacks.IFileDownloadTracker;
 import com.zrmiller.core.datawrangler.callbacks.IMultipleFileDownloadTracker;
-import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
 
 public class DownloaderProgressPanel2022 extends AbstractDownloadProgressPanel {

@@ -1,4 +1,4 @@
-package com.zrmiller.core.utility;
+package com.zrmiller.core.data;
 
 import java.awt.*;
 import java.text.NumberFormat;

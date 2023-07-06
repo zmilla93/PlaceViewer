@@ -1,6 +1,6 @@
 package com.zrmiller.gui.mainframe;
 
-import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.data.Dataset;
 import com.zrmiller.core.enums.PlaybackSpeed;
 import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.listeners.IDatasetListener;

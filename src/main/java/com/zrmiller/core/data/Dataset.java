@@ -1,12 +1,14 @@
-package com.zrmiller.core.enums;
+package com.zrmiller.core.data;
 
 import com.zrmiller.core.colors.ColorConverter2022;
-import com.zrmiller.core.utility.PlaceInfo;
 
 import java.awt.*;
 import java.io.File;
 import java.text.NumberFormat;
 
+/**
+ * Stores data that is mutual to the 2017 and 2022 datasets.
+ */
 public enum Dataset {
 
     PLACE_2017(2017, 1001, 1001, 16567564, PlaceInfo.canvasColors, 0),

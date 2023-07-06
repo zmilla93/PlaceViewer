@@ -1,6 +1,6 @@
 package com.zrmiller.core.savefiles;
 
-import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.data.Dataset;
 import com.zrmiller.modules.colortheme.ColorTheme;
 
 public class SettingsSaveFile {

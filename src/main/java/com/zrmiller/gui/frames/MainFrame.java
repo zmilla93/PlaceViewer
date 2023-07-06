@@ -1,10 +1,10 @@
 package com.zrmiller.gui.frames;
 
 import com.zrmiller.App;
-import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.data.Dataset;
+import com.zrmiller.core.data.References;
 import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
-import com.zrmiller.core.strings.References;
 import com.zrmiller.gui.mainframe.MainMenuBar;
 import com.zrmiller.gui.mainframe.MainPanel;
 

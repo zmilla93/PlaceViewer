@@ -3,11 +3,11 @@ package com.zrmiller.core.utility;
 import com.zrmiller.App;
 import com.zrmiller.core.colors.ColorMode;
 import com.zrmiller.core.colors.Gradient;
+import com.zrmiller.core.data.References;
 import com.zrmiller.core.enums.ZoomLevel;
 import com.zrmiller.core.exporting.IExportCallback;
 import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.parser.PlacePlayer;
-import com.zrmiller.core.strings.References;
 import com.zrmiller.gui.FrameManager;
 
 import javax.imageio.ImageIO;

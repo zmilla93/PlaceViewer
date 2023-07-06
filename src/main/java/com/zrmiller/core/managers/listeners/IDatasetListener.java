@@ -1,6 +1,6 @@
 package com.zrmiller.core.managers.listeners;
 
-import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.data.Dataset;
 
 public interface IDatasetListener {
 

@@ -1,9 +1,8 @@
 package com.zrmiller.gui.exporting;
 
 import com.zrmiller.App;
-import com.zrmiller.core.enums.ExportSelection;
+import com.zrmiller.core.data.References;
 import com.zrmiller.core.enums.ZoomLevel;
-import com.zrmiller.core.strings.References;
 import com.zrmiller.core.utility.PlaceCanvas;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.FrameManager;
@@ -21,9 +20,7 @@ public class ExportImageWindow extends JFrame {
         setTitle(References.APP_NAME + " - Export PNG");
         setLayout(new BorderLayout());
         JTextField fileNameInput = new JTextField(20);
-        JComboBox<ExportSelection> selectionCombo = new JComboBox<>();
         JComboBox<ZoomLevel> zoomCombo = new JComboBox<>();
-        for (ExportSelection selection : ExportSelection.values()) selectionCombo.addItem(selection);
         for (ZoomLevel zoom : ZoomLevel.values()) zoomCombo.addItem(zoom);
         JLabel info1 = new JLabel("Click and drag right mouse to create a selection.");
         JLabel info2 = new JLabel("Tap right click to clear selection.");
@@ -45,8 +42,6 @@ public class ExportImageWindow extends JFrame {
         gc = ZUtil.getGC();
 
         selectionPanel.add(new JLabel("Area"), gc);
-        gc.gridx++;
-        selectionPanel.add(selectionCombo, gc);
         gc.gridx++;
 
         gc = ZUtil.getGC();

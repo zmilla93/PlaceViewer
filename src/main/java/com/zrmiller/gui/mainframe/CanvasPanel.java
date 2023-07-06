@@ -1,7 +1,7 @@
 package com.zrmiller.gui.mainframe;
 
 import com.zrmiller.core.colors.ColorMode;
-import com.zrmiller.core.enums.Dataset;
+import com.zrmiller.core.data.Dataset;
 import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.listeners.IColorModeListener;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
