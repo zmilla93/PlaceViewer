@@ -5,12 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.zrmiller</groupId>
-    <artifactId>PlaceApp</artifactId>
-    <version>0.1.0</version>
+    <artifactId>PlaceViewer</artifactId>
+    <version>1.0.0</version>
 
-    <name>PlaceApp</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
+    <name>PlaceViewer</name>
+    <url>https://github.com/zmilla93/PlaceViewer</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
