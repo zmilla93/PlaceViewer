@@ -8,6 +8,7 @@ import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.managers.listeners.IDataDirectoryListener;
 import com.zrmiller.core.utility.ZUtil;
+import com.zrmiller.gui.FrameManager;
 import com.zrmiller.gui.downloader.DownloaderPanel2017;
 import com.zrmiller.gui.downloader.DownloaderPanel2022;
 import com.zrmiller.gui.downloader.progress.AbstractDownloadProgressPanel;
@@ -98,7 +99,7 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener, IVal
         addListeners();
         ColorManager.addListener(this);
         pack();
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(FrameManager.mainFrame);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
 
         DataValidator.addValidationListener2017(this);
@@ -199,6 +200,11 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener, IVal
 
     public void addDirectoryListener(IDataDirectoryListener listener) {
         directoryListeners.add(listener);
+    }
+
+    public void centerAndShow() {
+        setLocationRelativeTo(FrameManager.mainFrame);
+        setVisible(true);
     }
 
     @Override

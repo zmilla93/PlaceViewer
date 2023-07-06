@@ -78,7 +78,7 @@ public class ExportImageWindow extends JFrame {
         setMinimumSize(new Dimension(400, 300));
         addListeners();
         pack();
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(FrameManager.mainFrame);
     }
 
     private void addListeners() {

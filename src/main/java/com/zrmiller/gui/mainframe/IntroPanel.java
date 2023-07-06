@@ -27,12 +27,7 @@ public class IntroPanel extends JPanel {
     }
 
     private void addListeners() {
-        openDatasetsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                FrameManager.dataDownloaderFrame.setVisible(true);
-            }
-        });
+        openDatasetsButton.addActionListener(e -> FrameManager.dataDownloaderFrame.centerAndShow());
     }
 
 }

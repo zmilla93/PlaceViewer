@@ -120,7 +120,7 @@ public class ExportGifWindow extends JDialog implements ICanvasListener {
         container.add(panel, BorderLayout.CENTER);
         addListeners();
         pack();
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(FrameManager.mainFrame);
     }
 
     private void addListeners() {
