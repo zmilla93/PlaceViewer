@@ -4,10 +4,10 @@ import java.util.Locale;
 
 public enum PlaybackSpeed {
 
-    SLOW(1, 1000),
+    SLOW(60, 1000),
     MEDIUM(100, 100000),
     FAST(1000, 1000000),
-    FASTER(100, 10000000),
+    FASTER(1000, 10000000),
     ;
 
     private String name;

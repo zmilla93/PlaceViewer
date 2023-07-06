@@ -22,7 +22,7 @@ public class PlacePlayer implements IDatasetListener {
     // General
     private AbstractPlaceParser parser;
     private int tileUpdatesPerSecond = 1000000;
-    private final int LOGIC_UPDATES_PER_SECOND = 60;
+    public static final int LOGIC_UPDATES_PER_SECOND = 60;
     private int frameCount = 0;
     private boolean streamIsOpen;
     private Timer timer = new Timer();
@@ -65,7 +65,7 @@ public class PlacePlayer implements IDatasetListener {
             streamIsOpen = parser.openStream();
             if (!streamIsOpen) return;
         }
-        // FIXME: tileUpdatesPerSecond can't go below LOGIC_UPDATES_PER_SECOND
+        // NOTE: tileUpdatesPerSecond can't go below LOGIC_UPDATES_PER_SECOND
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
