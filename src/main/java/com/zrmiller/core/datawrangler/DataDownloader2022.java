@@ -1,6 +1,5 @@
 package com.zrmiller.core.datawrangler;
 
-import com.zrmiller.core.datawrangler.callbacks.IDownloadTracker;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.PlaceInfo;
@@ -28,7 +27,6 @@ public class DataDownloader2022 extends DataDownloader {
         DataDownloader downloader = this;
         Thread thread = new Thread(() -> {
             DataDownloader.activeDownloader = downloader;
-//            downloader.getMultipleFileTracker().updateProgress();
             for (int index : fileIndexes) {
                 if (isCanceled()) {
                     downloader.getFileTracker().onDownloadComplete();
@@ -36,18 +34,6 @@ public class DataDownloader2022 extends DataDownloader {
                     return;
                 }
                 String downloadPath = getIndexedURL(index);
-                IDownloadTracker tracker = new IDownloadTracker() {
-                    @Override
-                    public void onDownloadComplete() {
-
-                    }
-
-                    @Override
-                    public void onCancel() {
-
-                    }
-                };
-                setTracker(tracker);
                 downloader.getMultipleFileTracker().updateProgress();
                 if (!downloadFile(FileName.BINARY_2022.getIndexedName(index), downloadPath)) cancelDownload();
                 filesDownloaded++;

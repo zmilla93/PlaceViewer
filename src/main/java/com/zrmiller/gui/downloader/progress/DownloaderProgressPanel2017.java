@@ -1,7 +1,6 @@
 package com.zrmiller.gui.downloader.progress;
 
 import com.zrmiller.core.datawrangler.DataValidator;
-import com.zrmiller.core.datawrangler.callbacks.IDownloadTracker;
 import com.zrmiller.core.datawrangler.callbacks.IFileDownloadTracker;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
@@ -19,17 +18,6 @@ public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
         setInfoUpper("Downloading 2017 dataset...");
         setInfoLower("Loading...");
         progressBar.setValue(0);
-        IDownloadTracker tracker = new IDownloadTracker() {
-            @Override
-            public void onDownloadComplete() {
-                datasetManagerFrame.swapToDownloader();
-            }
-
-            @Override
-            public void onCancel() {
-                datasetManagerFrame.swapToDownloader();
-            }
-        };
         IFileDownloadTracker fileTracker = new IFileDownloadTracker() {
             @Override
             public void updateProgress() {
@@ -39,9 +27,9 @@ public class DownloaderProgressPanel2017 extends AbstractDownloadProgressPanel {
             @Override
             public void onDownloadComplete() {
                 DataValidator.runValidation2017();
+                datasetManagerFrame.swapToDownloader();
             }
         };
-        downloader.setTracker(tracker);
         downloader.setFileTracker(fileTracker);
     }
 

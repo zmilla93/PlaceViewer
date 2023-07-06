@@ -1,21 +1,23 @@
 package com.zrmiller.core.datawrangler;
 
-import com.zrmiller.core.datawrangler.callbacks.IDownloadTracker;
 import com.zrmiller.core.datawrangler.callbacks.IFileDownloadTracker;
 import com.zrmiller.core.datawrangler.callbacks.IMultipleFileDownloadTracker;
 import com.zrmiller.core.managers.SaveManager;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public abstract class DataDownloader {
 
     protected int fileSize;
     protected int bytesProcessed;
     private static final int BYTE_BUFFER_SIZE = 1024 * 4;
-    // FIXME : remove tracker
-    private IDownloadTracker tracker;
     private IFileDownloadTracker fileTracker;
     protected IMultipleFileDownloadTracker multipleFileTracker;
     private boolean cancel = false;
@@ -34,7 +36,7 @@ public abstract class DataDownloader {
             fileSize = httpConnection.getContentLength();
             BufferedInputStream inputStream = new BufferedInputStream(httpConnection.getInputStream());
             String outputFile = SaveManager.settings.data.dataDirectory + yearString + File.separator + fileName;
-            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
+            BufferedOutputStream outputStream = new BufferedOutputStream(Files.newOutputStream(Paths.get(outputFile)));
             byte[] data = new byte[BYTE_BUFFER_SIZE];
             bytesProcessed = 0;
             int numBytesRead;
@@ -46,7 +48,6 @@ public abstract class DataDownloader {
                     inputStream.close();
                     outputStream.close();
                     deleteFile(outputFile);
-                    tracker.onDownloadComplete();
                     if (fileTracker != null) fileTracker.onDownloadComplete();
                     if (multipleFileTracker != null) multipleFileTracker.onDownloadComplete();
                     return false;
@@ -54,7 +55,6 @@ public abstract class DataDownloader {
             }
             inputStream.close();
             outputStream.close();
-            tracker.onDownloadComplete();
             if (fileTracker != null) fileTracker.onDownloadComplete();
             return true;
         } catch (IOException e) {
@@ -70,24 +70,20 @@ public abstract class DataDownloader {
         return file.mkdirs();
     }
 
-    public void setTracker(IDownloadTracker tracker) {
-        this.tracker = tracker;
+    public void setFileTracker(IFileDownloadTracker tracker) {
+        this.fileTracker = tracker;
     }
 
-    public IDownloadTracker getFileTracker() {
-        return tracker;
-    }
-
-    public IMultipleFileDownloadTracker getMultipleFileTracker() {
-        return multipleFileTracker;
+    public IFileDownloadTracker getFileTracker() {
+        return fileTracker;
     }
 
     public void setMultipleFileTracker(IMultipleFileDownloadTracker tracker) {
         this.multipleFileTracker = tracker;
     }
 
-    public void setFileTracker(IFileDownloadTracker tracker) {
-        this.fileTracker = tracker;
+    public IMultipleFileDownloadTracker getMultipleFileTracker() {
+        return multipleFileTracker;
     }
 
     public int getFileSizeInBytes() {

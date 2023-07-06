@@ -5,8 +5,6 @@ import com.zrmiller.gui.FrameManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class IntroPanel extends JPanel {
 
