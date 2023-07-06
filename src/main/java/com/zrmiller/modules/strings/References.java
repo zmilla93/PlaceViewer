@@ -16,6 +16,10 @@ public class References {
     public static final int MENU_BAR_ICON_SIZE = 16;
 
     public static String getExportFolder() {
+        String dir = SaveManager.settings.data.dataDirectory;
+        if (dir == null) return null;
+        File file = new File(dir);
+        if (!file.isDirectory()) return null;
         return SaveManager.settings.data.dataDirectory + References.EXPORT_FOLDER_NAME + File.separator;
     }
 

@@ -12,6 +12,7 @@ import com.zrmiller.core.utility.PlaceCanvas;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.FrameManager;
 import com.zrmiller.modules.colortheme.components.FlatColorIconButton;
+import com.zrmiller.modules.strings.References;
 
 import javax.swing.*;
 import java.awt.*;
@@ -84,7 +85,7 @@ public class ExportPanel extends JPanel implements IDatasetListener {
     private void addListeners() {
         openFolderButton.addActionListener(e -> {
             if (!DataValidator.isDataDirectoryValid()) return;
-            ZUtil.openExplorer(SaveManager.settings.data.dataDirectory + "Exports");
+            ZUtil.openExplorer(References.getExportFolder());
         });
         closeButton.addActionListener(e -> {
             setVisible(false);

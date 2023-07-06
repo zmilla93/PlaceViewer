@@ -96,6 +96,7 @@ public class ZUtil {
     }
 
     public static void openExplorer(String path) {
+        if (path == null) return;
         File targetDir = new File(path);
         if (!targetDir.exists()) {
             boolean success = targetDir.mkdirs();

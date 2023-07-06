@@ -13,6 +13,7 @@ import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.FrameManager;
 import com.zrmiller.modules.colortheme.ColorManager;
 import com.zrmiller.modules.colortheme.ColorTheme;
+import com.zrmiller.modules.strings.References;
 
 import javax.swing.*;
 
@@ -45,7 +46,7 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
     // Export Menu Bar
     private final JMenuItem exportImageButton = new JMenuItem("Export PNG...");
     //    private final JMenuItem exportGifButton = new JMenuItem("Export GIF...");
-    private final JMenuItem openExportsButton = new JMenuItem("Open Exports Folder");
+    private final JMenuItem openExportsButton = new JMenuItem("View Exports");
 
     public MainMenuBar() {
         // Create theme list
@@ -63,8 +64,9 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
         // Options
         optionsMenu.add(themeMenu);
 //        optionsMenu.add(new JSeparator());
-        optionsMenu.add(exportMenu);
+//        optionsMenu.add(exportMenu);
 //        optionsMenu.add(new JSeparator());
+        optionsMenu.add(openExportsButton);
         optionsMenu.add(githubButton);
         optionsMenu.add(new JSeparator());
         optionsMenu.add(quitButton);
@@ -81,7 +83,7 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
         exportMenu.add(exportImageButton);
 //        exportMenu.add(exportGifButton);
         exportMenu.add(new JSeparator());
-        exportMenu.add(openExportsButton);
+//        exportMenu.add(openExportsButton);
 
         // Display
         ButtonGroup displayGroup = new ButtonGroup();
@@ -116,7 +118,7 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
         quitButton.addActionListener(e -> System.exit(0));
         exportImageButton.addActionListener(e -> FrameManager.exportImageWindow.setVisible(true));
 //        exportGifButton.addActionListener(e -> FrameManager.exportGifWindow.setVisible(true));
-        openExportsButton.addActionListener(e -> ZUtil.openExplorer(SaveManager.settings.data.dataDirectory + "exports"));
+        openExportsButton.addActionListener(e -> ZUtil.openExplorer(References.getExportFolder()));
 
         // Display
         displayNormalButton.addActionListener(e -> DatasetManager.setColorMode(ColorMode.NORMAL));

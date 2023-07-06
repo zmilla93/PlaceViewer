@@ -4,8 +4,6 @@ import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.PlaceInfo;
-import com.zrmiller.gui.exporting.ExportGifWindow;
-import com.zrmiller.gui.exporting.ExportImageWindow;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
 import com.zrmiller.gui.frames.MainFrame;
 import com.zrmiller.gui.frames.WaitingFrame;
@@ -20,8 +18,6 @@ public class FrameManager {
     public static MainFrame mainFrame;
     public static DatasetManagerFrame dataDownloaderFrame;
     public static WaitingFrame waitingFrame;
-    public static ExportImageWindow exportImageWindow;
-    public static ExportGifWindow exportGifWindow;
 
     // Important UI Elements
     public static CanvasPanel canvasPanel;
@@ -34,15 +30,11 @@ public class FrameManager {
         // Create GUI
         mainFrame = new MainFrame();
         dataDownloaderFrame = new DatasetManagerFrame();
-        exportImageWindow = new ExportImageWindow();
-        exportGifWindow = new ExportGifWindow();
         waitingFrame = new WaitingFrame();
 
         // Color Manager Setup
         ColorManager.addFrame(mainFrame);
         ColorManager.addFrame(dataDownloaderFrame);
-        ColorManager.addFrame(exportImageWindow);
-        ColorManager.addFrame(exportGifWindow);
         ColorManager.addFrame(waitingFrame);
         ColorTheme theme = SaveManager.settings.data.colorTheme == null ? ColorTheme.SOLARIZED_LIGHT : SaveManager.settings.data.colorTheme;
         ColorManager.setTheme(theme);
