@@ -15,7 +15,6 @@ public class SaveManager {
     private static final String folderWin = "PlaceViewer";
     private static final String folderOther = ".placeviewer";
 
-    // FIXME : Switch to local low
     public static String getSaveDirectory() {
         if (saveDirectory == null) {
             String os = (System.getProperty("os.name")).toUpperCase();
@@ -25,12 +24,12 @@ public class SaveManager {
                 saveDirectory = System.getProperty("user.home") + File.separator + folderOther + File.separator;
             }
         }
-        if (!verify(saveDirectory))
+        if (!verifySaveDirectory())
             return null;
         return saveDirectory;
     }
 
-    private static boolean verify(String saveDirectory) {
+    public static boolean verifySaveDirectory() {
         File file = new File(saveDirectory);
         if (!file.exists()) {
             if (!file.mkdirs()) {

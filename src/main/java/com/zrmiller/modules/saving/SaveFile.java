@@ -3,11 +3,14 @@ package com.zrmiller.modules.saving;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.zrmiller.core.managers.SaveManager;
 
 import java.awt.*;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,7 +28,6 @@ public class SaveFile<T> {
     private final Timer autoSaveTimer = new Timer();
     private TimerTask saveTask;
 
-    //    private static final Gson gson = new GsonBuilder().create();
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public SaveFile(String path, Class<T> classType) {
@@ -73,12 +75,13 @@ public class SaveFile<T> {
      * Saves the data class to a json file.
      */
     public synchronized void saveToDisk() {
+        if (!SaveManager.verifySaveDirectory()) return;
         try {
             for (ISavable c : savables) {
                 c.save();
             }
             File file = new File(path);
-            Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+            Writer writer = new OutputStreamWriter(Files.newOutputStream(file.toPath()), StandardCharsets.UTF_8);
             writer.write(gson.toJson(data));
             writer.close();
         } catch (IOException e) {
@@ -95,6 +98,7 @@ public class SaveFile<T> {
      * Automatically called when SaveFile is created.
      */
     public synchronized void loadFromDisk() {
+        if (!SaveManager.verifySaveDirectory()) return;
         File file = new File(path);
         if (file.exists()) {
             try {
@@ -142,12 +146,11 @@ public class SaveFile<T> {
         saveListeners.clear();
     }
 
-    // FIXME : This can be cleaned up
     private static String getFileAsString(String path) {
         StringBuilder builder = new StringBuilder();
         BufferedReader br;
         try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8));
+            br = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(path)), StandardCharsets.UTF_8));
             while (br.ready()) {
                 builder.append(br.readLine());
             }
