@@ -42,7 +42,7 @@ public class JumpToFramePanel extends JPanel implements IDatasetListener {
         jumpToFrameButton.addActionListener(e -> {
             int targetFrame = getTargetFrame();
             if (targetFrame == -1) return;
-            player.jumpToFrame(targetFrame, canvasPanel);
+            player.jumpToFrame(targetFrame);
         });
     }
 
