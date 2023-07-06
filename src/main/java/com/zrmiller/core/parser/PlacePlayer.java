@@ -69,7 +69,10 @@ public class PlacePlayer implements IDatasetListener {
                 int iterations = tileUpdatesPerSecond / LOGIC_UPDATES_PER_SECOND;
                 try {
                     for (int i = 0; i < iterations; i++) {
-                        if (!applyNextFrame()) break;
+                        if (!applyNextFrame()) {
+                            pause();
+                            break;
+                        }
                     }
                 } catch (IOException e) {
                     pause();
@@ -175,7 +178,10 @@ public class PlacePlayer implements IDatasetListener {
     private boolean applyNextFrame() throws IOException {
         if (parser.ready()) {
             TileEdit tile = parser.readNextLine();
-            // FIXME : It is possible for tile to be null here
+            if (tile == null) {
+                System.err.println("Parser encountered a null tile! Playback stopping early.");
+                return false;
+            }
             if (tile.color == -1) return false;
             if (App.dataset() == null) return false;
             int index = tile.x + tile.y * App.dataset().CANVAS_SIZE_X;
