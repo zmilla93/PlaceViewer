@@ -21,7 +21,7 @@ import java.awt.image.BufferedImage;
 
 public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements IThemeListener, IDatasetListener, IPlayerControllerListener, IColorModeListener {
 
-    private final int targetFPS = 60;
+    private final int targetFPS = 120;
 
     // Mouse Movement
     private int initialX;
