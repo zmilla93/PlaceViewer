@@ -33,8 +33,10 @@ public class MainPanel extends JPanel implements ICanvasListener, IDatasetListen
     public MainPanel() {
         setLayout(new BorderLayout());
 
-        JPanel exportPanel = new ExportPanel();
+        ExportPanel exportPanel = new ExportPanel();
         controlPanel = new PlayerControlPanel(exportPanel);
+        exportPanel.setControlPanel(controlPanel);
+        exportPanel.setVisible(false);
         canvasPanel = new CanvasPanel(controlPanel);
         FrameManager.canvasPanel = canvasPanel;
 

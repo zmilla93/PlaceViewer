@@ -282,8 +282,8 @@ public class PlaceCanvas {
         } else if (!outDir.mkdirs()) return;
         // Validate output file
         String outputPath = References.getExportFolder() + fileName + ".png";
-        if (!ZUtil.validateFileName(outputPath)) {
-            JOptionPane.showMessageDialog(FrameManager.mainFrame, "Invalid file name: " + fileName, "Invalid File Name", JOptionPane.ERROR_MESSAGE);
+        if (!ZUtil.validateFileName(fileName, outputPath)) {
+            JOptionPane.showMessageDialog(FrameManager.mainFrame, "File name '" + fileName + "' is invalid.", "Invalid File Name", JOptionPane.ERROR_MESSAGE);
             return;
         }
         File file = new File(outputPath);

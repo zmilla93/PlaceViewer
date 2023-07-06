@@ -17,8 +17,8 @@ import java.util.Objects;
 public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerListener> implements IPlayerControllerListener, IDatasetListener {
 
     private final JButton stopButton = new FlatColorIconButton("/icons/media-stop.png");
-    private final FlatColorIconButton playPauseButton = new FlatColorIconButton("icons/media-play.png", "icons/media-pause.png");
-    private final JButton exportButton = new FlatColorIconButton("/icons/export.png");
+    private final FlatColorIconButton playPauseButton = new FlatColorIconButton("/icons/media-play.png", "/icons/media-pause.png");
+    private final FlatColorIconButton exportButton = new FlatColorIconButton("/icons/export-outline.png", "/icons/export.png");
     private final JSlider speedSlider = new JSlider();
     private final JLabel speedLabel = new JLabel();
     private final JComboBox<PlaybackSpeed> speedCombo = new JComboBox<>();
@@ -70,7 +70,11 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
                 listener.onTogglePlayPause();
             }
         });
-        exportButton.addActionListener(e -> exportPanel.setVisible(!exportPanel.isVisible()));
+        exportButton.addActionListener(e -> {
+            boolean visible = !exportPanel.isVisible();
+            exportPanel.setVisible(visible);
+            setExportIcon(visible);
+        });
         speedCombo.addActionListener(e -> setPlaybackSpeed((PlaybackSpeed) Objects.requireNonNull(speedCombo.getSelectedItem())));
         speedSlider.addChangeListener(e -> {
             int speed = speedSlider.getValue();
@@ -80,6 +84,11 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
                 listener.onSpeedChange(speedSlider.getValue());
             }
         });
+    }
+
+    public void setExportIcon(boolean visible) {
+        if (visible) exportButton.setIconIndex(1);
+        else exportButton.setIconIndex(0);
     }
 
     @Override
@@ -116,6 +125,7 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
     @Override
     public void onDatasetChanged(Dataset dataset) {
         boolean enabled = dataset != null;
+        if (!enabled) setExportIcon(false);
         for (JComponent component : components) {
             component.setEnabled(enabled);
         }

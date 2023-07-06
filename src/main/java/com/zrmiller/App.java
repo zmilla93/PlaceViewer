@@ -19,6 +19,8 @@ public class App {
     public static void main(String[] args) {
         // Load save data
         SaveManager.settings.loadFromDisk();
+        // Adjust tooltip delay
+        ToolTipManager.sharedInstance().setInitialDelay(500);
 
         // Create GUI
         try {

@@ -109,8 +109,9 @@ public class ZUtil {
         }
     }
 
-    public static boolean validateFileName(String path) {
-        File file = new File(path);
+    public static boolean validateFileName(String fileName, String fullPath) {
+        if (fileName.trim().equals("")) return false;
+        File file = new File(fullPath);
         if (file.exists()) return true;
         try {
             boolean success = file.createNewFile();
