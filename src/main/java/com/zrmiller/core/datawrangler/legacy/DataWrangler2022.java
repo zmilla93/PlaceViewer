@@ -2,7 +2,7 @@ package com.zrmiller.core.datawrangler.legacy;
 
 import com.zrmiller.core.colors.ColorConverter2022;
 import com.zrmiller.core.datawrangler.DataValidator;
-import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2022;
+import com.zrmiller.core.datawrangler.legacy.callbacks.IStatusTracker2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.PlaceInfo;

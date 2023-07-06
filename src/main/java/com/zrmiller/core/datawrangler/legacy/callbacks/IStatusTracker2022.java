@@ -1,5 +1,6 @@
-package com.zrmiller.core.datawrangler.callbacks;
+package com.zrmiller.core.datawrangler.legacy.callbacks;
 
+@Deprecated
 public interface IStatusTracker2022 {
 
     void onFileDownloadComplete();

@@ -1,6 +1,6 @@
 package com.zrmiller.core.datawrangler.legacy;
 
-import com.zrmiller.core.datawrangler.callbacks.IStatusTracker2017;
+import com.zrmiller.core.datawrangler.legacy.callbacks.IStatusTracker2017;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.SaveManager;
 import com.zrmiller.core.utility.PlaceInfo;
