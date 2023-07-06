@@ -20,7 +20,7 @@ public class ExportPanel extends JPanel implements IDatasetListener {
 
     // Insets
     private static final int INSET_SMALL = 0;
-    private static final int INSET_LARGE = 0;
+    private static final int INSET_LARGE = 4;
 
     // Controls
     private final JButton exportButton = new JButton("Export PNG");
@@ -48,7 +48,8 @@ public class ExportPanel extends JPanel implements IDatasetListener {
         GridBagConstraints gc = ZUtil.getGC();
         gc.fill = 1;
 
-        gc.insets.left = 4;
+        controlsPanel.add(Box.createHorizontalStrut(7), gc);
+        gc.gridx++;
         controlsPanel.add(new JLabel("File Name"), gc);
         gc.gridx++;
         controlsPanel.add(fileNameInput, gc);
@@ -62,6 +63,7 @@ public class ExportPanel extends JPanel implements IDatasetListener {
         gc.insets.left = INSET_LARGE;
         controlsPanel.add(exportButton, gc);
         gc.gridx++;
+        gc.insets.left = INSET_SMALL;
         controlsPanel.add(openFolderButton, gc);
         gc.gridx++;
         controlsPanel.add(closeButton, gc);

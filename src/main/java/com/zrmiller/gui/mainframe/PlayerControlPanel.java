@@ -33,9 +33,7 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
         for (PlaybackSpeed speed : PlaybackSpeed.values()) {
             speedCombo.addItem(speed);
         }
-        add(speedCombo);
-        gc.gridx++;
-        add(speedSlider);
+        add(Box.createHorizontalStrut(4));
         gc.gridx++;
         add(playPauseButton);
         gc.gridx++;
@@ -43,14 +41,23 @@ public class PlayerControlPanel extends ListenManagerPanel<IPlayerControllerList
         gc.gridx++;
         add(exportButton);
         gc.gridx++;
+        add(speedCombo);
+        gc.gridx++;
+        add(speedSlider);
+        gc.gridx++;
         add(speedLabel);
         gc.gridx++;
-        speedSlider.setPreferredSize(new Dimension(100, getPreferredSize().height));
+
         addListeners();
+        playPauseButton.setToolTipText("Play/Pause");
+        stopButton.setToolTipText("Stop");
+        speedCombo.setToolTipText("Adjust speed slider range");
+        exportButton.setToolTipText("Export PNG");
+        speedSlider.setToolTipText("Playback speed");
+        speedSlider.setPreferredSize(new Dimension(120, getPreferredSize().height));
         speedCombo.setSelectedItem(PlaybackSpeed.FAST);
         speedSlider.setValue(500000);
         components = new JComponent[]{playPauseButton, stopButton, exportButton, speedSlider, speedCombo};
-        exportButton.setToolTipText("Export PNG");
         DatasetManager.addDatasetListener(this);
     }
 
