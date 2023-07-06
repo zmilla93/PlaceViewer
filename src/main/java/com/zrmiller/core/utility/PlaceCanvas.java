@@ -21,7 +21,7 @@ import java.io.IOException;
 
 public class PlaceCanvas {
 
-    private static final int PAN_OOB_SIZE = 100;
+    private static final int PAN_OOB_SIZE = 10;
 
     public int viewportWidth = 1400;
     public int viewportHeight = 1400;
@@ -42,13 +42,18 @@ public class PlaceCanvas {
     private Color backgroundColor = Color.WHITE;
 
     private static final int COLOR_CHANNEL_COUNT = 3;
-    int[] rgbColorBuffer = new int[viewportWidth * viewportHeight * COLOR_CHANNEL_COUNT];
+    private int[] rgbColorBuffer = new int[viewportWidth * viewportHeight * COLOR_CHANNEL_COUNT];
 
     public ZoomLevel zoomLevel = ZoomLevel.Zoom_1;
     private final PlacePlayer player;
     private final Gradient heatGradient = new Gradient();
     private ColorMode colorMode = ColorMode.NORMAL;
 
+    /**
+     * Converts the raw color data from a PlacePlayer into something that can be easily displayed.
+     * Handles viewports, zooming, panning, selections, color converting, and image exporting.
+     * @param player The PlacePlayer to process data for.
+     */
     public PlaceCanvas(PlacePlayer player) {
         this.player = player;
         heatGradient.addKey(0f, new Color(0, 0, 0));

@@ -6,7 +6,6 @@ import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.utility.TileEdit;
 import com.zrmiller.gui.FrameManager;
-import com.zrmiller.gui.mainframe.CanvasPanel;
 import com.zrmiller.gui.mainframe.listeners.IPlayerControllerListener;
 
 import javax.swing.*;
@@ -46,16 +45,14 @@ public class PlacePlayer implements IDatasetListener {
 
     /**
      * Provides a media player style state machine for interacting with a dataset.
-     * Stores color and heatmap data in flat arrays.
+     * Stores raw color and heatmap data in flat arrays.
      */
     public PlacePlayer() {
         parser = new PlaceParser2022();
         DatasetManager.addDatasetListener(this);
     }
 
-    //
     // Public Stuff
-    //
 
     public void play() {
         if (App.dataset() == null) return;
@@ -131,12 +128,8 @@ public class PlacePlayer implements IDatasetListener {
         return tileUpdatesPerSecond;
     }
 
-    public boolean jumpToFrame(int targetFrame) {
-        return jumpToFrame(targetFrame, null);
-    }
-
-    public boolean jumpToFrame(int targetFrame, CanvasPanel canvasPanel) {
-        if (App.dataset() == null || targetFrame == frameCount) return false;
+    public void jumpToFrame(int targetFrame) {
+        if (App.dataset() == null || targetFrame == frameCount) return;
         boolean wasPlaying = state == State.PLAYING;
         if (targetFrame < frameCount) stop();
         if (!streamIsOpen) {
@@ -166,7 +159,6 @@ public class PlacePlayer implements IDatasetListener {
             String targetFrameFormatted = NumberFormat.getInstance().format(targetFrame);
             FrameManager.waitingFrame.showFrame("Seeking", "Seeking to frame " + targetFrameFormatted + ". Please wait...");
         }
-        return true;
     }
 
     public int getFrameCount() {
@@ -184,10 +176,6 @@ public class PlacePlayer implements IDatasetListener {
     public State getState() {
         return state;
     }
-
-    //
-    // Private Stuff
-    //
 
     private boolean applyNextFrame() throws IOException {
         if (parser.ready()) {
@@ -231,9 +219,13 @@ public class PlacePlayer implements IDatasetListener {
         Arrays.fill(colorBuffer, App.dataset().WHITE_INDEX);
     }
 
+    // Listeners
+
     public void addPlayerListener(IPlayerControllerListener listener) {
         playerListeners.add(listener);
     }
+
+    // Overrides
 
     @Override
     public void onDatasetChanged(Dataset dataset) {
@@ -253,4 +245,5 @@ public class PlacePlayer implements IDatasetListener {
                 break;
         }
     }
+
 }
