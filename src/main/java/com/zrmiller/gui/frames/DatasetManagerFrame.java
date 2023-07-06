@@ -6,6 +6,7 @@ import com.zrmiller.core.datawrangler.callbacks.IValidationListener2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.SaveManager;
+import com.zrmiller.core.managers.listeners.IDataDirectoryListener;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.downloader.DownloaderPanel2017;
 import com.zrmiller.gui.downloader.DownloaderPanel2022;
@@ -20,6 +21,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.ArrayList;
 
 import static java.nio.file.StandardWatchEventKinds.*;
 
@@ -37,6 +39,8 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener, IVal
     private final DownloaderPanel2022 downloaderPanel2022 = new DownloaderPanel2022(this);
     private final AbstractDownloadProgressPanel downloadProgressPanel2017 = new DownloaderProgressPanel2017(this);
     private final AbstractDownloadProgressPanel downloadProgressPanel2022 = new DownloaderProgressPanel2022(this);
+
+    private final ArrayList<IDataDirectoryListener> directoryListeners = new ArrayList<>();
 
     private Thread watchThread;
 
@@ -119,12 +123,16 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener, IVal
     private void updateDirectory() {
         DatasetManager.setDataset(null);
         String dir = SaveManager.settings.data.dataDirectory;
-        if (dir == null) return;
-        File file = new File(dir);
-        if (file.isDirectory()) {
-            fileChooser.setCurrentDirectory(file);
-            updateDirectoryLabel();
-            setupFileWatcher(dir);
+        if (dir != null) {
+            File file = new File(dir);
+            if (file.isDirectory()) {
+                fileChooser.setCurrentDirectory(file);
+                updateDirectoryLabel();
+                setupFileWatcher(dir);
+            }
+        }
+        for (IDataDirectoryListener listener : directoryListeners) {
+            listener.onDataDirectoryChange(dir);
         }
     }
 
@@ -187,6 +195,10 @@ public class DatasetManagerFrame extends JDialog implements IThemeListener, IVal
 
     public AbstractDownloadProgressPanel getProgressPanel2022() {
         return downloadProgressPanel2022;
+    }
+
+    public void addDirectoryListener(IDataDirectoryListener listener) {
+        directoryListeners.add(listener);
     }
 
     @Override

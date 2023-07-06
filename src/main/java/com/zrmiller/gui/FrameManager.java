@@ -28,8 +28,8 @@ public class FrameManager {
     public static void init() {
 
         // Create GUI
-        mainFrame = new MainFrame();
         dataDownloaderFrame = new DatasetManagerFrame();
+        mainFrame = new MainFrame();
         waitingFrame = new WaitingFrame();
 
         // Color Manager Setup

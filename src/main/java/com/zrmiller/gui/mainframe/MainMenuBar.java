@@ -8,6 +8,7 @@ import com.zrmiller.core.datawrangler.callbacks.IValidationListener2022;
 import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.SaveManager;
+import com.zrmiller.core.managers.listeners.IDataDirectoryListener;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.utility.ZUtil;
 import com.zrmiller.gui.FrameManager;
@@ -16,8 +17,9 @@ import com.zrmiller.modules.colortheme.ColorTheme;
 import com.zrmiller.modules.strings.References;
 
 import javax.swing.*;
+import java.io.File;
 
-public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidationListener2017, IValidationListener2022 {
+public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidationListener2017, IValidationListener2022, IDataDirectoryListener {
 
     // Menus
     private final JMenu optionsMenu = new JMenu("Options");
@@ -28,8 +30,11 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
     // Options
     private final JMenu themeMenu = new JMenu("Color Theme");
     private final JMenuItem githubButton = new JMenuItem("Github");
-
     private final JMenuItem quitButton = new JMenuItem("Quit");
+    private final JMenu openFolderMenu = new JMenu("Open Folder");
+
+    private final JMenuItem datasetFolderButton = new JMenuItem("Datasets");
+    private final JMenuItem exportsFolderButton = new JMenuItem("Exports");
 
     // Display
     private final JMenuItem displayNormalButton = new JRadioButtonMenuItem("Normal");
@@ -66,7 +71,7 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
 //        optionsMenu.add(new JSeparator());
 //        optionsMenu.add(exportMenu);
 //        optionsMenu.add(new JSeparator());
-        optionsMenu.add(openExportsButton);
+        optionsMenu.add(openFolderMenu);
         optionsMenu.add(githubButton);
         optionsMenu.add(new JSeparator());
         optionsMenu.add(quitButton);
@@ -78,6 +83,10 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
 //        datasetMenu.add(missingDatasetsLabel);
         datasetMenu.add(new JSeparator());
         datasetMenu.add(datasetManagerButton);
+
+        // Open Folder Menu
+        openFolderMenu.add(datasetFolderButton);
+        openFolderMenu.add(exportsFolderButton);
 
         // Export
         exportMenu.add(exportImageButton);
@@ -105,6 +114,8 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
         DatasetManager.addDatasetListener(this);
         DataValidator.addValidationListener2017(this);
         DataValidator.addValidationListener2022(this);
+        onDataDirectoryChange(SaveManager.settings.data.dataDirectory);
+        FrameManager.dataDownloaderFrame.addDirectoryListener(this);
     }
 
     private void addListeners() {
@@ -116,9 +127,10 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
         datasetManagerButton.addActionListener(e -> FrameManager.dataDownloaderFrame.setVisible(true));
         githubButton.addActionListener(e -> ZUtil.openLink("https://github.com/zmilla93/PlaceViewer"));
         quitButton.addActionListener(e -> System.exit(0));
-        exportImageButton.addActionListener(e -> FrameManager.exportImageWindow.setVisible(true));
+//        exportImageButton.addActionListener(e -> FrameManager.exportImageWindow.setVisible(true));
 //        exportGifButton.addActionListener(e -> FrameManager.exportGifWindow.setVisible(true));
-        openExportsButton.addActionListener(e -> ZUtil.openExplorer(References.getExportFolder()));
+        datasetFolderButton.addActionListener(e -> ZUtil.openExplorer(References.getDataFolder()));
+        exportsFolderButton.addActionListener(e -> ZUtil.openExplorer(References.getExportFolder()));
 
         // Display
         displayNormalButton.addActionListener(e -> DatasetManager.setColorMode(ColorMode.NORMAL));
@@ -141,4 +153,13 @@ public class MainMenuBar extends JMenuBar implements IDatasetListener, IValidati
         dataset2022Button.setEnabled(valid);
     }
 
+    @Override
+    public void onDataDirectoryChange(String directory) {
+        boolean valid = false;
+        if (directory != null) {
+            File file = new File(directory);
+            valid = file.isDirectory();
+        }
+        openFolderMenu.setEnabled(valid);
+    }
 }
