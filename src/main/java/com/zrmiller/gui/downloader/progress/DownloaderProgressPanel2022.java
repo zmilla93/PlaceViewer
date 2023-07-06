@@ -4,6 +4,7 @@ import com.zrmiller.core.datawrangler.DataDownloader2022;
 import com.zrmiller.core.datawrangler.DataValidator;
 import com.zrmiller.core.datawrangler.callbacks.IFileDownloadTracker;
 import com.zrmiller.core.datawrangler.callbacks.IMultipleFileDownloadTracker;
+import com.zrmiller.core.utility.PlaceInfo;
 import com.zrmiller.gui.frames.DatasetManagerFrame;
 
 public class DownloaderProgressPanel2022 extends AbstractDownloadProgressPanel {
@@ -50,13 +51,13 @@ public class DownloaderProgressPanel2022 extends AbstractDownloadProgressPanel {
     }
 
     private void updateDownloadProgress() {
-        setInfoUpper("Downloading file " + (downloader2022.getFilesDownloaded() + 1) + " / " + downloader2022.getExpectedFiles() + "...");
+        setInfoUpper("Downloading file " + (downloader2022.getFilesDownloaded() + 1) + " / " + PlaceInfo.FILE_COUNT_2022 + "...");
         setInfoLower((downloader.getBytesProcessed() / 1000000) + " MB / " + downloader.getFileSizeInBytes() / 1000000 + " MB");
         progressBar.setValue(downloader.getProgress());
     }
 
     private void updateFileProgress() {
-        double progress = downloader2022.getFilesDownloaded() / (double) downloader2022.getExpectedFiles();
+        double progress = downloader2022.getFilesDownloaded() / (double) PlaceInfo.FILE_COUNT_2022;
         progressBarLower.setValue((int) Math.ceil(progress * 100.0));
     }
 

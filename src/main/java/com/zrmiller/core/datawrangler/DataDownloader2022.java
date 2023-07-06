@@ -69,11 +69,6 @@ public class DataDownloader2022 extends DataDownloader {
         return filesDownloaded;
     }
 
-    public int getExpectedFiles() {
-        // FIXME
-        return PlaceInfo.FILE_COUNT_2022;
-    }
-
     public boolean deleteData() {
         directory = SaveManager.settings.data.dataDirectory + yearString + File.separator;
         boolean success = true;
