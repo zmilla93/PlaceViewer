@@ -58,7 +58,7 @@ public class CanvasPanel extends ListenManagerPanel<ICanvasListener> implements 
     }
 
     public void tryRepaint(boolean force) {
-        // TODO : Double check is this lastPaintedFrame check is needed
+        if (player.getState() == PlacePlayer.State.SEEKING && !force) return;
         if (lastPaintedFrame != player.getFrameCount()) {
             markForRepaint = true;
             lastPaintedFrame = player.getFrameCount();

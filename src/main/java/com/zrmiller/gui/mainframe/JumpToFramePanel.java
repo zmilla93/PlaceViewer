@@ -17,7 +17,7 @@ public class JumpToFramePanel extends JPanel implements IDatasetListener {
     private final CanvasPanel canvasPanel;
 
     private final JButton jumpToFrameButton = new JButton("Jump to Frame");
-    private final JTextField frameInput = new JTextField("0");
+    private final JTextField frameInput = new JTextField(8);
 
     public JumpToFramePanel(CanvasPanel canvasPanel, PlacePlayer player) {
         this.canvasPanel = canvasPanel;
@@ -27,6 +27,7 @@ public class JumpToFramePanel extends JPanel implements IDatasetListener {
         gc.insets = new Insets(2, 0, 2, 2);
 
         ((PlainDocument) frameInput.getDocument()).setDocumentFilter(new NumberDocumentFilter());
+        frameInput.setText("0");
 
         add(frameInput, gc);
         gc.gridx++;
@@ -41,8 +42,7 @@ public class JumpToFramePanel extends JPanel implements IDatasetListener {
         jumpToFrameButton.addActionListener(e -> {
             int targetFrame = getTargetFrame();
             if (targetFrame == -1) return;
-            player.jumpToFrame(targetFrame);
-            canvasPanel.tryRepaint(true);
+            player.jumpToFrame(targetFrame, canvasPanel);
         });
     }
 

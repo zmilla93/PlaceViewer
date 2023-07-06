@@ -5,9 +5,13 @@ import com.zrmiller.core.enums.Dataset;
 import com.zrmiller.core.managers.DatasetManager;
 import com.zrmiller.core.managers.listeners.IDatasetListener;
 import com.zrmiller.core.utility.TileEdit;
+import com.zrmiller.gui.FrameManager;
+import com.zrmiller.gui.mainframe.CanvasPanel;
 import com.zrmiller.gui.mainframe.listeners.IPlayerControllerListener;
 
+import javax.swing.*;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
@@ -127,32 +131,42 @@ public class PlacePlayer implements IDatasetListener {
         return tileUpdatesPerSecond;
     }
 
-    public boolean jumpToFrame(int frame) {
-        if (App.dataset() == null || frame == frameCount)
-            return false;
+    public boolean jumpToFrame(int targetFrame) {
+        return jumpToFrame(targetFrame, null);
+    }
+
+    public boolean jumpToFrame(int targetFrame, CanvasPanel canvasPanel) {
+        if (App.dataset() == null || targetFrame == frameCount) return false;
         boolean wasPlaying = state == State.PLAYING;
-        state = State.SEEKING;
-        if (frame < frameCount) {
-            stop();
-        }
+        if (targetFrame < frameCount) stop();
         if (!streamIsOpen) {
             parser.openStream();
             streamIsOpen = true;
         }
-        try {
-            while (frameCount < frame) {
-                if (!applyNextFrame())
-                    break;
+        int frameDifference = 0;
+        if (frameCount > targetFrame) frameDifference = targetFrame;
+        else frameDifference = targetFrame - frameCount;
+        boolean showWaitingDialog = frameDifference > 1000000;
+        state = State.SEEKING;
+        Thread thread = new Thread(() -> {
+            try {
+                while (frameCount < targetFrame) {
+                    if (!applyNextFrame()) break;
+                }
+                state = State.PAUSED;
+                if (wasPlaying) play();
+            } catch (IOException e) {
+                e.printStackTrace();
+                stop();
             }
-            state = State.PAUSED;
-            if (wasPlaying)
-                play();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            stop();
-            return false;
+            if (showWaitingDialog) SwingUtilities.invokeLater(() -> FrameManager.waitingFrame.hideFrame());
+        });
+        thread.start();
+        if (showWaitingDialog) {
+            String targetFrameFormatted = NumberFormat.getInstance().format(targetFrame);
+            FrameManager.waitingFrame.showFrame("Seeking", "Seeking to frame " + targetFrameFormatted + ". Please wait...");
         }
+        return true;
     }
 
     public int getFrameCount() {

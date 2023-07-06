@@ -1,6 +1,7 @@
 package com.zrmiller.gui.frames;
 
 import com.zrmiller.core.utility.ZUtil;
+import com.zrmiller.gui.FrameManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +11,7 @@ public class WaitingFrame extends JDialog {
     private final JPanel infoPanel = new JPanel(new GridBagLayout());
     private final JLabel[] labels = new JLabel[5];
     private int showHide = 0;
+    private JProgressBar progressBar = new JProgressBar();
 
     private static final int INSET_VERTICAL = 40;
     private static final int INSET_HORIZONTAL = 80;
@@ -33,6 +35,15 @@ public class WaitingFrame extends JDialog {
             gc.gridy++;
         }
 
+        // Add progress bar
+        gc.weightx = 1;
+        gc.fill = GridBagConstraints.HORIZONTAL;
+        gc.insets.top = 5;
+        infoPanel.add(progressBar, gc);
+        gc.gridy++;
+        progressBar.setIndeterminate(true);
+        gc.insets.top = 0;
+
         add(new JSeparator(), BorderLayout.NORTH);
         add(wrapperPanel, BorderLayout.CENTER);
         setResizable(false);
@@ -52,7 +63,7 @@ public class WaitingFrame extends JDialog {
         pack();
         revalidate();
         repaint();
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(FrameManager.mainFrame);
         showHide++;
         if (showHide > 0) setVisible(true);
     }
