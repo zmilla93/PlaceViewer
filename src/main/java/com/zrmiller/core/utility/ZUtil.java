@@ -109,4 +109,16 @@ public class ZUtil {
         }
     }
 
+    public static boolean validateFileName(String path) {
+        File file = new File(path);
+        if (file.exists()) return true;
+        try {
+            boolean success = file.createNewFile();
+            if (success) success = file.delete();
+            return success;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
 }

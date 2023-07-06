@@ -95,7 +95,12 @@ public class ExportPanel extends JPanel {
             renderCanvas = null;
             System.gc();
         };
-        renderCanvas.exportImage(fileNameInput.getText(), rect.x, rect.y, rect.width, rect.height, renderCanvas.zoomLevel, callback);
+        String fileName = fileNameInput.getText();
+        if (fileName.endsWith(".png")) {
+            fileName = fileName.replaceAll("\\.png", "");
+            fileNameInput.setText(fileName);
+        }
+        renderCanvas.exportImage(fileName, rect.x, rect.y, rect.width, rect.height, renderCanvas.zoomLevel, callback);
     }
 
 }

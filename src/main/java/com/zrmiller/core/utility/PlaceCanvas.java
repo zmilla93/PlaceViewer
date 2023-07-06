@@ -275,6 +275,22 @@ public class PlaceCanvas {
     public void exportImage(String fileName, int posX, int posY, int width, int height, ZoomLevel zoomLevel, IExportCallback callback) {
         if (App.dataset() == null) return;
         this.zoomLevel = zoomLevel;
+        // Validate output directory
+        File outDir = new File(References.getExportFolder());
+        if (outDir.exists()) {
+            if (!outDir.isDirectory()) return;
+        } else if (!outDir.mkdirs()) return;
+        // Validate output file
+        String outputPath = References.getExportFolder() + fileName + ".png";
+        if (!ZUtil.validateFileName(outputPath)) {
+            JOptionPane.showMessageDialog(FrameManager.mainFrame, "Invalid file name: " + fileName, "Invalid File Name", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        File file = new File(outputPath);
+        if (file.exists()) {
+            int answer = JOptionPane.showConfirmDialog(null, "File '" + fileName + "' already exists. Would you like to overwrite?", "Overwrite File?", JOptionPane.YES_NO_OPTION);
+            if (answer != JOptionPane.YES_OPTION) return;
+        }
         // Export the canvas using a separate thread
         Thread thread = new Thread(() -> {
             viewportWidth = zoomLevel.scale(width);
@@ -285,14 +301,7 @@ public class PlaceCanvas {
             updateColorBuffer();
             BufferedImage image = new BufferedImage(zoomLevel.scale(width), zoomLevel.scale(height), BufferedImage.TYPE_INT_RGB);
             image.getRaster().setPixels(0, 0, zoomLevel.scale(width), zoomLevel.scale(height), getColorBuffer());
-            File outDir = new File(References.getExportFolder());
-            // FIXME : Validate file name
-            File outFile = new File(References.getExportFolder() + fileName + ".png");
-            if (outDir.exists()) {
-                if (!outDir.isDirectory())
-                    return;
-            } else if (!outDir.mkdirs())
-                return;
+            File outFile = new File(outputPath);
             try {
                 ImageIO.write(image, "png", outFile);
             } catch (IOException e) {
@@ -306,9 +315,7 @@ public class PlaceCanvas {
     }
 
     public void exportGIF(int posX, int posY, int width, int height, ZoomLevel zoomLevel, int startFrame, int endFrame, int tilesPerSecond, int fps) {
-        if (App.dataset() == null)
-            return;
-//        if (zoomLevel.zoomOut) return;
+        if (App.dataset() == null) return;
         viewportWidth = zoomLevel.scale(width);
         viewportHeight = zoomLevel.scale(height);
         rgbColorBuffer = new int[viewportWidth * viewportHeight * COLOR_CHANNEL_COUNT];
