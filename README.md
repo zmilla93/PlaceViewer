@@ -1,19 +1,38 @@
 # PlaceViewer
-An app to watch the reddit /r/Place datasets.<br>
-If you enjoy my work, please consider [donating](https://www.paypal.com/paypalme/zmilla93) to support!
+An app to watch the reddit /r/Place datasets.
 
 ## Features
-- Automatically download and compress the entire r/Place datasets from 2017 & 2022.
+- Automatically downloads the entire r/Place datasets from 2017 & 2022
 - Replay the data at up to 10,000,000 tiles per second!
-- Freely zoom and pan around the canvas.
-- Quickly jump to any frame.
-- App will automatically update when new versions are released.
-- Only tested on Windows, but should be cross-platform.
+- Freely zoom and pan around the canvas
+- Quickly jump to any frame
+- Heatmap view
+- Cross-platform
+- Canvas can be exported to a png
+- Multiple color themes
 
-## Important Notes
-- Data from 2017 is a 1 GB download, 166 MB compressed.
-- Data from 2022 is a 10.6 GB download, 1.6 GB compressed. This is broken into 88 files, so you only need space for the compressed size.
-- User hash is discarded while compressing. All other information is preserved.
+## Images (Click to View)
+<details>
+  <summary>Main App</summary><br>
+  
+![placeviewer](https://github.com/zmilla93/PlaceViewer/assets/10750321/ee739c2b-a0de-4a83-8450-d4c1c73babfb)
+</details>
+<details>
+  <summary>Exported Heatmap (Grayscale)</summary><br>
+  
+![heatmap_grayscale](https://github.com/zmilla93/PlaceViewer/assets/10750321/0afc7956-0157-48e3-afa6-f32b844003f1)
+</details>
+<details>
+  <summary>Exported Heatmap (Color)</summary><br>
+  
+![heatmap_color](https://github.com/zmilla93/PlaceViewer/assets/10750321/af0aaa7e-ad71-41e3-862b-458edf26ac72)
+</details>
+<details>
+  <summary>Dataset Manager</summary><br>
+  
+![java_2023-07-06_00-52-59](https://github.com/zmilla93/PlaceViewer/assets/10750321/f65b846b-f4e7-4823-ab26-4bde3f221805)
+</details>
 
-## Credits
-GifSequenceWriter.java - Elliot Kroo, 2009 (CC BY 3)
+## Notes
+- 2017 dataset is a single 158 MB file
+- 2022 dataset is 79 files, totaling 1.49 GB
