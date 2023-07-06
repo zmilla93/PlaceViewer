@@ -114,6 +114,7 @@ public class ExportPanel extends JPanel implements IDatasetListener {
             fileName = fileName.replaceAll("\\.png", "");
             fileNameInput.setText(fileName);
         }
+        FrameManager.canvasPanel.getPlayer().pause();
         renderCanvas.exportImage(fileName, rect.x, rect.y, rect.width, rect.height, renderCanvas.zoomLevel, callback);
     }
 
